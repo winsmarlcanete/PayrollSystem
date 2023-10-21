@@ -11,6 +11,8 @@ package com.mycompany.wp2c2project;
 public class WP2C2Project {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        RegisterFrame rf = new RegisterFrame();
+        rf.setVisible(true);
+        
     }
 }
