@@ -18,6 +18,7 @@ public class WP2C2Project {
         //sakit sa ulo neto
         // 3:17pm tangina hirap naman nito
         //auq na T_T
+        //so need mag pull lagi bago mag commit????
         
     }
 }
