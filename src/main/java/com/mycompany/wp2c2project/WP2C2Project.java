@@ -11,7 +11,7 @@ package com.mycompany.wp2c2project;
 public class WP2C2Project {
 
     public static void main(String[] args) {
-        EmployeeLogin ea = new EmployeeLogin();
+        EmployeeAccount ea = new EmployeeAccount();
         ea.setVisible(true);
         
         
