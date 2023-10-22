@@ -15,6 +15,7 @@ public class WP2C2Project {
         rf.setVisible(true);
         // hilo
         //oks na ba?
+        //sakit sa ulo neto
         
     }
 }
