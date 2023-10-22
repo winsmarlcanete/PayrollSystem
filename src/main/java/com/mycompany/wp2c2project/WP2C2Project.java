@@ -16,6 +16,7 @@ public class WP2C2Project {
         // hilo
         //oks na ba?
         //sakit sa ulo neto
+        // 3:17pm tangina hirap naman nito
         
     }
 }
