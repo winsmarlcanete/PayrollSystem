@@ -17,7 +17,7 @@ public class WP2C2Project {
         //oks na ba?
         //sakit sa ulo neto
         // 3:17pm tangina hirap naman nito
-        //pano mag commit - jerwin
+        //auq na T_T
         
     }
 }
