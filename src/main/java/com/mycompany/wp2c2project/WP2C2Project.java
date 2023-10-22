@@ -13,6 +13,8 @@ public class WP2C2Project {
     public static void main(String[] args) {
         RegisterFrame rf = new RegisterFrame();
         rf.setVisible(true);
+        // hilo
+        //oks na ba?
         
     }
 }
