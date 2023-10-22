@@ -43,7 +43,10 @@ public class Biometrics extends javax.swing.JFrame {
         DateTimeFormatter timeout = DateTimeFormatter .ofPattern("hh:mm a");
         LocalDateTime now = LocalDateTime.now();
         Attendance timeOut = new Attendance();
+        Attendance prevframe = new Attendance();
         timeOut.TimeOut.setText(timeout.format(now));
+        prevframe.setVisible(false);
+        timeOut.setVisible(true);
     }
 
     /**
@@ -55,43 +58,37 @@ public class Biometrics extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        BiometricsPreview = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        TimeOut = new java.awt.Button();
         TimeIn = new java.awt.Button();
+        TimeOut = new java.awt.Button();
         Register = new java.awt.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel1.setAlignmentX(0.0F);
-        jPanel1.setAlignmentY(0.0F);
+        jPanel2.setBackground(new java.awt.Color(160, 233, 255));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        BiometricsPreview.setBackground(new java.awt.Color(255, 255, 255));
+        BiometricsPreview.setAlignmentX(0.0F);
+        BiometricsPreview.setAlignmentY(0.0F);
+
+        javax.swing.GroupLayout BiometricsPreviewLayout = new javax.swing.GroupLayout(BiometricsPreview);
+        BiometricsPreview.setLayout(BiometricsPreviewLayout);
+        BiometricsPreviewLayout.setHorizontalGroup(
+            BiometricsPreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 302, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        BiometricsPreviewLayout.setVerticalGroup(
+            BiometricsPreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 207, Short.MAX_VALUE)
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Biometrics");
 
-        TimeOut.setBackground(new java.awt.Color(79, 152, 202));
-        TimeOut.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        TimeOut.setForeground(new java.awt.Color(255, 255, 255));
-        TimeOut.setLabel("Time Out");
-        TimeOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TimeOutActionPerformed(evt);
-            }
-        });
-
         TimeIn.setBackground(new java.awt.Color(79, 152, 202));
+        TimeIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         TimeIn.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         TimeIn.setForeground(new java.awt.Color(255, 255, 255));
         TimeIn.setLabel("Time In");
@@ -101,7 +98,19 @@ public class Biometrics extends javax.swing.JFrame {
             }
         });
 
+        TimeOut.setBackground(new java.awt.Color(79, 152, 202));
+        TimeOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        TimeOut.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        TimeOut.setForeground(new java.awt.Color(255, 255, 255));
+        TimeOut.setLabel("Time Out");
+        TimeOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TimeOutActionPerformed(evt);
+            }
+        });
+
         Register.setBackground(new java.awt.Color(79, 152, 202));
+        Register.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         Register.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         Register.setForeground(new java.awt.Color(255, 255, 255));
         Register.setLabel("Register");
@@ -111,32 +120,32 @@ public class Biometrics extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(210, 210, 210)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(193, 193, 193)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(60, 60, 60)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(TimeIn, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TimeOut, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Register, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(250, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addComponent(jLabel1))
+                    .addComponent(BiometricsPreview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(241, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(BiometricsPreview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addComponent(TimeIn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -148,7 +157,19 @@ public class Biometrics extends javax.swing.JFrame {
 
         TimeOut.getAccessibleContext().setAccessibleName("RegisterButton");
 
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void TimeOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimeOutActionPerformed
@@ -215,10 +236,11 @@ timein();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel BiometricsPreview;
     private java.awt.Button Register;
     private java.awt.Button TimeIn;
     private java.awt.Button TimeOut;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }
