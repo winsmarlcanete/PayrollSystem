@@ -11,12 +11,12 @@ import java.awt.event.WindowEvent;
  *
  * @author Windows
  */
-public class EmployeeAccount extends javax.swing.JFrame {
+public class EmployeeLogin extends javax.swing.JFrame {
 
     /**
      * Creates new form EmployeeAccount
      */
-    public EmployeeAccount() {
+    public EmployeeLogin() {
         initComponents();
     }
 
@@ -123,7 +123,7 @@ public class EmployeeAccount extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        EmployeeAccount1 ea1 = new EmployeeAccount1();
+        EmployeeHome ea1 = new EmployeeHome();
         ea1.setVisible(true);
         
         dispose();
@@ -150,20 +150,21 @@ public class EmployeeAccount extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EmployeeAccount().setVisible(true);
+                new EmployeeLogin().setVisible(true);
             }
         });
     }
