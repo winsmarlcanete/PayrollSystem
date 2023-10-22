@@ -35,7 +35,7 @@ public class Biometrics extends javax.swing.JFrame {
         DateTimeFormatter timein = DateTimeFormatter .ofPattern("hh:mm a");
         LocalDateTime now = LocalDateTime.now();
         Attendance timeIn = new Attendance();
-        timeIn.TimeIn.setText(timein.format(now));
+        timeIn.timeIn.setText(timein.format(now));
         timeIn.setVisible(true);
     }
     
@@ -44,7 +44,7 @@ public class Biometrics extends javax.swing.JFrame {
         LocalDateTime now = LocalDateTime.now();
         Attendance timeOut = new Attendance();
         Attendance prevframe = new Attendance();
-        timeOut.TimeOut.setText(timeout.format(now));
+        timeOut.timeOut.setText(timeout.format(now));
         prevframe.setVisible(false);
         timeOut.setVisible(true);
     }
@@ -226,7 +226,7 @@ timein();
     }//GEN-LAST:event_RegisterActionPerformed
 
     private void Register1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Register1ActionPerformed
-       EmployeeAccount1 ea1 = new EmployeeAccount1();
+       EmployeeHome ea1 = new EmployeeHome();
        ea1.setVisible(true);
        dispose();
     }//GEN-LAST:event_Register1ActionPerformed

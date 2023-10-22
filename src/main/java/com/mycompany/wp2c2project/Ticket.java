@@ -8,12 +8,12 @@ package com.mycompany.wp2c2project;
  *
  * @author Windows
  */
-public class EmployeeAccount4 extends javax.swing.JFrame {
+public class Ticket extends javax.swing.JFrame {
 
     /**
      * Creates new form EmployeeAccount4
      */
-    public EmployeeAccount4() {
+    public Ticket() {
         initComponents();
     }
 
@@ -169,7 +169,7 @@ public class EmployeeAccount4 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        EmployeeAccount1 ea1 = new EmployeeAccount1();
+        EmployeeHome ea1 = new EmployeeHome();
         ea1.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -191,14 +191,18 @@ public class EmployeeAccount4 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ticket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ticket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ticket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount4.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ticket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -207,7 +211,7 @@ public class EmployeeAccount4 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EmployeeAccount4().setVisible(true);
+                new Ticket().setVisible(true);
             }
         });
     }

@@ -18,18 +18,21 @@ public final class Attendance extends javax.swing.JFrame {
 
     /**
      * Creates new form Attendance
+     *
      * @throws java.text.ParseException
      */
     public Attendance() throws ParseException {
         initComponents();
         date();
     }
-    
+
     public void date() {
-        DateTimeFormatter date = DateTimeFormatter .ofPattern("MMM-dd-yyyy");
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("MMM-dd-yyyy");
         LocalDateTime now = LocalDateTime.now();
         Date.setText(date.format(now));
     }
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,34 +45,34 @@ public final class Attendance extends javax.swing.JFrame {
 
         BG = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        empName = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         jPanel2 = new javax.swing.JPanel();
         Date = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        TimeIn = new javax.swing.JLabel();
+        timeIn = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
-        TimeOut = new javax.swing.JLabel();
+        timeOut = new javax.swing.JLabel();
         jPanel15 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
-        Late = new javax.swing.JLabel();
+        late = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
+        overtime = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
-        jLabel31 = new javax.swing.JLabel();
+        nightDiff = new javax.swing.JLabel();
         jPanel18 = new javax.swing.JPanel();
         jLabel32 = new javax.swing.JLabel();
-        jLabel33 = new javax.swing.JLabel();
+        sHol = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
-        jLabel35 = new javax.swing.JLabel();
+        sHolOt = new javax.swing.JLabel();
         jPanel20 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
-        jLabel37 = new javax.swing.JLabel();
+        lHol = new javax.swing.JLabel();
         Back = new java.awt.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,8 +84,8 @@ public final class Attendance extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Dela Cruz, Juan");
+        empName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        empName.setText("Dela Cruz, Juan");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -90,14 +93,14 @@ public final class Attendance extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(jLabel1)
+                .addComponent(empName)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(empName)
                 .addGap(17, 17, 17))
         );
 
@@ -111,13 +114,13 @@ public final class Attendance extends javax.swing.JFrame {
         jLabel16.setText("Time In:");
         jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        TimeIn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        TimeIn.setText("00:00");
-        TimeIn.addInputMethodListener(new java.awt.event.InputMethodListener() {
+        timeIn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        timeIn.setText("00:00");
+        timeIn.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                TimeInInputMethodTextChanged(evt);
+                timeInInputMethodTextChanged(evt);
             }
         });
 
@@ -129,7 +132,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
-                .addComponent(TimeIn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(timeIn, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
@@ -138,15 +141,15 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(TimeIn))
+                    .addComponent(timeIn))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel22.setText("Time Out:");
         jLabel22.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        TimeOut.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        TimeOut.setText("00:00");
+        timeOut.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        timeOut.setText("00:00");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -156,7 +159,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(TimeOut, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(timeOut, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel13Layout.setVerticalGroup(
@@ -165,15 +168,15 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
-                    .addComponent(TimeOut))
+                    .addComponent(timeOut))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel26.setText("Late:");
         jLabel26.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        Late.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        Late.setText("00:00");
+        late.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        late.setText("00:00");
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
@@ -183,7 +186,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(Late, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(late, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
@@ -192,15 +195,15 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
-                    .addComponent(Late))
+                    .addComponent(late))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel28.setText("Overtime:");
         jLabel28.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        jLabel29.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel29.setText("00:00");
+        overtime.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        overtime.setText("00:00");
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -210,7 +213,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(overtime, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel16Layout.setVerticalGroup(
@@ -219,15 +222,15 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel28)
-                    .addComponent(jLabel29))
+                    .addComponent(overtime))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel30.setText("Night Diff:");
         jLabel30.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        jLabel31.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel31.setText("00:00");
+        nightDiff.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        nightDiff.setText("00:00");
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -237,7 +240,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
-                .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nightDiff, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
@@ -246,15 +249,15 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel30)
-                    .addComponent(jLabel31))
+                    .addComponent(nightDiff))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel32.setText("Spl Hol:");
         jLabel32.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        jLabel33.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel33.setText("00:00");
+        sHol.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        sHol.setText("00:00");
 
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
@@ -264,7 +267,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
-                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sHol, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel18Layout.setVerticalGroup(
@@ -273,15 +276,15 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel32)
-                    .addComponent(jLabel33))
+                    .addComponent(sHol))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel34.setText("Spl Hol OT:");
         jLabel34.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        jLabel35.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel35.setText("00:00");
+        sHolOt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        sHolOt.setText("00:00");
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
@@ -291,7 +294,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
-                .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sHolOt, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel19Layout.setVerticalGroup(
@@ -300,15 +303,15 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel34)
-                    .addComponent(jLabel35))
+                    .addComponent(sHolOt))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jLabel36.setText("Leg Hol:");
         jLabel36.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        jLabel37.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel37.setText("00:00");
+        lHol.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lHol.setText("00:00");
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
@@ -318,7 +321,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
-                .addComponent(jLabel37, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lHol, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel20Layout.setVerticalGroup(
@@ -327,7 +330,7 @@ public final class Attendance extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel36)
-                    .addComponent(jLabel37))
+                    .addComponent(lHol))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -435,10 +438,10 @@ public final class Attendance extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TimeInInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_TimeInInputMethodTextChanged
+    private void timeInInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_timeInInputMethodTextChanged
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_TimeInInputMethodTextChanged
+
+    }//GEN-LAST:event_timeInInputMethodTextChanged
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
@@ -486,23 +489,15 @@ public final class Attendance extends javax.swing.JFrame {
     private javax.swing.JPanel BG;
     private java.awt.Button Back;
     public javax.swing.JLabel Date;
-    private javax.swing.JLabel Late;
-    public javax.swing.JLabel TimeIn;
-    public javax.swing.JLabel TimeOut;
-    private javax.swing.JLabel jLabel1;
+    public static javax.swing.JLabel empName;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel13;
@@ -514,5 +509,13 @@ public final class Attendance extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JToolBar jToolBar1;
+    public static javax.swing.JLabel lHol;
+    public static javax.swing.JLabel late;
+    public static javax.swing.JLabel nightDiff;
+    public static javax.swing.JLabel overtime;
+    public static javax.swing.JLabel sHol;
+    public static javax.swing.JLabel sHolOt;
+    public static javax.swing.JLabel timeIn;
+    public static javax.swing.JLabel timeOut;
     // End of variables declaration//GEN-END:variables
 }

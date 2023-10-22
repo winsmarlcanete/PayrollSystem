@@ -8,12 +8,12 @@ package com.mycompany.wp2c2project;
  *
  * @author Windows
  */
-public class EmployeeAccount1 extends javax.swing.JFrame {
+public class EmployeeHome extends javax.swing.JFrame {
 
     /**
      * Creates new form EmployeeAccount1
      */
-    public EmployeeAccount1() {
+    public EmployeeHome() {
         initComponents();
     }
 
@@ -183,20 +183,20 @@ public class EmployeeAccount1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        EmployeeAccount2 ea2 = new EmployeeAccount2();
+        Payslip ea2 = new Payslip();
         ea2.setVisible(true);
         
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        EmployeeAccount4 ea4 = new EmployeeAccount4();
+        Ticket ea4 = new Ticket();
         ea4.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        EmployeeAccount ea = new EmployeeAccount();
+        Login ea = new Login();
         ea.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -225,14 +225,18 @@ public class EmployeeAccount1 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EmployeeAccount1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EmployeeHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -241,7 +245,7 @@ public class EmployeeAccount1 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EmployeeAccount1().setVisible(true);
+                new EmployeeHome().setVisible(true);
             }
         });
     }
