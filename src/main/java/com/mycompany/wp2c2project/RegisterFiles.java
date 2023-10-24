@@ -11,12 +11,12 @@ import javax.swing.JFileChooser;
  *
  * @author Jon Gleur Tan
  */
-public class Upload_Here extends javax.swing.JFrame {
+public class RegisterFiles extends javax.swing.JFrame {
 
     /**
      * Creates new form Upload_Here
      */
-    public Upload_Here() {
+    public RegisterFiles() {
         initComponents();
     }
 
@@ -47,6 +47,7 @@ public class Upload_Here extends javax.swing.JFrame {
         regMC = new javax.swing.JTextField();
         btnMC = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        Reg_Log1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,6 +137,15 @@ public class Upload_Here extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(137, 207, 243));
         jLabel6.setText("Upload Files Here: ");
 
+        Reg_Log1.setBackground(new java.awt.Color(137, 207, 243));
+        Reg_Log1.setForeground(new java.awt.Color(255, 255, 255));
+        Reg_Log1.setText("Back");
+        Reg_Log1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Reg_Log1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -159,7 +169,8 @@ public class Upload_Here extends javax.swing.JFrame {
                             .addComponent(btnPH))
                         .addComponent(jLabel1)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(199, 199, 199)
+                            .addComponent(Reg_Log1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(111, 111, 111)
                             .addComponent(Reg_Log, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addComponent(jLabel2)
@@ -206,7 +217,9 @@ public class Upload_Here extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(regMC, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(Reg_Log)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Reg_Log, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Reg_Log1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(41, 41, 41))
         );
 
@@ -239,6 +252,7 @@ public class Upload_Here extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void regSSSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regSSSActionPerformed
@@ -246,9 +260,8 @@ public class Upload_Here extends javax.swing.JFrame {
     }//GEN-LAST:event_regSSSActionPerformed
 
     private void Reg_LogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reg_LogActionPerformed
-        LoginRegister frame = new LoginRegister();
+        Login frame = new Login();
         frame.setVisible(true);
-
         dispose();
     }//GEN-LAST:event_Reg_LogActionPerformed
 
@@ -284,6 +297,12 @@ public class Upload_Here extends javax.swing.JFrame {
         regPI.setText(filename);
     }//GEN-LAST:event_btnMCActionPerformed
 
+    private void Reg_Log1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reg_Log1ActionPerformed
+       Register frame = new Register();
+       frame.setVisible(true);
+       dispose();
+    }//GEN-LAST:event_Reg_Log1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -301,27 +320,30 @@ public class Upload_Here extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Upload_Here.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Upload_Here.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Upload_Here.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Upload_Here.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RegisterFiles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Upload_Here().setVisible(true);
+                new RegisterFiles().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Reg_Log;
+    private javax.swing.JButton Reg_Log1;
     private javax.swing.JButton btnMC;
     private javax.swing.JButton btnPH;
     private javax.swing.JButton btnSSS;

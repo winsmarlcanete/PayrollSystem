@@ -22,7 +22,7 @@ public class Biometrics extends javax.swing.JFrame {
     public Biometrics() {
         initComponents();
     }
-    
+
 //    public void date() {
 //        DateTimeFormatter date = DateTimeFormatter .ofPattern("MMM-dd-yyyy");
 //        LocalDateTime now = LocalDateTime.now();
@@ -30,17 +30,16 @@ public class Biometrics extends javax.swing.JFrame {
 //        deyt.Date.setText(date.format(now));
 //        deyt.setVisible(true);
 //    }
-    
     public void timein() throws ParseException {
-        DateTimeFormatter timein = DateTimeFormatter .ofPattern("hh:mm a");
+        DateTimeFormatter timein = DateTimeFormatter.ofPattern("hh:mm a");
         LocalDateTime now = LocalDateTime.now();
         Attendance timeIn = new Attendance();
         timeIn.timeIn.setText(timein.format(now));
         timeIn.setVisible(true);
     }
-    
+
     public void timeout() throws ParseException {
-        DateTimeFormatter timeout = DateTimeFormatter .ofPattern("hh:mm a");
+        DateTimeFormatter timeout = DateTimeFormatter.ofPattern("hh:mm a");
         LocalDateTime now = LocalDateTime.now();
         Attendance timeOut = new Attendance();
         Attendance prevframe = new Attendance();
@@ -215,7 +214,7 @@ public class Biometrics extends javax.swing.JFrame {
 //        deyt.Date.setText(dd);
 //
 //        date();
-timein();
+            timein();
         } catch (ParseException ex) {
             Logger.getLogger(Biometrics.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -226,9 +225,9 @@ timein();
     }//GEN-LAST:event_RegisterActionPerformed
 
     private void Register1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Register1ActionPerformed
-       EmployeeHome ea1 = new EmployeeHome();
-       ea1.setVisible(true);
-       dispose();
+        EmployeeHome ea1 = new EmployeeHome();
+        ea1.setVisible(true);
+        dispose();
     }//GEN-LAST:event_Register1ActionPerformed
 
     /**

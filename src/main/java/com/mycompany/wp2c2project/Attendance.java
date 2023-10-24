@@ -115,7 +115,7 @@ public final class Attendance extends javax.swing.JFrame {
         jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         timeIn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        timeIn.setText("00:00");
+        timeIn.setText("08:50");
         timeIn.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -149,7 +149,7 @@ public final class Attendance extends javax.swing.JFrame {
         jLabel22.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         timeOut.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        timeOut.setText("00:00");
+        timeOut.setText("17:03");
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -516,6 +516,6 @@ public final class Attendance extends javax.swing.JFrame {
     public static javax.swing.JLabel sHol;
     public static javax.swing.JLabel sHolOt;
     public static javax.swing.JLabel timeIn;
-    public static javax.swing.JLabel timeOut;
+    public javax.swing.JLabel timeOut;
     // End of variables declaration//GEN-END:variables
 }

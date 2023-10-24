@@ -11,4 +11,5 @@
         <maven.compiler.target>17</maven.compiler.target>
         <exec.mainClass>com.mycompany.wp2c2project.WP2C2Project</exec.mainClass>
     </properties>
+    <name>WP2C2_Payroll</name>
 </project>

@@ -134,6 +134,11 @@ public class AdminHome extends javax.swing.JFrame {
         jButton7.setBackground(new java.awt.Color(137, 207, 243));
         jButton7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton7.setText("Employees");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setBackground(new java.awt.Color(137, 207, 243));
         jButton8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -228,6 +233,10 @@ public class AdminHome extends javax.swing.JFrame {
 
         dispose();
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments
