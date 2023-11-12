@@ -387,7 +387,7 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        Login frame = new Login();
+        Login_Jon frame = new Login_Jon();
         frame.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton10ActionPerformed
