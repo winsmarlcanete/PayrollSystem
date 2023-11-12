@@ -10,7 +10,7 @@ package com.mycompany.wp2c2project;
 public class WP2C2Project {
 
     public static void main(String[] args) {
-        Login ea = new Login();
+        Login_Jon ea = new Login_Jon();
         ea.setVisible(true);
     }
 }
