@@ -9,10 +9,12 @@ import java.sql.*;
  *
  * @author Jon Gleur Tan
  */
+
 public class SynergyGraffix {
-       static final String SG_URL = "jdbc:mysql://localhost/demo";
+       static final String SG_URL = "jdbc:mysql://localhost/wopapacaca";
        static final String USER = "root";
        static final String PASS = "";
+     
        public static Connection connectSG(){
            Connection conn = null;
            try{

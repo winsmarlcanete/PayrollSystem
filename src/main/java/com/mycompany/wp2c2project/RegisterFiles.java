@@ -260,7 +260,7 @@ public class RegisterFiles extends javax.swing.JFrame {
     }//GEN-LAST:event_regSSSActionPerformed
 
     private void Reg_LogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reg_LogActionPerformed
-        Login frame = new Login();
+        Login_Jon frame = new Login_Jon();
         frame.setVisible(true);
         dispose();
     }//GEN-LAST:event_Reg_LogActionPerformed

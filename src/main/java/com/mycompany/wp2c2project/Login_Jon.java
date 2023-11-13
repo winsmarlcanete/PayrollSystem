@@ -4,6 +4,12 @@
  */
 package com.mycompany.wp2c2project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,10 +25,7 @@ public class Login_Jon extends javax.swing.JFrame {
     SynergyGraffix conn;
     public Login_Jon() {
         initComponents();
-        conn = new SynergyGraffix();
-        if(conn == null){
-            JOptionPane.showMessageDialog(this, "Not Available3", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -38,7 +41,7 @@ public class Login_Jon extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         SGusername = new javax.swing.JTextField();
-        btnlogin = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
         SGpass = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -62,24 +65,24 @@ public class Login_Jon extends javax.swing.JFrame {
             }
         });
 
-        btnlogin.setBackground(new java.awt.Color(137, 207, 243));
-        btnlogin.setForeground(new java.awt.Color(255, 255, 255));
-        btnlogin.setText("Sign in");
-        btnlogin.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setBackground(new java.awt.Color(137, 207, 243));
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogin.setText("Sign in");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnloginActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
 
         SGpass.setForeground(new java.awt.Color(102, 102, 102));
 
-        jLabel2.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel2.setForeground(new java.awt.Color(153, 153, 153));
         jLabel2.setText("Username:");
 
-        jLabel3.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
         jLabel3.setText("Password:");
 
-        jLabel4.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
         jLabel4.setText("Register");
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -101,9 +104,9 @@ public class Login_Jon extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(SGpass)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(btnlogin)
+                            .addComponent(jLabel4)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4))))
+                            .addComponent(btnLogin))))
                 .addContainerGap(125, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -119,11 +122,11 @@ public class Login_Jon extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(4, 4, 4)
                 .addComponent(SGpass, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnlogin)
-                    .addComponent(jLabel4))
-                .addContainerGap(63, Short.MAX_VALUE))
+                    .addComponent(jLabel4)
+                    .addComponent(btnLogin))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -140,7 +143,7 @@ public class Login_Jon extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(62, 62, 62)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -157,18 +160,17 @@ public class Login_Jon extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnloginActionPerformed
-        // TODO add your handling code here:
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String username = SGusername.getText();
-        String password = SGpass.getPassword() .toString();
+        String password = String.valueOf(SGpass.getPassword());
         
         if(username.isEmpty() || password.isEmpty()){
-          JOptionPane.showMessageDialog(this, "Please fill out the filled properly", "Error", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(this, "Some fields are empty", "Error", JOptionPane.ERROR_MESSAGE);
         }
         else{
-            
+            userLogin(username, password);
         }
-    }//GEN-LAST:event_btnloginActionPerformed
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     private void SGusernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SGusernameActionPerformed
         // TODO add your handling code here:
@@ -226,7 +228,7 @@ public class Login_Jon extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPasswordField SGpass;
     private javax.swing.JTextField SGusername;
-    private javax.swing.JButton btnlogin;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -234,4 +236,32 @@ public class Login_Jon extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
+
+    private void userLogin(String username, String password) {
+        Connection sgconn = SynergyGraffix.connectSG();
+        if(sgconn != null){
+            try {
+                PreparedStatement st = (PreparedStatement)
+                        sgconn.prepareStatement("Select * from employee WHERE username = ? AND pass = ?");
+                
+
+                st.setString(1, username);
+                st.setString(2, password);
+                ResultSet res = st.executeQuery();
+                if(res.next()) {
+                    AdminHome frame = new AdminHome();
+                    frame.setVisible(true);
+                    dispose();
+                }else{
+                    JOptionPane.showMessageDialog(this, "User not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            System.out.println("Connection not available.");
+        }
+        
+    }
 }
+
