@@ -63,7 +63,6 @@ public class SummaryExample extends javax.swing.JFrame {
         int timeOutMin = (int) ((timeOutMill / (60 * 1000)) % 60);
 
         float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
-
         float days = hours / 8;
 
         float late = 0;
@@ -88,22 +87,30 @@ public class SummaryExample extends javax.swing.JFrame {
         }
         float otAmt = ot * rpH;
 
+        //night diff
         float nd = 0;
         try {
             Date thresholdStart = dateFormat.parse("22:00");
             Date thresholdEnd = dateFormat.parse("06:00");
-            Date threshold12 = dateFormat.parse("00:00");
+            Date midnight = dateFormat.parse("00:00");
+            int hr24 = 24 * 60 * 60 * 1000;
 
-            if (timeIn.after(thresholdStart) || timeOut.before(thresholdEnd)) {
-                //if timeIn inside & timeOut outside
-                if (timeIn.after(thresholdStart) && timeOut.after(thresholdEnd)) {
-                    //if timeIn before & timeOut after
-                    if (timeIn.before(threshold12) && timeOut.after(threshold12)) {
-                        nd = (timeInMill - thresholdStart.getTime() + thresholdEnd.getTime()) / (60 * 60 * 1000);
-                    } else //if timeIn & timeOut both before or after
-                    {
-                        nd = (thresholdEnd.getTime() - timeInMill) / (60 * 60 * 1000);
-                    }
+            if (timeIn.after(thresholdStart) || (timeIn.after(midnight) && timeOut.before(thresholdEnd)) || (timeIn.after(thresholdStart) && timeOut.before(midnight)) || timeOut.before(thresholdEnd)) {
+                long timeInMax = timeInMill;
+                long timeOutMnm = timeOutMill;
+
+                if (timeIn.before(midnight)) {
+                    timeInMax = Math.max(timeInMill, 22 * 60 * 60 * 1000);
+                }
+                if (timeOut.after(midnight)) {
+                    timeOutMnm = Math.min(timeOutMill, 6 * 60 * 60 * 1000);
+                }
+
+                //if timeOut after 24:00    
+                if (timeIn.after(timeOut)) {
+                    nd = (hr24 + timeOutMnm - timeInMax) / (60 * 60 * 1000);
+                } else {
+                    nd = (timeOutMnm - timeInMax) / (60 * 60 * 1000);
                 }
             }
         } catch (ParseException ex) {
@@ -121,9 +128,8 @@ public class SummaryExample extends javax.swing.JFrame {
             late + " (" + lateAmt + ")",
             rWage,
             ot + " (" + otAmt + ")",
-            nd,0,0,0,0,
-            gross,
-        });
+            nd + " (" + ndAmt + ")", 0, 0, 0, 0,
+            gross,});
     }
 
     /**
