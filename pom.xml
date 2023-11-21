@@ -12,11 +12,4 @@
         <exec.mainClass>com.mycompany.wp2c2project.WP2C2Project</exec.mainClass>
     </properties>
     <name>WP2C2_Payroll</name>
-    <dependencies>
-        <dependency>
-            <groupId>mysql-connector-j-8.2.0</groupId>
-            <artifactId>mysql-connector-j-8.2.0</artifactId>
-            <version>mysql-connector-j-8.2.0</version>
-        </dependency>
-    </dependencies>
 </project>
