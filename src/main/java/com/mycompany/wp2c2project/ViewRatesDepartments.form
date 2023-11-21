@@ -42,10 +42,9 @@
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jPanel2" max="32767" attributes="0"/>
                   <Component id="jPanel3" max="32767" attributes="0"/>
+                  <Component id="jPanel2" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -114,7 +113,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   <Component id="jTabbedPane1" min="-2" pref="318" max="-2" attributes="0"/>
-                  <EmptySpace pref="62" max="32767" attributes="0"/>
+                  <EmptySpace pref="30" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -314,11 +313,19 @@
                 <Component class="javax.swing.JTable" name="jTable2">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="4" rowCount="0">
-                        <Column editable="true" title="Surname" type="java.lang.Object"/>
-                        <Column editable="true" title="Name" type="java.lang.Object"/>
-                        <Column editable="true" title="Rate Per Day" type="java.lang.Object"/>
-                        <Column editable="true" title="Type" type="java.lang.Object"/>
+                      <Table columnCount="4" rowCount="1">
+                        <Column editable="true" title="Surname" type="java.lang.Object">
+                          <Data value="Serrano"/>
+                        </Column>
+                        <Column editable="true" title="Name" type="java.lang.Object">
+                          <Data value="Jerwin"/>
+                        </Column>
+                        <Column editable="true" title="Rate Per Day" type="java.lang.Object">
+                          <Data value="50"/>
+                        </Column>
+                        <Column editable="true" title="Type" type="java.lang.Object">
+                          <Data value="Manyakol"/>
+                        </Column>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -367,15 +374,21 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                          <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel1" min="-2" pref="46" max="-2" attributes="0"/>
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <Component id="jButton1" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                                  <Component id="jToggleButton1" min="-2" pref="61" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -392,9 +405,11 @@
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jToggleButton1" min="-2" pref="50" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -442,6 +457,11 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
