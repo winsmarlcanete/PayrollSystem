@@ -31,7 +31,7 @@ public class SummaryExample extends javax.swing.JFrame {
             System.err.println("Error creating Attendance instance: " + ex.getMessage());
             return;
         }
-
+        //table model
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
         String name = attendance.empName.getText();
@@ -117,10 +117,15 @@ public class SummaryExample extends javax.swing.JFrame {
             System.err.println("Error parsing time values: " + ex.getMessage());
         }
         float ndAmt = .10f * rpH * nd;
-
+        
+        float OD = 0;
+        float TD = 0;
+        float AA = 0;
+        
         float rWage = rpH * hours - lateAmt + ndAmt;
         float gross = rWage + ot + nd;
-
+        float NP = gross - OD + TD + AA;
+                
         model.addRow(new Object[]{
             name,
             rate,
@@ -129,7 +134,7 @@ public class SummaryExample extends javax.swing.JFrame {
             rWage,
             ot + " (" + otAmt + ")",
             nd + " (" + ndAmt + ")", 0, 0, 0, 0,
-            gross,});
+            gross, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, OD, TD, AA, NP, });
     }
 
     /**
@@ -199,13 +204,16 @@ public class SummaryExample extends javax.swing.JFrame {
                 .addContainerGap(42, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1001, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton3)
                         .addGap(81, 81, 81)
                         .addComponent(jButton4)))
-                .addGap(36, 36, 36))
+                .addGap(669, 669, 669))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1007, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,9 +222,9 @@ public class SummaryExample extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
