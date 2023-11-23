@@ -5,9 +5,11 @@
 package com.mycompany.wp2c2project;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -27,6 +29,22 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         tableName.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
         tableName.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
     }
+    
+    static void cellEditor(JTable tableName) {
+        JTable JTable = tableName;
+        tableName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+               TableModel tableModel = null;
+               int row= tableName.rowAtPoint(e.getPoint());
+               int col= tableName.columnAtPoint(e.getPoint());
+//               String colName = tableModel.getColumnName(col);
+               String newInput = (JOptionPane.showInputDialog(null, "Enter new Shift Start"));
+               tableName.setValueAt(newInput, row, col);
+            }
+         }
+        );
+    }
+    
     public ViewRatesDepartments() {
         initComponents();
         
@@ -38,6 +56,8 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         centerTableValue(Prepress);
         centerTableValue(Press);
         centerTableValue(Postpress);
+        
+        cellEditor(Accounting);
     }
     
     
