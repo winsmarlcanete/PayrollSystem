@@ -11,18 +11,18 @@ import java.sql.*;
  */
 
 public class SynergyGrafix {
-       static final String SG_URL = "jdbc:mysql://localhost/wopapacaca";
+       static final String SG_URL = "jdbc:mysql://localhost";
        static final String USER = "root";
        static final String PASS = "";
      
        public static Connection connectSG(){
-           Connection conn = null;
+           Connection conn;
            try{
                Class.forName("com.mysql.jdbc.Driver");
                conn = DriverManager.getConnection(SG_URL,USER,PASS);
                return conn;
            }   
-           catch(Exception ex){
+           catch(ClassNotFoundException | SQLException ex){
                System.out.println("There were errors connecting to Snergy Graffix");
                return null;
            }

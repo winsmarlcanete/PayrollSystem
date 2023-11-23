@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,10 +16,8 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    public static void main(String[] args) {
-        //set up database
-        String databaseName = "wp2c2_payroll";
-
+    public void setupDatabase() {
+        String databaseName = "wp2c2_test";
         Connection sgconn = SynergyGrafix.connectSG();
 
         if (sgconn != null) {
@@ -27,7 +26,7 @@ public class Main {
                 Statement statement = sgconn.createStatement();
                 statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + databaseName);
                 statement.executeUpdate("USE " + databaseName);
-                   statement.executeUpdate("CREATE TABLE IF NOT EXISTS employee ("
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS employee ("
                         + "id INT PRIMARY KEY, "
                         + "name VARCHAR(20) NOT NULL, "
                         + "department VARCHAR(20) NOT NULL, "
@@ -40,7 +39,7 @@ public class Main {
                         + "pagibig INT(20) NOT NULL, "
                         + "taxStatus VARCHAR(10) NOT NULL "
                         + ")");
-                    statement.executeUpdate("CREATE TABLE IF NOT EXISTS user ("
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS user ("
                         + "id INT PRIMARY KEY AUTO_INCREMENT, "
                         + "name VARCHAR(25) NOT NULL, "
                         + "username VARCHAR(25) NOT NULL, "
@@ -49,15 +48,20 @@ public class Main {
                         + "pass VARCHAR(25) NOT NULL, "
                         + "pass2 VARCHAR(25) NOT NULL "
                         + ")");
+                System.out.println("Database setup successful");
             } catch (SQLException ex) {
                 Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            //JOptionPane.showMessageDialog(this, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        main.setupDatabase();
 
         Login_Jon ea = new Login_Jon();
         ea.setVisible(true);
-
     }
 }

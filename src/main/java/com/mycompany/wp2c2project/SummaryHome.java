@@ -138,9 +138,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         jLabel2 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         fileName = new javax.swing.JLabel();
-        nameText = new javax.swing.JLabel();
-        dptText = new javax.swing.JLabel();
-        idText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,15 +174,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         fileName.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         fileName.setText("No file selected");
 
-        nameText.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
-        nameText.setText("Name");
-
-        dptText.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
-        dptText.setText("Department");
-
-        idText.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
-        idText.setText("ID");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -193,9 +181,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(idText)
-                    .addComponent(dptText)
-                    .addComponent(nameText)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(jButton2)
@@ -215,13 +200,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fileName, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addComponent(nameText, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(idText)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dptText, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -307,14 +286,11 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel dptText;
     private javax.swing.JLabel fileName;
-    private javax.swing.JLabel idText;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel nameText;
     // End of variables declaration//GEN-END:variables
 }
