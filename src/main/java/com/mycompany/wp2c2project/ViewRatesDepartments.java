@@ -4,6 +4,11 @@
  */
 package com.mycompany.wp2c2project;
 
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Windows
@@ -13,9 +18,29 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     /**
      * Creates new form Modifications
      */
+
+    static void centerTableValue(JTable tableName) {
+        JTable JTable = tableName;
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        tableName.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+        tableName.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
+        tableName.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
+    }
     public ViewRatesDepartments() {
         initComponents();
+        
+        centerTableValue(Admin);
+        centerTableValue(Accounting);
+        centerTableValue(Sales);
+        centerTableValue(HR);
+        centerTableValue(QC);
+        centerTableValue(Prepress);
+        centerTableValue(Press);
+        centerTableValue(Postpress);
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,20 +55,28 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        Admin = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        Accounting = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        Sales = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        HR = new javax.swing.JTable();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        QC = new javax.swing.JTable();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        Prepress = new javax.swing.JTable();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        Press = new javax.swing.JTable();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        Postpress = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,69 +108,236 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         jTabbedPane1.setBackground(new java.awt.Color(102, 102, 102));
         jTabbedPane1.setForeground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Admin.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {"Jon", "500", "10:00", "14:00"}
             },
             new String [] {
-                "Surname", "Name", "Rate Per Day", "Type"
+                "Name", "Rate", "Shift Start", "Shift End"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
 
-        jTabbedPane1.addTab("Human Resource", jScrollPane1);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane7.setViewportView(Admin);
+        if (Admin.getColumnModel().getColumnCount() > 0) {
+            Admin.getColumnModel().getColumn(0).setPreferredWidth(150);
+            Admin.getColumnModel().getColumn(1).setPreferredWidth(50);
+            Admin.getColumnModel().getColumn(2).setPreferredWidth(50);
+            Admin.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jTabbedPane1.addTab("Admin", jScrollPane7);
+
+        Accounting.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {"Jher", "1000", "7:30", "22:00"}
             },
             new String [] {
-                "Surname", "Name", "Rate Per Day", "Type"
+                "Name", "Rate", "Shift Start", "Shift End"
             }
-        ));
-        jScrollPane2.setViewportView(jTable3);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
 
-        jTabbedPane1.addTab("Human Resource", jScrollPane2);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        Accounting.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AccountingMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Accounting);
+        if (Accounting.getColumnModel().getColumnCount() > 0) {
+            Accounting.getColumnModel().getColumn(0).setPreferredWidth(150);
+            Accounting.getColumnModel().getColumn(1).setPreferredWidth(50);
+            Accounting.getColumnModel().getColumn(2).setPreferredWidth(50);
+            Accounting.getColumnModel().getColumn(2).setCellEditor(null);
+            Accounting.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        jTabbedPane1.addTab("Accounting", jScrollPane1);
+
+        Sales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {"Marc", "2", "14:00", "16:00"},
+                {null, null, null, null}
             },
             new String [] {
-                "Surname", "Name", "Rate Per Day", "Type"
+                "Name", "Rate", "Shift Start", "Shift End"
             }
-        ));
-        jScrollPane3.setViewportView(jTable4);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
 
-        jTabbedPane1.addTab("Accounting", jScrollPane3);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(Sales);
+        if (Sales.getColumnModel().getColumnCount() > 0) {
+            Sales.getColumnModel().getColumn(0).setPreferredWidth(150);
+            Sales.getColumnModel().getColumn(1).setPreferredWidth(50);
+            Sales.getColumnModel().getColumn(2).setPreferredWidth(50);
+            Sales.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTabbedPane1.addTab("Sales", jScrollPane5);
+
+        HR.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Serrano", "Jerwin", "50", "Manyakol"}
+                {"Marlon", "1500", "1:00", "23:00"}
             },
             new String [] {
-                "Surname", "Name", "Rate Per Day", "Type"
+                "Name", "Rate", "Shift Start", "Shift End"
             }
-        ));
-        jScrollPane4.setViewportView(jTable2);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
 
-        jTabbedPane1.addTab("Production", jScrollPane4);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(HR);
+        if (HR.getColumnModel().getColumnCount() > 0) {
+            HR.getColumnModel().getColumn(0).setPreferredWidth(150);
+            HR.getColumnModel().getColumn(1).setPreferredWidth(50);
+            HR.getColumnModel().getColumn(2).setPreferredWidth(50);
+            HR.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
+
+        jTabbedPane1.addTab("Human Resources", jScrollPane6);
+
+        QC.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"Jer", "999999", "7:30", "7:31"}
+            },
+            new String [] {
+                "Name", "Rate", "Shift Start", "Shift End"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane8.setViewportView(QC);
+        if (QC.getColumnModel().getColumnCount() > 0) {
+            QC.getColumnModel().getColumn(0).setPreferredWidth(150);
+            QC.getColumnModel().getColumn(1).setPreferredWidth(50);
+            QC.getColumnModel().getColumn(2).setPreferredWidth(50);
+            QC.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
+
+        jTabbedPane1.addTab("Quality Control", jScrollPane8);
+
+        Prepress.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"Vince", "21", "2:00", "3:00"}
+            },
+            new String [] {
+                "Name", "Rate", "Shift Start", "Shift End"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane9.setViewportView(Prepress);
+        if (Prepress.getColumnModel().getColumnCount() > 0) {
+            Prepress.getColumnModel().getColumn(0).setPreferredWidth(150);
+            Prepress.getColumnModel().getColumn(1).setPreferredWidth(50);
+            Prepress.getColumnModel().getColumn(2).setPreferredWidth(50);
+            Prepress.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
+
+        jTabbedPane1.addTab("Prepress", jScrollPane9);
+
+        Press.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"Laurence", "5", "7:30", "20:00"}
+            },
+            new String [] {
+                "Name", "Rate", "Shift Start", "Shift End"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane10.setViewportView(Press);
+        if (Press.getColumnModel().getColumnCount() > 0) {
+            Press.getColumnModel().getColumn(0).setPreferredWidth(150);
+            Press.getColumnModel().getColumn(1).setPreferredWidth(50);
+            Press.getColumnModel().getColumn(2).setPreferredWidth(50);
+            Press.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
+
+        jTabbedPane1.addTab("Press", jScrollPane10);
+
+        Postpress.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"Glouyer", "99", "3:00", "3:30"}
+            },
+            new String [] {
+                "Name", "Rate", "Shift Start", "Shift End"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane11.setViewportView(Postpress);
+        if (Postpress.getColumnModel().getColumnCount() > 0) {
+            Postpress.getColumnModel().getColumn(0).setPreferredWidth(150);
+            Postpress.getColumnModel().getColumn(1).setPreferredWidth(50);
+            Postpress.getColumnModel().getColumn(2).setPreferredWidth(50);
+            Postpress.getColumnModel().getColumn(3).setPreferredWidth(50);
+        }
+
+        jTabbedPane1.addTab("Postpress", jScrollPane11);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(43, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(29, 29, 29)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
@@ -167,7 +367,12 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
             }
         });
 
-        jToggleButton1.setText("Edit");
+        jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -185,23 +390,23 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(14, Short.MAX_VALUE))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jButton2)
+                                    .addComponent(jButton1))))))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addGap(40, 40, 40))
         );
@@ -212,12 +417,14 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,6 +445,18 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         frame.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void AccountingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AccountingMouseClicked
+//        JOptionPane.showInputDialog("Enter time");
+    }//GEN-LAST:event_AccountingMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        DefaultTableModel model = (DefaultTableModel) Accounting.getModel();
+        
+        int selectedRowIndex = Accounting.getSelectedRow();
+        
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -276,7 +495,16 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JTable Accounting;
+    private javax.swing.JTable Admin;
+    private javax.swing.JTable HR;
+    private javax.swing.JTable Postpress;
+    private javax.swing.JTable Prepress;
+    private javax.swing.JTable Press;
+    private javax.swing.JTable QC;
+    private static javax.swing.JTable Sales;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -285,14 +513,13 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
