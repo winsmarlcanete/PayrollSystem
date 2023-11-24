@@ -4,6 +4,11 @@
  */
 package com.mycompany.wp2c2project;
 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+
 /**
  *
  * @author Windows
@@ -13,8 +18,50 @@ public class ViewRates extends javax.swing.JFrame {
     /**
      * Creates new form Modifications
      */
+    
+    static void centerTableValue(JTable tableName) {
+        JTable JTable = tableName;
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        tableName.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+        
+        
+       
+    }
+    
+    static void cellEditor(JTable tableName) {
+        JTable JTable = tableName;
+        tableName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int row= tableName.rowAtPoint(e.getPoint());
+                int col= tableName.columnAtPoint(e.getPoint());
+                String cellValue = (String) tableName.getValueAt(row, col);
+                String colName = tableName.getColumnName(col);
+                if (col >= 1) {
+                    String newInput = JOptionPane.showInputDialog(null, "Enter new " + colName);
+                    if (newInput != null) {
+                        tableName.setValueAt(newInput, row, col);
+                    } else {
+                        tableName.setValueAt(cellValue, row, col);
+                    }
+                }
+                
+//               System.out.println(colName);
+            }
+         }
+        );
+    }
+        
     public ViewRates() {
         initComponents();
+        centerTableValue(AddPay);
+        centerTableValue(Taxation);
+        centerTableValue(OtherDeduc);
+        
+        cellEditor(AddPay);
+        cellEditor(Taxation);
+        cellEditor(OtherDeduc);
+        
     }
 
     /**
@@ -31,11 +78,11 @@ public class ViewRates extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
+        AddPay = new javax.swing.JTable();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable6 = new javax.swing.JTable();
+        Taxation = new javax.swing.JTable();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable7 = new javax.swing.JTable();
+        OtherDeduc = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -69,42 +116,126 @@ public class ViewRates extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        AddPay.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"Overtime", "1.25"},
-                {"Night Differential", "0.1"}
-            },
-            new String [] {
-                "Rate Name", "Rate Value"
-            }
-        ));
-        jScrollPane5.setViewportView(jTable5);
-
-        jTabbedPane1.addTab("Additional Pay", jScrollPane5);
-
-        jTable6.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"SSS", "1.25"},
-                {"Cooperative", "0.1"}
-            },
-            new String [] {
-                "Rate Name", "Rate Value"
-            }
-        ));
-        jScrollPane6.setViewportView(jTable6);
-
-        jTabbedPane1.addTab("Taxation", jScrollPane6);
-
-        jTable7.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Late", "1.25"},
+                {"Night Differential", "0.1"},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
                 {null, null}
             },
             new String [] {
                 "Rate Name", "Rate Value"
             }
         ));
-        jScrollPane7.setViewportView(jTable7);
+        jScrollPane5.setViewportView(AddPay);
+
+        jTabbedPane1.addTab("Additional Pay", jScrollPane5);
+
+        Taxation.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"SSS", "1.25"},
+                {"Cooperative", "0.1"},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Rate Name", "Rate Value"
+            }
+        ));
+        jScrollPane6.setViewportView(Taxation);
+
+        jTabbedPane1.addTab("Taxation", jScrollPane6);
+
+        OtherDeduc.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"Late", "1.25"},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Rate Name", "Rate Value"
+            }
+        ));
+        jScrollPane7.setViewportView(OtherDeduc);
 
         jTabbedPane1.addTab("Other Deductions", jScrollPane7);
 
@@ -180,7 +311,7 @@ public class ViewRates extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addGap(29, 29, 29))
+                .addGap(28, 28, 28))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,6 +386,9 @@ public class ViewRates extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable AddPay;
+    private javax.swing.JTable OtherDeduc;
+    private javax.swing.JTable Taxation;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -267,8 +401,5 @@ public class ViewRates extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable5;
-    private javax.swing.JTable jTable6;
-    private javax.swing.JTable jTable7;
     // End of variables declaration//GEN-END:variables
 }
