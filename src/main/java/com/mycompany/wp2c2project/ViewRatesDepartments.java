@@ -65,10 +65,14 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         centerTableValue(Press);
         centerTableValue(Postpress);
         
+        cellEditor(Admin);
         cellEditor(Accounting);
-        
-//        String columnName = Accounting.getColumnName(2);
-//        System.out.println(columnName);
+        cellEditor(Sales);
+        cellEditor(HR);
+        cellEditor(QC);
+        cellEditor(Prepress);
+        cellEditor(Press);
+        cellEditor(Postpress);
     }
     
     
