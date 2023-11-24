@@ -34,12 +34,15 @@ public class SummaryExample extends javax.swing.JFrame {
         //table model
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
-        String name = attendance.empName.getText();
+//        String name = attendance.empName.getText();
+        String name = "Jerwin"; //sample name
         float rate = (float) 1007.86;
         float rpH = rate / 8;
 
-        String timeInStr = attendance.timeIn.getText();
-        String timeOutStr = attendance.timeOut.getText();
+//        String timeInStr = attendance.timeIn.getText();
+//        String timeOutStr = attendance.timeOut.getText();
+        String timeInStr = "8:30"; //sample time in
+        String timeOutStr = "8:30"; //sample time out
 
         //Time in & time out
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -65,9 +68,14 @@ public class SummaryExample extends javax.swing.JFrame {
         float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
         float days = hours / 8;
 
+        //get shift start time from table in ViewRatesDepartments
+        ViewRatesDepartments rates = new ViewRatesDepartments();
+        String shiftIntae = (String) rates.Accounting.getModel().getValueAt(0, 2);
+        System.out.println(shiftIntae);
+        
         float late = 0;
         try {
-            Date thresholdTime = dateFormat.parse("08:00");
+            Date thresholdTime = dateFormat.parse(shiftIntae);
             if (timeIn.after(thresholdTime)) {
                 late = (float) (timeInMill - thresholdTime.getTime()) / (60 * 1000);
             }
@@ -75,7 +83,7 @@ public class SummaryExample extends javax.swing.JFrame {
             System.err.println("Error parsing time values: " + ex.getMessage());
         }
         float lateAmt = late * 2 / 60 * rpH;
-
+        
         float ot = 0;
         try {
             Date thresholdTime = dateFormat.parse("17:00");
@@ -242,7 +250,7 @@ public class SummaryExample extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
