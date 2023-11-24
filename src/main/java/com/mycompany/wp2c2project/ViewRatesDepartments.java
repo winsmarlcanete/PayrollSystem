@@ -34,17 +34,25 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         JTable JTable = tableName;
         tableName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
-               TableModel tableModel = null;
-               int row= tableName.rowAtPoint(e.getPoint());
-               int col= tableName.columnAtPoint(e.getPoint());
-//               String colName = tableModel.getColumnName(col);
-               String newInput = (JOptionPane.showInputDialog(null, "Enter new Shift Start"));
-               tableName.setValueAt(newInput, row, col);
+                int row= tableName.rowAtPoint(e.getPoint());
+                int col= tableName.columnAtPoint(e.getPoint());
+                String cellValue = (String) tableName.getValueAt(row, col);
+                String colName = tableName.getColumnName(col);
+                if (col >= 1) {
+                    String newInput = JOptionPane.showInputDialog(null, "Enter new " + colName);
+                    if (newInput != null) {
+                        tableName.setValueAt(newInput, row, col);
+                    } else {
+                        tableName.setValueAt(cellValue, row, col);
+                    }
+                }
+                
+//               System.out.println(colName);
             }
          }
         );
     }
-    
+        
     public ViewRatesDepartments() {
         initComponents();
         
@@ -58,6 +66,9 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         centerTableValue(Postpress);
         
         cellEditor(Accounting);
+        
+//        String columnName = Accounting.getColumnName(2);
+//        System.out.println(columnName);
     }
     
     
