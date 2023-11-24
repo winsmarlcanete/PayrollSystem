@@ -98,7 +98,10 @@ public class Main {
         Main main = new Main();
         main.setupDatabase();
 
-        Login_Jon ea = new Login_Jon();
-        ea.setVisible(true);
+        //Login_Jon ea = new Login_Jon();
+        //ea.setVisible(true);
+        
+        AdminHome frame = new AdminHome();
+        frame.setVisible(true);
     }
 }
