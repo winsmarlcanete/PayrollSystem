@@ -22,7 +22,6 @@ public class Login_Jon extends javax.swing.JFrame {
      * Creates new form LoginRegister
      */
     
-    SynergyGrafix conn;
     public Login_Jon() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -238,7 +237,7 @@ public class Login_Jon extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void userLogin(String username, String password) {
-        Connection sgconn = SynergyGrafix.connectSG();
+        Connection sgconn = Main.connectSG();
         if(sgconn != null){
             try {
                 PreparedStatement st = (PreparedStatement)

@@ -8,8 +8,10 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 interface SetupEmployeeCallback {
 
@@ -25,8 +27,6 @@ public class SetupEmployee extends javax.swing.JFrame {
     /**
      * Creates new form registerEmployee
      */
-
-
     private String id = "0";
     private String name = "none";
     private String department = "none";
@@ -34,12 +34,10 @@ public class SetupEmployee extends javax.swing.JFrame {
     public SetupEmployee(SummaryHome summaryHome) {
         initComponents();
 
-
         id = summaryHome.id;
         name = summaryHome.name;
         department = summaryHome.department;
 
-        System.out.println(id + name + department);
         nameLabel.setText(name);
     }
 
@@ -72,13 +70,13 @@ public class SetupEmployee extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         taxStatusField = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        saveBtn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        rateField1 = new javax.swing.JTextField();
-        rateField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        shiftStartField = new javax.swing.JTextField();
+        shiftEndField = new javax.swing.JTextField();
+        skipBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -89,6 +87,7 @@ public class SetupEmployee extends javax.swing.JFrame {
         jLabel2.setText("Rate");
 
         rateField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        rateField.setText("570.00");
 
         jLabel1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         jLabel1.setText("Enter details");
@@ -97,37 +96,37 @@ public class SetupEmployee extends javax.swing.JFrame {
         jLabel3.setText("TIN");
 
         tinField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        tinField.setText("000-000-000");
 
         jLabel4.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         jLabel4.setText("Phil Health No.");
 
         philHealthField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        philHealthField.setText("000000000000");
 
         jLabel5.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         jLabel5.setText("SSS No.");
 
         sssField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        sssField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sssFieldActionPerformed(evt);
-            }
-        });
+        sssField.setText("00-0000000-0");
 
         pagibigField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        pagibigField.setText("000000000000");
 
         jLabel6.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         jLabel6.setText("Tax Status");
 
         taxStatusField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        taxStatusField.setText("ME0");
 
         jLabel7.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         jLabel7.setText("Pag-ibig No.");
 
-        jButton1.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
-        jButton1.setText("Save");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveBtn.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        saveBtn.setText("Save");
+        saveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                saveBtnActionPerformed(evt);
             }
         });
 
@@ -140,22 +139,17 @@ public class SetupEmployee extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         jLabel10.setText("Shift end");
 
-        rateField1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        rateField1.setText("07:00");
-        rateField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rateField1ActionPerformed(evt);
-            }
-        });
+        shiftStartField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        shiftStartField.setText("07:00");
 
-        rateField2.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        rateField2.setText("16:00");
+        shiftEndField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        shiftEndField.setText("16:00");
 
-        jButton2.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
-        jButton2.setText("Skip");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        skipBtn.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        skipBtn.setText("Skip");
+        skipBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                skipBtnActionPerformed(evt);
             }
         });
 
@@ -165,36 +159,35 @@ public class SetupEmployee extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel1)
-                    .addComponent(nameLabel)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(philHealthField)
-                    .addComponent(sssField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(rateField)
-                    .addComponent(tinField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel8)
+                        .addComponent(jLabel1)
+                        .addComponent(nameLabel)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel4)
+                        .addComponent(philHealthField)
+                        .addComponent(sssField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)
+                        .addComponent(rateField)
+                        .addComponent(tinField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel7)
+                        .addComponent(pagibigField)
+                        .addComponent(taxStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel9)
+                                .addComponent(shiftStartField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButton1))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(pagibigField)
-                            .addComponent(taxStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel2)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(rateField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(shiftEndField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel10))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(saveBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rateField2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))))
+                        .addComponent(skipBtn)))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -216,8 +209,8 @@ public class SetupEmployee extends javax.swing.JFrame {
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rateField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rateField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(shiftStartField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(shiftEndField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -240,8 +233,8 @@ public class SetupEmployee extends javax.swing.JFrame {
                 .addComponent(taxStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(saveBtn)
+                    .addComponent(skipBtn))
                 .addGap(30, 30, 30))
         );
 
@@ -249,16 +242,25 @@ public class SetupEmployee extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         String rate = "0";
+        String shiftStart = "00:00";
+        String shiftEnd = "00:00";
         String tin = "0";
         String philHealth = "0";
         String sss = "0";
         String pagibig = "0";
         String taxStatus = "none";
 
+        //!! need checking !!
         if (!rateField.getText().isEmpty()) {
             rate = rateField.getText();
+        }
+        if (!shiftStartField.getText().isEmpty()) {
+            shiftStart = shiftStartField.getText();
+        }
+        if (!shiftEndField.getText().isEmpty()) {
+            shiftEnd = shiftEndField.getText();
         }
         if (!tinField.getText().isEmpty()) {
             tin = tinField.getText();
@@ -276,19 +278,24 @@ public class SetupEmployee extends javax.swing.JFrame {
             taxStatus = taxStatusField.getText();
         }
 
-        Connection sgconn = SynergyGrafix.connectSG();
+        Connection sgconn = Main.connectSG();
         PreparedStatement st;
         try {
-            st = (PreparedStatement) sgconn.prepareStatement("INSERT INTO `employee`(`id`, `name`, `department`, `rate`, `tin`, `philHealth`, `sss`, `pagibig`, `taxStatus`) VALUES (?,?,?,?,?,?,?,?,?)");
+            st = (PreparedStatement) sgconn.prepareStatement(
+                    "INSERT INTO `employee`"
+                    + "(`id`, `name`, `department`, `rate`, `shiftStart`, `shiftEnd`,`tin`, `philHealth`, `sss`, `pagibig`, `taxStatus`) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             st.setString(1, id);
             st.setString(2, name);
             st.setString(3, department);
             st.setString(4, rate);
-            st.setString(5, tin);
-            st.setString(6, philHealth);
-            st.setString(7, sss);
-            st.setString(8, pagibig);
-            st.setString(9, taxStatus);
+            st.setString(5, shiftStart);
+            st.setString(6, shiftEnd);
+            st.setString(7, tin);
+            st.setString(8, philHealth);
+            st.setString(9, sss);
+            st.setString(10, pagibig);
+            st.setString(11, taxStatus);
             st.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(SetupEmployee.class.getName()).log(Level.SEVERE, null, ex);
@@ -297,20 +304,16 @@ public class SetupEmployee extends javax.swing.JFrame {
         if (callback != null) {
             callback.onSetupEmployeeFinished();
         }
+
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_saveBtnActionPerformed
 
-    private void sssFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sssFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sssFieldActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void rateField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rateField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rateField1ActionPerformed
+    private void skipBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipBtnActionPerformed
+        int result = JOptionPane.showConfirmDialog(this, "Confirm skipping registering all new employees?", "Confirm", JOptionPane.WARNING_MESSAGE);
+        if (result == 0) {
+            dispose();
+        }
+    }//GEN-LAST:event_skipBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -318,10 +321,11 @@ public class SetupEmployee extends javax.swing.JFrame {
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        FlatLightLaf.setup();
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        FlatLightLaf.setup();
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -334,8 +338,6 @@ public class SetupEmployee extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -350,8 +352,10 @@ public class SetupEmployee extends javax.swing.JFrame {
     public javax.swing.JTextField pagibigField;
     public javax.swing.JTextField philHealthField;
     public javax.swing.JTextField rateField;
-    public javax.swing.JTextField rateField1;
-    public javax.swing.JTextField rateField2;
+    private javax.swing.JButton saveBtn;
+    public javax.swing.JTextField shiftEndField;
+    public javax.swing.JTextField shiftStartField;
+    private javax.swing.JButton skipBtn;
     public javax.swing.JTextField sssField;
     public javax.swing.JTextField taxStatusField;
     public javax.swing.JTextField tinField;

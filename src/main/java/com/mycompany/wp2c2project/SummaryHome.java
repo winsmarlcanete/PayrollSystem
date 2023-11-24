@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -20,6 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+import static org.apache.poi.ss.usermodel.CellType.STRING;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -40,68 +44,13 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
     Sheet sheet = null;
     Workbook wb = null;
+    ResultSet resultSet;
+    Connection sgconn = Main.connectSG();
+    PreparedStatement st;
 
     @Override
     public void onSetupEmployeeFinished() {
-        readEmployeeInfo();
-    }
-
-    String name;
-    String id;
-    String department;
-
-    int infoCol1 = 9;
-    int infoCol2 = 1;
-    int infoSheet = 2;
-
-    private void readEmployeeInfo() {
-        sheet = wb.getSheetAt(infoSheet);
-
-        name = readCell(3, infoCol1);
-        id = readCell(4, infoCol1);
-        department = readCell(3, infoCol2);
-
-        if (Double.parseDouble(id) < 1000) {
-            Connection sgconn = SynergyGrafix.connectSG();
-            if (sgconn != null) {
-                try {
-                    PreparedStatement st;
-
-                    //find if record exists
-                    st = sgconn.prepareStatement("SELECT EXISTS(SELECT * FROM `employee` WHERE `id` = ?)");
-                    st.setString(1, id);
-                    ResultSet resultSet = st.executeQuery();
-
-                    if (resultSet.next() && resultSet.getInt(1) == 0) {
-                        //transfer data to SetupEmployee.java to register
-                        SetupEmployee setupEmployeeFrame = new SetupEmployee(this);
-                        setupEmployeeFrame.setCallback(this);
-                        setupEmployeeFrame.setVisible(true);
-
-                        iterateEmpyInfoCols();
-                    } else {
-                        iterateEmpyInfoCols();
-                        readEmployeeInfo();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Time card uploaded successfully", "Success", JOptionPane.PLAIN_MESSAGE);
-        }
-    }
-
-    private void iterateEmpyInfoCols() {
-        infoCol1 += 15;
-        infoCol2 += 15;
-        if (infoCol1 > 39) {
-            infoCol1 = 9;
-            infoCol2 = 1;
-            infoSheet++;
-        }
+        readTime();
     }
 
     private String readCell(int rowP, int columnP) {
@@ -114,13 +63,176 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         } else {
             FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
             switch (formulaEvaluator.evaluateInCell(cell).getCellType()) {
-                case NUMERIC ->
-                    data = String.valueOf(cell.getNumericCellValue());
+                case NUMERIC -> {
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        // Handle as date and format as time
+                        java.util.Date dateCell = cell.getDateCellValue();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(dateCell);
+                        calendar.add(Calendar.MINUTE, 1);
+                        dateCell = calendar.getTime();
+                        String timeFormat = "HH:mm";
+                        data = new java.text.SimpleDateFormat(timeFormat).format(dateCell);
+                    } else {
+                        // Handle as numeric
+                        data = String.valueOf(cell.getNumericCellValue());
+                    }
+                }
                 case STRING ->
                     data = cell.getStringCellValue();
             }
         }
         return data;
+    }
+
+    String name;
+    String id;
+    String department;
+
+    int infoCol1 = 9;
+    int infoCol2 = 1;
+    int readSheet = 2;
+
+    private void readEmployeeInfo() {
+        sheet = wb.getSheetAt(readSheet);
+
+        name = readCell(3, infoCol1);
+        id = readCell(4, infoCol1);
+        department = readCell(3, infoCol2);
+
+        if (Double.parseDouble(id) < 1000 && sheet != null) {
+            if (sgconn != null) {
+                try {
+                    //find if record exists
+                    st = sgconn.prepareStatement("SELECT EXISTS(SELECT * FROM `employee` WHERE `id` = ?)");
+                    st.setString(1, id);
+                    resultSet = st.executeQuery();
+
+                    if (resultSet.next() && resultSet.getInt(1) == 0) {
+                        //transfer data to SetupEmployee.java to register
+                        SetupEmployee setupEmployeeFrame = new SetupEmployee(this);
+                        setupEmployeeFrame.setCallback(this);
+                        setupEmployeeFrame.setVisible(true);
+                    } else {
+                        readTime();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Time card uploaded successfully", "Success", JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
+    String date;
+    String dateType = "0";
+    String timeIn;
+    String timeOut = null;
+    String shiftStart;
+    String shiftEnd;
+
+    int dateCol = 0;
+    int timeInCol = 1;
+    int timeOutColStart = 12;
+    int timeOutColEnd = 3;
+
+    //time card 1
+    //date cells 12,0 - 42, 0
+    //timeIn cells 12,1 - 42, 1
+    //timeOut cells 12,12 - 42, 3
+    //time card 2 row + 15
+    //time card 3 row + 15
+    private void readTime() {
+        try {
+            for (int i = 12; i <= 42; i++) {
+                date = readCell(i, dateCol);
+
+                if (date != null) {
+                    //check first if date data doesnt exist in the data base yet
+                    int idCvt = (int) Double.parseDouble(id);
+                    st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card` WHERE `id` = ? AND `date` = ?");
+                    st.setInt(1, idCvt);
+                    st.setString(2, date);
+                    resultSet = st.executeQuery();
+                    resultSet.next();
+                    int rowCount = resultSet.getInt(1);
+
+                    if (rowCount == 0 && date != null) {
+                        //timeIn
+                        timeIn = readCell(i, timeInCol);
+                        if (timeIn == null) {
+                            timeIn = "none";
+                        }
+
+                        //timeOut
+                        timeOut = null;
+                        for (int j = timeOutColStart; j >= timeOutColEnd && (timeOut == null || "".equals(timeOut)); j--) {
+                            timeOut = readCell(i, j);
+                        }
+                        if (timeOut == null) {
+                            timeOut = "none";
+                        }
+
+                        //shiftStart
+                        st = (PreparedStatement) sgconn.prepareStatement("SELECT shiftStart FROM employee WHERE id = ?;");
+                        st.setInt(1, idCvt);
+                        resultSet = st.executeQuery();
+                        resultSet.next();
+                        shiftStart = resultSet.getString("shiftStart");
+                        System.out.println("getting shiftStart success");
+
+                        //shiftEnd
+                        st = (PreparedStatement) sgconn.prepareStatement("SELECT shiftEnd FROM employee WHERE id = ?;");
+                        st.setInt(1, idCvt);
+                        resultSet = st.executeQuery();
+                        resultSet.next();
+                        shiftEnd = resultSet.getString("shiftEnd");
+                        System.out.println("getting shiftEnd success");
+
+                        //for debugging
+                        System.out.println("id: " + idCvt);
+                        System.out.println("date: " + date);
+                        System.out.println("timeIn: " + timeIn);
+
+                        //insert to table
+                        st = (PreparedStatement) sgconn.prepareStatement(
+                                "INSERT INTO `time_card`"
+                                + "(`id`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`) "
+                                + "VALUES (?,?,?,?,?,?,?)"
+                        );
+                        st.setString(1, id);
+                        st.setString(2, date);
+                        st.setString(3, dateType);
+                        st.setString(4, timeIn);
+                        st.setString(5, timeOut);
+                        st.setString(6, shiftStart);
+                        st.setString(7, shiftEnd);
+                        st.executeUpdate();
+                        System.out.println("insert data success");
+                    } else {
+                        System.out.println("date data already exists");
+                    }
+                }
+                System.out.println("date is null");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        iterateEmpyInfoCols();
+        readEmployeeInfo();
+    }
+
+    private void iterateEmpyInfoCols() {
+        infoCol1 += 15;
+        infoCol2 += 15;
+        if (infoCol1 > 39) {
+            infoCol1 = 9;
+            infoCol2 = 1;
+            readSheet++;
+        }
     }
 
     /**
@@ -226,6 +338,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //upload excel
         JFileChooser excelFileChooser = new JFileChooser();
         FileNameExtensionFilter fnef = new FileNameExtensionFilter("Excel Files", "xls");
         excelFileChooser.setFileFilter(fnef);
@@ -234,8 +347,8 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         String filename = excelFile.getName();
         fileName.setText(filename);
 
+        //read excel
         String filePath = excelFile.getAbsolutePath();
-
         try {
             FileInputStream fis = new FileInputStream(new File(filePath));
             wb = new HSSFWorkbook(fis);
@@ -249,16 +362,15 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
+        //check if file is right
         if (wb != null) {
             sheet = wb.getSheetAt(2);
         }
-
-        //checking if file is correct
         if (!"Employee Attendance Table".equals(readCell(0, 11))) {
             JOptionPane.showMessageDialog(this, "Please check if the file is correct", "Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
 
-            //initiate read loop
+            //initiate read employee info loop
             readEmployeeInfo();
         }
     }//GEN-LAST:event_jButton1ActionPerformed

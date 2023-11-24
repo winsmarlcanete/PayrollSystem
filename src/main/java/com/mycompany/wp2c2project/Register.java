@@ -324,7 +324,7 @@ public class Register extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void userRegister(String name, String username, String number, String email, String password, String conpassword) {
-        Connection sgconn = SynergyGrafix.connectSG();
+        Connection sgconn = Main.connectSG();
         if(sgconn != null){
             try {
                 PreparedStatement st = (PreparedStatement)
