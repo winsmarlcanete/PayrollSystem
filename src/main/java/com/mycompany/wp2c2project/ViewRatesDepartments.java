@@ -107,7 +107,6 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -191,7 +190,6 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
             Accounting.getColumnModel().getColumn(0).setPreferredWidth(150);
             Accounting.getColumnModel().getColumn(1).setPreferredWidth(50);
             Accounting.getColumnModel().getColumn(2).setPreferredWidth(50);
-            Accounting.getColumnModel().getColumn(2).setCellEditor(null);
             Accounting.getColumnModel().getColumn(3).setPreferredWidth(50);
         }
 
@@ -398,13 +396,6 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Edit");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -421,9 +412,7 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton2)
-                                    .addComponent(jButton1))))))
+                                .addComponent(jButton1)))))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -436,8 +425,6 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addGap(40, 40, 40))
         );
@@ -480,14 +467,6 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     private void AccountingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AccountingMouseClicked
 //        JOptionPane.showInputDialog("Enter time");
     }//GEN-LAST:event_AccountingMouseClicked
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        DefaultTableModel model = (DefaultTableModel) Accounting.getModel();
-        
-        int selectedRowIndex = Accounting.getSelectedRow();
-        
-
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -535,7 +514,6 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     private javax.swing.JTable QC;
     private static javax.swing.JTable Sales;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
