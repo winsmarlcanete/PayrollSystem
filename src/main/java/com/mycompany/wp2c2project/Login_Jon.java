@@ -241,7 +241,7 @@ public class Login_Jon extends javax.swing.JFrame {
         if(sgconn != null){
             try {
                 PreparedStatement st = (PreparedStatement)
-                        sgconn.prepareStatement("Select * from employee WHERE username = ? AND pass = ?");
+                        sgconn.prepareStatement("Select * from user WHERE username = ? AND pass = ?");
                 
 
                 st.setString(1, username);

@@ -328,7 +328,7 @@ public class Register extends javax.swing.JFrame {
         if(sgconn != null){
             try {
                 PreparedStatement st = (PreparedStatement)
-                        sgconn.prepareStatement("INSERT INTO `employee`(`name`, `username`, `cell no.`, `email`, `pass`, `pass2`) VALUES (?,?,?,?,?,?)");
+                        sgconn.prepareStatement("INSERT INTO `user`(`name`, `username`, `cell no.`, `email`, `pass`, `pass2`) VALUES (?,?,?,?,?,?)");
                 
 
                 st.setString(1, name);
