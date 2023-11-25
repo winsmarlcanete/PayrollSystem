@@ -4,6 +4,9 @@
  */
 package com.mycompany.wp2c2project;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -59,32 +62,44 @@ public class ViewRates extends javax.swing.JFrame {
     public ViewRates() {
         initComponents();
         
+        
+        
         centerTableValue(rateTable);
         
-        DefaultTableModel model = (DefaultTableModel)rateTable.getModel();
-        model.setRowCount(0);
-        
-        try {
-        String sql = "SELECT * FROM rates";
-        Connection sgconn = Main.connectSG();
-        PreparedStatement pst = sgconn.prepareStatement(sql);
-        ResultSet rs  = pst.executeQuery();
-        
-        
-        while(rs.next()){
-            model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
-        }
-        } catch (Exception e) {
-            System.out.println("error par");
-        }
-        
-        // Centers the value of table (loop)
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-        for(int x=0;x<4;x++){
-         rateTable.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
-        }
+        showTableContent();
 
+        rateTable.addMouseListener(new MouseListener() {
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {
+            //scv means selected cell value
+            String scv1 = (String) rateTable.getValueAt(rateTable.getSelectedRow() ,0);
+            String scv2 = (String) rateTable.getValueAt(rateTable.getSelectedRow() ,1);
+            String scv3 = (String) rateTable.getValueAt(rateTable.getSelectedRow() ,2);
+            
+            
+            rateNameTF.setText(scv2);
+            rateValueTF.setText(scv3);
+            idTF.setText(scv1);
+            
+            
+            
+            
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+        @Override
+        public void mouseClicked(MouseEvent e) {
+        }
+        });
+        
+        
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,11 +119,13 @@ public class ViewRates extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         rateValueTF = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        addBtn = new javax.swing.JButton();
+        updateBtn = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         typeCB = new javax.swing.JComboBox<>();
+        idTF = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         rateTable = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -163,25 +180,34 @@ public class ViewRates extends javax.swing.JFrame {
 
         jLabel5.setText("Rate Value");
 
-        jButton2.setText("Add");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        addBtn.setText("Add");
+        addBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                addBtnActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Update");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        updateBtn.setText("Update");
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                updateBtnActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Delete");
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Type");
 
         typeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Additional Pay", "Deductions", " " }));
+
+        idTF.setEditable(false);
+
+        jLabel7.setText("ID");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -192,20 +218,26 @@ public class ViewRates extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(rateValueTF, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rateNameTF)
-                            .addComponent(typeCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(typeCB, 0, 166, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(rateValueTF, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(77, 77, 77)
-                        .addComponent(jButton4)))
+                        .addComponent(btnDelete)))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -216,19 +248,23 @@ public class ViewRates extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rateNameTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel7))
                 .addGap(8, 8, 8)
-                .addComponent(rateValueTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rateValueTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(typeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(addBtn)
+                    .addComponent(updateBtn))
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(btnDelete)
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -413,9 +449,9 @@ public class ViewRates extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rateValueTFActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        DefaultTableModel model = (DefaultTableModel)rateTable.getModel();
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         
+        //code black of sending data to database starts here
         if (rateNameTF.getText().isEmpty() || rateValueTF.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Make sure to enter all fields!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -436,38 +472,64 @@ public class ViewRates extends javax.swing.JFrame {
                 
             
             }   catch (SQLException ex) {
-                    
+                    JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        // Code block of sending data to database ends here
         
-        model.setRowCount(0);
-        
-        try {
-        String sql = "SELECT * FROM rates";
-        Connection sgconn = Main.connectSG();
-        PreparedStatement pst = sgconn.prepareStatement(sql);
-        ResultSet rs  = pst.executeQuery();
-        
-        
-        while(rs.next()){
-            model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
-        }
-        } catch (Exception e) {
-            System.out.println("error par");
-        }
-        
-        // Centers the value of table (loop)
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-        for(int x=0;x<4;x++){
-         rateTable.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
-        }
+        showTableContent();
             
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_addBtnActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        //code black of sending data to database starts here
+        if (rateNameTF.getText().isEmpty() || rateValueTF.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Make sure to enter all fields!", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Connection sgconn = Main.connectSG();
+        try {
+            String val1 = rateNameTF.getText();
+            Double val2= Double.valueOf(rateValueTF.getText());
+            String val3 = typeCB.getSelectedItem().toString();
+            Integer val4 = Integer.valueOf(idTF.getText());
+            
+            
+             PreparedStatement pstmt = sgconn.prepareStatement("UPDATE rates SET rateName = ?, rateValue = ?, type = ? WHERE ID = ?");
+             pstmt.setString(1, val1);
+             pstmt.setDouble(2, val2);
+             pstmt.setString(3, val3);
+             pstmt.setInt(4, val4);
+             pstmt.executeUpdate();
+                
+            
+            }   catch (SQLException ex) {
+                    //JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
+                    System.out.println(ex);
+        }
+        // Code block of sending data to database ends here
+        }
+        showTableContent();
+        
+    }//GEN-LAST:event_updateBtnActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        Connection sgconn = Main.connectSG();
+        try {
+            int val4 = Integer.parseInt(idTF.getText());
+            
+            String sqlStatement = "DELETE FROM rates WHERE ID = ?"; 
+             
+            PreparedStatement updateQuery  = sgconn.prepareStatement(sqlStatement);
+            updateQuery.setInt(1, val4);
+            updateQuery.executeUpdate();
+              
+            }   catch (SQLException ex) {
+                    System.out.println(ex);
+                    
+            }
+        
+        showTableContent();
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -508,16 +570,17 @@ public class ViewRates extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addBtn;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JTextField idTF;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -528,5 +591,35 @@ public class ViewRates extends javax.swing.JFrame {
     private javax.swing.JTable rateTable;
     private javax.swing.JTextField rateValueTF;
     private javax.swing.JComboBox<String> typeCB;
+    private javax.swing.JButton updateBtn;
     // End of variables declaration//GEN-END:variables
+
+    private void showTableContent() {
+        
+        // This functions gets values from database and store to the table in the frame.
+        
+        DefaultTableModel model = (DefaultTableModel)rateTable.getModel();
+        model.setRowCount(0);
+        
+        try {
+        String sql = "SELECT * FROM rates";
+        Connection sgconn = Main.connectSG();
+        PreparedStatement pst = sgconn.prepareStatement(sql);
+        ResultSet rs  = pst.executeQuery();
+        
+        
+        while(rs.next()){
+            model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
+        }
+        } catch (Exception e) {
+            System.out.println("error par");
+        }
+        
+        // Centers the value of table (loop)
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for(int x=0;x<4;x++){
+         rateTable.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
+        }
+    }
 }
