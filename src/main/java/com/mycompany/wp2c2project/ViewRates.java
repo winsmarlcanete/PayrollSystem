@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -59,6 +60,30 @@ public class ViewRates extends javax.swing.JFrame {
         initComponents();
         
         centerTableValue(rateTable);
+        
+        DefaultTableModel model = (DefaultTableModel)rateTable.getModel();
+        model.setRowCount(0);
+        
+        try {
+        String sql = "SELECT * FROM rates";
+        Connection sgconn = Main.connectSG();
+        PreparedStatement pst = sgconn.prepareStatement(sql);
+        ResultSet rs  = pst.executeQuery();
+        
+        
+        while(rs.next()){
+            model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
+        }
+        } catch (Exception e) {
+            System.out.println("error par");
+        }
+        
+        // Centers the value of table (loop)
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for(int x=0;x<4;x++){
+         rateTable.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
+        }
 
 
     /**
@@ -146,6 +171,11 @@ public class ViewRates extends javax.swing.JFrame {
         });
 
         jButton3.setText("Update");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Delete");
 
@@ -257,9 +287,9 @@ public class ViewRates extends javax.swing.JFrame {
         rateTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(rateTable);
         if (rateTable.getColumnModel().getColumnCount() > 0) {
-            rateTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+            rateTable.getColumnModel().getColumn(0).setPreferredWidth(25);
             rateTable.getColumnModel().getColumn(1).setResizable(false);
-            rateTable.getColumnModel().getColumn(2).setResizable(false);
+            rateTable.getColumnModel().getColumn(2).setPreferredWidth(50);
             rateTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
@@ -384,6 +414,7 @@ public class ViewRates extends javax.swing.JFrame {
     }//GEN-LAST:event_rateValueTFActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        DefaultTableModel model = (DefaultTableModel)rateTable.getModel();
         
         if (rateNameTF.getText().isEmpty() || rateValueTF.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Make sure to enter all fields!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -409,8 +440,34 @@ public class ViewRates extends javax.swing.JFrame {
             }
         }
         
+        model.setRowCount(0);
+        
+        try {
+        String sql = "SELECT * FROM rates";
+        Connection sgconn = Main.connectSG();
+        PreparedStatement pst = sgconn.prepareStatement(sql);
+        ResultSet rs  = pst.executeQuery();
+        
+        
+        while(rs.next()){
+            model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
+        }
+        } catch (Exception e) {
+            System.out.println("error par");
+        }
+        
+        // Centers the value of table (loop)
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for(int x=0;x<4;x++){
+         rateTable.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
+        }
             
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
