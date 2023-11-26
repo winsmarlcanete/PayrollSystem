@@ -89,7 +89,7 @@ public class Main {
             conn = DriverManager.getConnection(SG_URL, USER, PASS);
             return conn;
         } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println("There were errors connecting to Snergy Graffix");
+            System.out.println("There were errors connecting to Synergy Graffix");
             return null;
         }
     }
@@ -98,10 +98,10 @@ public class Main {
         Main main = new Main();
         main.setupDatabase();
 
-        //Login_Jon ea = new Login_Jon();
-        //ea.setVisible(true);
+        Login_Jon ea = new Login_Jon();
+        ea.setVisible(true);
         
-        AdminHome frame = new AdminHome();
-        frame.setVisible(true);
+//        AdminHome frame = new AdminHome();
+//        frame.setVisible(true);
     }
 }

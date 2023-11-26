@@ -221,10 +221,10 @@
                           <Data value="1000"/>
                         </Column>
                         <Column editable="true" title="Shift Start" type="java.lang.String">
-                          <Data value="7:30"/>
+                          <Data value="7:00"/>
                         </Column>
                         <Column editable="true" title="Shift End" type="java.lang.String">
-                          <Data value="22:00"/>
+                          <Data value="16:00"/>
                         </Column>
                       </Table>
                     </Property>

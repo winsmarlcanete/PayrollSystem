@@ -4,6 +4,10 @@
  */
 package com.mycompany.wp2c2project;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.ParseException;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
@@ -42,7 +46,7 @@ public class SummaryExample extends javax.swing.JFrame {
 //        String timeInStr = attendance.timeIn.getText();
 //        String timeOutStr = attendance.timeOut.getText();
         String timeInStr = "8:30"; //sample time in
-        String timeOutStr = "8:30"; //sample time out
+        String timeOutStr = "17:30"; //sample time out
 
         //Time in & time out
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -55,6 +59,8 @@ public class SummaryExample extends javax.swing.JFrame {
             System.err.println("Error parsing time values: " + ex.getMessage());
             return;
         }
+        
+        System.out.println(timeIn);
 
         long timeInMill = timeIn.getTime();
         long timeOutMill = timeOut.getTime();
@@ -70,12 +76,12 @@ public class SummaryExample extends javax.swing.JFrame {
 
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
-        String shiftIntae = (String) rates.Accounting.getModel().getValueAt(0, 2);
-        System.out.println(shiftIntae);
-        
+        String shiftStart = (String) rates.Accounting.getModel().getValueAt(0, 2);
+        String shiftEnd = (String) rates.Accounting.getModel().getValueAt(0, 3);
+                
         float late = 0;
         try {
-            Date thresholdTime = dateFormat.parse(shiftIntae);
+            Date thresholdTime = dateFormat.parse(shiftStart);
             if (timeIn.after(thresholdTime)) {
                 late = (float) (timeInMill - thresholdTime.getTime()) / (60 * 1000);
             }
@@ -84,16 +90,44 @@ public class SummaryExample extends javax.swing.JFrame {
         }
         float lateAmt = late * 2 / 60 * rpH;
         
+        String url = "jdbc:mysql://localhost/wp2c2_payroll";
+        String username = "root";
+        String password = "";
+
+        /*
+        dateType 0 = normal day
+        dateType 1 = spl hol / sun
+        dateType 2 = leg hol
+        */
+        int dateType = 0;
+        try {
+           Class.forName("com.mysql.jdbc.Driver");
+           Connection connection = DriverManager.getConnection(url, username, password);
+           Statement statement = connection.createStatement();
+           ResultSet resultSet = statement.executeQuery("SELECT * FROM time_card");
+           dateType = resultSet.getInt("dateType");
+           connection.close();
+        } catch (Exception e) {
+           System.out.println(e);
+        }
+        
+        if (dateType == 1) {
+            rpH = (float) (rpH * 1.30);
+        } else if (dateType == 2) {
+            rpH = rpH * 2;
+        }
+        
         float ot = 0;
         try {
-            Date thresholdTime = dateFormat.parse("17:00");
+            Date thresholdTime = dateFormat.parse(shiftEnd);
             if (timeOut.after(thresholdTime)) {
                 ot = (float) (timeOutMill - thresholdTime.getTime()) / (60 * 60 * 1000);
             }
         } catch (ParseException ex) {
             System.err.println("Error parsing time values: " + ex.getMessage());
         }
-        float otAmt = ot * rpH;
+        
+        float otAmt = otAmt = ot * rpH;
 
         //night diff
         float nd = 0;
@@ -124,7 +158,9 @@ public class SummaryExample extends javax.swing.JFrame {
         } catch (ParseException ex) {
             System.err.println("Error parsing time values: " + ex.getMessage());
         }
-        float ndAmt = .10f * rpH * nd;
+        float ndAmt = (float) (nd * (rpH * 1.10));
+        
+        //lagyan ko lang linya hehe ======================================================================
         
         float OD = 0;
         float TD = 0;

@@ -227,9 +227,16 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane7.setViewportView(Admin);
@@ -244,8 +251,7 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
 
         Accounting.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Jher", "1000", "7:30", "22:00"},
-                {"Vince", "1", "7:30", "7:31"}
+                {"Jher", "1000", "7:00", "16:00"}
             },
             new String [] {
                 "Name", "Rate", "Shift Start", "Shift End"
