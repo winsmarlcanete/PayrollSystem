@@ -163,23 +163,11 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        Admin = new javax.swing.JTable();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        Accounting = new javax.swing.JTable();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        Sales = new javax.swing.JTable();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        HR = new javax.swing.JTable();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        QC = new javax.swing.JTable();
-        jScrollPane9 = new javax.swing.JScrollPane();
-        Prepress = new javax.swing.JTable();
-        jScrollPane10 = new javax.swing.JScrollPane();
-        Press = new javax.swing.JTable();
-        jScrollPane11 = new javax.swing.JScrollPane();
-        Postpress = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -199,9 +187,9 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(226, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(226, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,245 +201,63 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
-        jTabbedPane1.setBackground(new java.awt.Color(102, 102, 102));
-        jTabbedPane1.setForeground(new java.awt.Color(255, 255, 255));
-
-        Admin.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Jon", "500", "10:00", "14:00"}
-            },
-            new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane7.setViewportView(Admin);
-        if (Admin.getColumnModel().getColumnCount() > 0) {
-            Admin.getColumnModel().getColumn(0).setPreferredWidth(150);
-            Admin.getColumnModel().getColumn(1).setPreferredWidth(50);
-            Admin.getColumnModel().getColumn(2).setPreferredWidth(50);
-            Admin.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
-
-        jTabbedPane1.addTab("Admin", jScrollPane7);
-
-        Accounting.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Jher", "1000", "7:00", "16:00"}
-            },
-            new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        Accounting.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                AccountingMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(Accounting);
-        if (Accounting.getColumnModel().getColumnCount() > 0) {
-            Accounting.getColumnModel().getColumn(0).setPreferredWidth(150);
-            Accounting.getColumnModel().getColumn(1).setPreferredWidth(50);
-            Accounting.getColumnModel().getColumn(2).setPreferredWidth(50);
-            Accounting.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
-
-        jTabbedPane1.addTab("Accounting", jScrollPane1);
-
-        Sales.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Marc", "2", "14:00", "16:00"},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
+        ));
+        jScrollPane2.setViewportView(jTable1);
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane5.setViewportView(Sales);
-        if (Sales.getColumnModel().getColumnCount() > 0) {
-            Sales.getColumnModel().getColumn(0).setPreferredWidth(150);
-            Sales.getColumnModel().getColumn(1).setPreferredWidth(50);
-            Sales.getColumnModel().getColumn(2).setPreferredWidth(50);
-            Sales.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jTabbedPane1.addTab("Sales", jScrollPane5);
+        jLabel4.setText("jLabel4");
 
-        HR.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Marlon", "1500", "1:00", "23:00"}
-            },
-            new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane6.setViewportView(HR);
-        if (HR.getColumnModel().getColumnCount() > 0) {
-            HR.getColumnModel().getColumn(0).setPreferredWidth(150);
-            HR.getColumnModel().getColumn(1).setPreferredWidth(50);
-            HR.getColumnModel().getColumn(2).setPreferredWidth(50);
-            HR.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
-
-        jTabbedPane1.addTab("Human Resources", jScrollPane6);
-
-        QC.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Jer", "999999", "7:30", "7:31"}
-            },
-            new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane8.setViewportView(QC);
-        if (QC.getColumnModel().getColumnCount() > 0) {
-            QC.getColumnModel().getColumn(0).setPreferredWidth(150);
-            QC.getColumnModel().getColumn(1).setPreferredWidth(50);
-            QC.getColumnModel().getColumn(2).setPreferredWidth(50);
-            QC.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
-
-        jTabbedPane1.addTab("Quality Control", jScrollPane8);
-
-        Prepress.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Vince", "21", "2:00", "3:00"}
-            },
-            new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane9.setViewportView(Prepress);
-        if (Prepress.getColumnModel().getColumnCount() > 0) {
-            Prepress.getColumnModel().getColumn(0).setPreferredWidth(150);
-            Prepress.getColumnModel().getColumn(1).setPreferredWidth(50);
-            Prepress.getColumnModel().getColumn(2).setPreferredWidth(50);
-            Prepress.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
-
-        jTabbedPane1.addTab("Prepress", jScrollPane9);
-
-        Press.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Laurence", "5", "7:30", "20:00"}
-            },
-            new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane10.setViewportView(Press);
-        if (Press.getColumnModel().getColumnCount() > 0) {
-            Press.getColumnModel().getColumn(0).setPreferredWidth(150);
-            Press.getColumnModel().getColumn(1).setPreferredWidth(50);
-            Press.getColumnModel().getColumn(2).setPreferredWidth(50);
-            Press.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
-
-        jTabbedPane1.addTab("Press", jScrollPane10);
-
-        Postpress.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"Glouyer", "99", "3:00", "3:30"}
-            },
-            new String [] {
-                "Name", "Rate", "Shift Start", "Shift End"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane11.setViewportView(Postpress);
-        if (Postpress.getColumnModel().getColumnCount() > 0) {
-            Postpress.getColumnModel().getColumn(0).setPreferredWidth(150);
-            Postpress.getColumnModel().getColumn(1).setPreferredWidth(50);
-            Postpress.getColumnModel().getColumn(2).setPreferredWidth(50);
-            Postpress.getColumnModel().getColumn(3).setPreferredWidth(50);
-        }
-
-        jTabbedPane1.addTab("Postpress", jScrollPane11);
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addContainerGap(152, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
@@ -522,19 +328,17 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
@@ -548,10 +352,6 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         frame.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void AccountingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AccountingMouseClicked
-//        JOptionPane.showInputDialog("Enter time");
-    }//GEN-LAST:event_AccountingMouseClicked
 
     /**
      * @param args the command line arguments
@@ -590,30 +390,18 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JTable Accounting;
-    private javax.swing.JTable Admin;
-    private javax.swing.JTable HR;
-    private javax.swing.JTable Postpress;
-    private javax.swing.JTable Prepress;
-    private javax.swing.JTable Press;
-    private javax.swing.JTable QC;
-    private static javax.swing.JTable Sales;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane10;
-    private javax.swing.JScrollPane jScrollPane11;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
