@@ -4,6 +4,9 @@
  */
 package com.mycompany.wp2c2project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -121,6 +124,7 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     public ViewRatesDepartments() {
         initComponents();
         
+        showTableContent();
         
     }
     
@@ -671,4 +675,32 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
+
+    private void showTableContent() {
+        DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
+        model.setRowCount(0);
+        
+        try {
+        String sql = "SELECT * FROM employee";
+        Connection sgconn = Main.connectSG();
+        PreparedStatement pst = sgconn.prepareStatement(sql);
+        ResultSet rs  = pst.executeQuery();
+        
+        
+        while(rs.next()){
+            model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)
+            ,rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)
+            ,rs.getString(10),rs.getString(11)});
+        }
+        } catch (Exception e) {
+            System.out.println("error par");
+        }
+        
+        // Centers the value of table (loop)
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        for(int x=0;x<4;x++){
+         employeeTable.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
+        }
+    }
 }
