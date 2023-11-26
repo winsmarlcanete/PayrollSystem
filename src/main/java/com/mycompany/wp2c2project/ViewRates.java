@@ -513,8 +513,8 @@ public class ViewRates extends javax.swing.JFrame {
                 
             
             }   catch (SQLException ex) {
-                    //JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
-                    System.out.println(ex);
+                    JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
+                    
         }
         // Code block of sending data to database ends here
         }
