@@ -94,6 +94,11 @@ public class RegisterFiles extends javax.swing.JFrame {
         jLabel3.setText("Philhealth");
 
         regPH.setForeground(new java.awt.Color(204, 204, 204));
+        regPH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                regPHActionPerformed(evt);
+            }
+        });
 
         btnPH.setBackground(new java.awt.Color(137, 207, 243));
         btnPH.setForeground(new java.awt.Color(255, 255, 255));
@@ -294,7 +299,7 @@ public class RegisterFiles extends javax.swing.JFrame {
         chooser.showOpenDialog(null);
         File PI = chooser.getSelectedFile();
         String filename = PI.getAbsolutePath();
-        regPI.setText(filename);
+        regMC.setText(filename);
     }//GEN-LAST:event_btnMCActionPerformed
 
     private void Reg_Log1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Reg_Log1ActionPerformed
@@ -302,6 +307,10 @@ public class RegisterFiles extends javax.swing.JFrame {
        frame.setVisible(true);
        dispose();
     }//GEN-LAST:event_Reg_Log1ActionPerformed
+
+    private void regPHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regPHActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_regPHActionPerformed
 
     /**
      * @param args the command line arguments

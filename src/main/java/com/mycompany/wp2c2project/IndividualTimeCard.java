@@ -26,10 +26,12 @@ public class IndividualTimeCard extends javax.swing.JFrame {
     Connection sgconn = Main.connectSG();
     PreparedStatement st;
 
+    //employee details
     int empId = 1;
     String empName;
     String dept;
 
+    //time card
     int dateId;
     String date;
     int dateType;
@@ -37,6 +39,15 @@ public class IndividualTimeCard extends javax.swing.JFrame {
     String timeOut;
     String shiftStart;
     String shiftEnd;
+
+    //total
+    float daysTot;
+    float lateTot;
+    float otTot;
+    float ndTot;
+    float spcTot;
+    float spcOtTot;
+    float legTot;
 
     public IndividualTimeCard() {
         initComponents();
@@ -52,7 +63,7 @@ public class IndividualTimeCard extends javax.swing.JFrame {
             deptLabel.setText(dept);
 
             //add row to table
-            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM time_card WHERE empId = ?");
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM time_card_" + empId + " WHERE empId = ?");
             st.setInt(1, empId);
             resultSet = st.executeQuery();
             while (resultSet.next()) {
@@ -68,6 +79,7 @@ public class IndividualTimeCard extends javax.swing.JFrame {
                 model.addRow(new Object[]{
                     dateId,
                     date,
+                    dateType,
                     shiftStart,
                     shiftEnd,
                     timeIn,
@@ -86,6 +98,12 @@ public class IndividualTimeCard extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(IndividualTimeCard.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        getTotal();
+    }
+
+    private void getTotal() {
+
     }
 
     /**
@@ -103,6 +121,21 @@ public class IndividualTimeCard extends javax.swing.JFrame {
         periodLabel = new javax.swing.JLabel();
         deptLabel = new javax.swing.JLabel();
         updateBtn = new javax.swing.JButton();
+        periodLabel1 = new javax.swing.JLabel();
+        periodLabel2 = new javax.swing.JLabel();
+        periodLabel3 = new javax.swing.JLabel();
+        periodLabel4 = new javax.swing.JLabel();
+        periodLabel5 = new javax.swing.JLabel();
+        periodLabel6 = new javax.swing.JLabel();
+        periodLabel7 = new javax.swing.JLabel();
+        periodLabel8 = new javax.swing.JLabel();
+        spcOtTotLb = new javax.swing.JLabel();
+        legTotLb = new javax.swing.JLabel();
+        spcTotLb = new javax.swing.JLabel();
+        ndTotLb = new javax.swing.JLabel();
+        otTotLb = new javax.swing.JLabel();
+        lateTotLb = new javax.swing.JLabel();
+        daysTotLb = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -118,11 +151,11 @@ public class IndividualTimeCard extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Date ID", "Date", "Shift Start", "Shift End", "Time In", "Time Out", "Day", "Late", "Overtime", "Night Differential", "Special Holiday/Sunday", "Special Holiday/Sunday Overtime", "Legal Holiday"
+                "Date ID", "Date", "Type", "Shift Start", "Shift End", "Time In", "Time Out", "Day", "Late", "Overtime", "Night Differential", "Special Holiday/Sunday", "Special Holiday/Sunday Overtime", "Legal Holiday"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, true, true, false, false, false, false, false, false, false
+                false, false, true, true, true, true, true, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -133,7 +166,7 @@ public class IndividualTimeCard extends javax.swing.JFrame {
         jScrollPane1.setViewportView(idvlTCTable);
 
         periodLabel.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
-        periodLabel.setText("Date Period");
+        periodLabel.setText("Payroll period");
 
         deptLabel.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         deptLabel.setText("Department");
@@ -145,6 +178,51 @@ public class IndividualTimeCard extends javax.swing.JFrame {
                 updateBtnActionPerformed(evt);
             }
         });
+
+        periodLabel1.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
+        periodLabel1.setText("Total");
+
+        periodLabel2.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel2.setText("Days");
+
+        periodLabel3.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel3.setText("Late");
+
+        periodLabel4.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel4.setText("Overtime");
+
+        periodLabel5.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel5.setText("Night Differential");
+
+        periodLabel6.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel6.setText("Special Holiday/Sunday");
+
+        periodLabel7.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel7.setText("Special Holiday/Sunday Overtime");
+
+        periodLabel8.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel8.setText("Legal Holiday");
+
+        spcOtTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        spcOtTotLb.setText("0");
+
+        legTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        legTotLb.setText("0");
+
+        spcTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        spcTotLb.setText("0");
+
+        ndTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        ndTotLb.setText("0");
+
+        otTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        otTotLb.setText("0");
+
+        lateTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        lateTotLb.setText("0");
+
+        daysTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        daysTotLb.setText("0");
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -169,24 +247,81 @@ public class IndividualTimeCard extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(updateBtn)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 746, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(43, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(periodLabel1)
+                                    .addComponent(periodLabel2)
+                                    .addComponent(periodLabel3)
+                                    .addComponent(periodLabel4)
+                                    .addComponent(periodLabel5)
+                                    .addComponent(periodLabel6)
+                                    .addComponent(periodLabel8)
+                                    .addComponent(periodLabel7))
+                                .addGap(38, 38, 38)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(legTotLb)
+                                            .addComponent(spcTotLb)
+                                            .addComponent(ndTotLb)
+                                            .addComponent(otTotLb)
+                                            .addComponent(lateTotLb)
+                                            .addComponent(spcOtTotLb))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(daysTotLb)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(updateBtn)))))))
+                .addGap(43, 43, 43))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addComponent(periodLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(nameLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(periodLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(nameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deptLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(periodLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(periodLabel2))
+                            .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(daysTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lateTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(otTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ndTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spcTotLb)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deptLabel)
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(periodLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spcOtTotLb, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(periodLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(legTotLb, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(120, 120, 120))
         );
 
         pack();
@@ -194,7 +329,7 @@ public class IndividualTimeCard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
-      
+
     }//GEN-LAST:event_updateBtnActionPerformed
 
     /**
@@ -212,14 +347,29 @@ public class IndividualTimeCard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JLabel daysTotLb;
     public javax.swing.JLabel deptLabel;
     private javax.swing.JTable idvlTCTable;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JLabel lateTotLb;
+    public javax.swing.JLabel legTotLb;
     public javax.swing.JLabel nameLabel;
+    public javax.swing.JLabel ndTotLb;
+    public javax.swing.JLabel otTotLb;
     public javax.swing.JLabel periodLabel;
+    public javax.swing.JLabel periodLabel1;
+    public javax.swing.JLabel periodLabel2;
+    public javax.swing.JLabel periodLabel3;
+    public javax.swing.JLabel periodLabel4;
+    public javax.swing.JLabel periodLabel5;
+    public javax.swing.JLabel periodLabel6;
+    public javax.swing.JLabel periodLabel7;
+    public javax.swing.JLabel periodLabel8;
+    public javax.swing.JLabel spcOtTotLb;
+    public javax.swing.JLabel spcTotLb;
     private javax.swing.JButton updateBtn;
     // End of variables declaration//GEN-END:variables
 }

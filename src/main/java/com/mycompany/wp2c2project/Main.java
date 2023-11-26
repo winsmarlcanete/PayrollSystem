@@ -26,12 +26,15 @@ public class Main {
     public void setupDatabase() {
         try {
             String databaseName = "wp2c2_payroll";
+
             Class.forName("com.mysql.jdbc.Driver");
             Connection sgconn = DriverManager.getConnection(SG_URL_SETUP, USER, PASS);
 
             if (sgconn != null) {
                 try {
                     Statement statement = sgconn.createStatement();
+
+                    //employee
                     statement.executeUpdate("CREATE DATABASE IF NOT EXISTS " + databaseName);
                     statement.executeUpdate("USE " + databaseName);
                     statement.executeUpdate(
@@ -42,6 +45,7 @@ public class Main {
                             + "rate DOUBLE NOT NULL, "
                             + "shiftStart VARCHAR(5) NOT NULL, "
                             + "shiftEnd VARCHAR(5) NOT NULL, "
+                            + "status VARCHAR(20) NOT NULL, "
                             + "tin VARCHAR(20) NOT NULL, "
                             + "philHealth INT(20) NOT NULL, "
                             + "sss VARCHAR(20) NOT NULL, "
@@ -49,18 +53,7 @@ public class Main {
                             + "taxStatus VARCHAR(10) NOT NULL "
                             + ")");
 
-                    statement.executeUpdate(
-                            "CREATE TABLE IF NOT EXISTS time_card ("
-                            + "dateId INT PRIMARY KEY AUTO_INCREMENT, "
-                            + "empId INT NOT NULL, "
-                            + "date VARCHAR(5) NOT NULL, "
-                            + "dateType INT NOT NULL, "
-                            + "timeIn VARCHAR(5) NOT NULL, "
-                            + "timeOut VARCHAR(5) NOT NULL, "
-                            + "shiftStart VARCHAR(5) NOT NULL, "
-                            + "shiftEnd VARCHAR(5) NOT NULL "
-                            + ")");
-
+                    //user
                     statement.executeUpdate(
                             "CREATE TABLE IF NOT EXISTS user ("
                             + "id INT PRIMARY KEY AUTO_INCREMENT, "
@@ -102,5 +95,8 @@ public class Main {
 
         Login_Jon ea = new Login_Jon();
         ea.setVisible(true);
+
+//        AdminHome frame = new AdminHome();
+//        frame.setVisible(true);
     }
 }

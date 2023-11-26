@@ -31,6 +31,28 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     }
     
     static void cellEditor(JTable tableName) {
+        JTable JTable  = tableName;
+        tableName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int row= tableName.rowAtPoint(e.getPoint());
+                int col= tableName.columnAtPoint(e.getPoint());
+                String cellValue = (String) tableName.getValueAt(row, col);
+                String colName = tableName.getColumnName(col);
+                if (col == 1) {
+                    String newInput = JOptionPane.showInputDialog(null, "Enter new " + colName);
+
+                    if (newInput != null) {
+                        tableName.setValueAt(newInput, row, col);
+                    } else {
+                        tableName.setValueAt(cellValue, row, col);
+                    }
+                }
+            }
+         }
+        );
+    }
+    
+    static void cellEditorForShift(JTable tableName) {
         JTable JTable = tableName;
         tableName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -38,16 +60,59 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                 int col= tableName.columnAtPoint(e.getPoint());
                 String cellValue = (String) tableName.getValueAt(row, col);
                 String colName = tableName.getColumnName(col);
-                if (col >= 1) {
+                if (col >= 2) {
                     String newInput = JOptionPane.showInputDialog(null, "Enter new " + colName);
+                    
+                    
                     if (newInput != null) {
-                        tableName.setValueAt(newInput, row, col);
+                        try {
+                            int inputValue = Integer.parseInt(newInput);
+                            String numStr = Integer.toString(inputValue);
+
+                            int numOfDigits = numStr.length();
+
+                            if (numOfDigits == 3) {
+                                int hours = Integer.parseInt(Integer.toString(inputValue).substring(0, 1));
+                                int mins = Integer.parseInt(Integer.toString(inputValue).substring(1, 3));
+                                
+                                if (mins <= 59) {
+                                    String time = Integer.toString(hours) + ":" + Integer.toString(mins);
+                                    tableName.setValueAt(time, row, col);
+                                } else {
+                                    tableName.setValueAt(cellValue, row, col);
+                                    JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                                
+                            } else if (numOfDigits == 4) {
+                                int hours = Integer.parseInt(Integer.toString(inputValue).substring(0, 2));
+                                int mins = Integer.parseInt(Integer.toString(inputValue).substring(2, 4));
+                                
+                                if (mins <= 59) {
+                                    String time = Integer.toString(hours) + ":" + Integer.toString(mins);
+                                    tableName.setValueAt(time, row, col);
+                                } else {
+                                    tableName.setValueAt(cellValue, row, col);
+                                    JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                                
+                                if (hours <= 24) {
+                                    String time = Integer.toString(hours) + ":" + Integer.toString(mins);
+                                    tableName.setValueAt(time, row, col);
+                                } else {
+                                    tableName.setValueAt(cellValue, row, col);
+                                    JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                                
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } catch (NumberFormatException t) {
+                            JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                        }
                     } else {
                         tableName.setValueAt(cellValue, row, col);
                     }
                 }
-                
-//               System.out.println(colName);
             }
          }
         );
@@ -64,6 +129,15 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         centerTableValue(Prepress);
         centerTableValue(Press);
         centerTableValue(Postpress);
+        
+        cellEditorForShift(Admin);
+        cellEditorForShift(Accounting);
+        cellEditorForShift(Sales);
+        cellEditorForShift(HR);
+        cellEditorForShift(QC);
+        cellEditorForShift(Prepress);
+        cellEditorForShift(Press);
+        cellEditorForShift(Postpress);
         
         cellEditor(Admin);
         cellEditor(Accounting);
@@ -153,9 +227,16 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane7.setViewportView(Admin);
@@ -170,7 +251,7 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
 
         Accounting.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Jher", "1000", "7:30", "22:00"}
+                {"Jher", "1000", "7:00", "16:00"}
             },
             new String [] {
                 "Name", "Rate", "Shift Start", "Shift End"

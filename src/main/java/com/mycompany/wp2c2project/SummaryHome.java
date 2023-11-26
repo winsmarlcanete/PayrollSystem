@@ -13,7 +13,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -127,13 +131,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         }
     }
 
-    String date;
-    String dateType = "0";
-    String timeIn;
-    String timeOut = null;
-    String shiftStart;
-    String shiftEnd;
-
     int dateCol = 0;
     int timeInCol = 1;
     int timeOutColStart = 12;
@@ -148,35 +145,70 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     private void readTime() {
         try {
             for (int i = 12; i <= 42; i++) {
+                String date;
+                int dateType = 0;
+                String shiftStart;
+                String shiftEnd;
+                String timeIn;
+                String timeOut = null;
+
+                int dayTot = 0;
+
                 date = readCell(i, dateCol);
 
                 if (date != null) {
-                    //check first if date data doesnt exist in the data base yet
                     int idCvt = (int) Double.parseDouble(id);
-                    st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card` WHERE `empId` = ? AND `date` = ?");
+
+                    //create own time card database table for employee using employee id
+                    st.executeUpdate(
+                            "CREATE TABLE IF NOT EXISTS time_card_" + idCvt + " ("
+                            + "dateId INT PRIMARY KEY AUTO_INCREMENT, "
+                            + "empId INT NOT NULL, "
+                            + "date VARCHAR(5) NOT NULL, "
+                            + "dateType INT NOT NULL, "
+                            + "shiftStart VARCHAR(5) NOT NULL, "
+                            + "shiftEnd VARCHAR(5) NOT NULL, "
+                            + "timeIn VARCHAR(5) NOT NULL, "
+                            + "timeOut VARCHAR(5) NOT NULL, "
+                            + "day FLOAT NOT NULL DEFAULT '0', "
+                            + "late FLOAT NOT NULL DEFAULT '0', "
+                            + "ot FLOAT NOT NULL DEFAULT '0', "
+                            + "nd FLOAT NOT NULL DEFAULT '0', "
+                            + "spc FLOAT NOT NULL DEFAULT '0', "
+                            + "spcOt FLOAT NOT NULL DEFAULT '0', "
+                            + "leg FLOAT NOT NULL DEFAULT '0' "
+                            + ")"
+                    );
+                    System.out.println("created database table for " + id);
+
+                    //check first if date data doesnt exist in the database yet
+                    st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card_" + idCvt + "` WHERE `empId` = ? AND `date` = ?");
                     st.setInt(1, idCvt);
                     st.setString(2, date);
                     resultSet = st.executeQuery();
                     resultSet.next();
                     int rowCount = resultSet.getInt(1);
 
-                    if (rowCount == 0 && date != null) {
-                        //timeIn
-                        timeIn = readCell(i, timeInCol);
-                        if (timeIn == null) {
-                            timeIn = "";
-                        }
+                    System.out.println("id: " + idCvt);
+                    System.out.println("date: " + date);
 
-                        //timeOut
-                        timeOut = null;
+                    if (rowCount == 0) {
+                        // !!get time in/out & shift start/end!!
+
+                        //set dateType = 1 if date is sunday
+                        String[] dateArr = date.split(" ");
+                        String dayOfWeek = dateArr[1];
+                        dateType = dayOfWeek.equalsIgnoreCase("Su") ? 1 : 0;
+
+                        //get timeIn/Out
+                        timeIn = readCell(i, timeInCol);
                         for (int j = timeOutColStart; j >= timeOutColEnd && (timeOut == null || "".equals(timeOut)); j--) {
                             timeOut = readCell(i, j);
                         }
-                        if (timeOut == null) {
-                            timeOut = "";
-                        }
+                        timeIn = timeIn != null ? timeIn : "";
+                        timeOut = timeOut != null ? timeOut : "";
 
-                        //shiftStart
+                        //get shift start & end
                         st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM employee WHERE id = ?;");
                         st.setInt(1, idCvt);
                         resultSet = st.executeQuery();
@@ -186,25 +218,75 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         System.out.println("getting shift success");
 
                         //for debugging
-                        System.out.println("id: " + idCvt);
-                        System.out.println("date: " + date);
                         System.out.println("timeIn: " + timeIn);
 
-                        //insert to table
+                        // !!calculation for attendance!!
+                        float day = 0;
+                        float ot = 0;
+                        float late = 0;
+
+                        //check if there is timeIn to do attendance calculation
+                        if (!"".equals(timeIn) && !"".equals(timeOut)) {
+                            //Time in & time out
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                            dateFormat.setTimeZone(TimeZone.getTimeZone("PT"));
+                            Date timeInDate, timeOutDate;
+                            timeInDate = dateFormat.parse(timeIn);
+                            timeOutDate = dateFormat.parse(timeOut);
+
+                            //convert to hours and minutes
+                            long timeInMill = timeInDate.getTime();
+                            long timeOutMill = timeOutDate.getTime();
+
+                            int timeInHr = (int) (timeInMill / (60 * 60 * 1000));
+                            int timeInMin = (int) ((timeInMill / (60 * 1000)) % 60);
+                            int timeOutHr = (int) (timeOutMill / (60 * 60 * 1000));
+                            int timeOutMin = (int) ((timeOutMill / (60 * 1000)) % 60);
+
+                            //calculate day (not done yet)
+                            float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
+                            day = hours / 9;
+
+                            Date thresholdTime;
+
+                            //calculate late
+                            thresholdTime = dateFormat.parse(shiftStart);
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(thresholdTime);
+                            calendar.add(Calendar.MINUTE, 5);
+                            thresholdTime = calendar.getTime();
+                            if (timeInDate.after(thresholdTime)) {
+                                late = (float) roundToNearestHalf((timeInMill - thresholdTime.getTime()) / (60 * 1000));
+                            }
+
+                            //calculate overtime (✅ working omg)
+                            thresholdTime = dateFormat.parse(shiftEnd);
+                            if (timeOutDate.after(thresholdTime)) {
+                                ot = roundToNearestHalf((float) (timeOutMill - thresholdTime.getTime()) / (60 * 60 * 1000));
+                            }
+                        }
+
+                        // !!insert to time card database table!!
                         st = (PreparedStatement) sgconn.prepareStatement(
-                                "INSERT INTO `time_card`"
-                                + "(`empId`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`) "
-                                + "VALUES (?,?,?,?,?,?,?)"
+                                "INSERT INTO `time_card_" + idCvt
+                                + "`(`empId`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`, `day`, `late`, `ot`) "
+                                + "VALUES (?,?,?,?,?,?,?,?,?,?)"
                         );
                         st.setString(1, id);
                         st.setString(2, date);
-                        st.setString(3, dateType);
+                        st.setInt(3, dateType);
                         st.setString(4, timeIn);
                         st.setString(5, timeOut);
                         st.setString(6, shiftStart);
                         st.setString(7, shiftEnd);
+                        st.setFloat(8, day);
+                        st.setFloat(9, late);
+                        st.setFloat(10, ot);
                         st.executeUpdate();
                         System.out.println("insert data success");
+
+                        // !!calculation for summary should be here (totals)!!
+                        dayTot += 0;
                     } else {
                         System.out.println("date data already exists");
                     }
@@ -213,19 +295,34 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(SummaryHome.class.getName()).log(Level.SEVERE, null, ex);
         }
-        iterateEmpyInfoCols();
-        readEmployeeInfo();
-    }
 
-    private void iterateEmpyInfoCols() {
+        //insert totals for summary table here
+        //iterate columns
         infoCol1 += 15;
         infoCol2 += 15;
+
+        dateCol += 15;
+        timeInCol += 15;
+        timeOutColStart += 15;
+        timeOutColEnd += 15;
         if (infoCol1 > 39) {
             infoCol1 = 9;
             infoCol2 = 1;
+
+            dateCol = 0;
+            timeInCol = 1;
+            timeOutColStart = 12;
+            timeOutColEnd = 3;
             readSheet++;
         }
+        readEmployeeInfo();
+    }
+
+    private static float roundToNearestHalf(float number) {
+        return Math.round(number * 2) / 2.0f;
     }
 
     /**

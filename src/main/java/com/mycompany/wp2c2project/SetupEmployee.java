@@ -76,6 +76,8 @@ public class SetupEmployee extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         shiftStartField = new javax.swing.JTextField();
         shiftEndField = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        statusCBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -144,6 +146,11 @@ public class SetupEmployee extends javax.swing.JFrame {
         shiftEndField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         shiftEndField.setText("16:00");
 
+        jLabel11.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        jLabel11.setText("Status");
+
+        statusCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Regular", "Probationary" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,25 +165,27 @@ public class SetupEmployee extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addComponent(jLabel4)
                         .addComponent(philHealthField)
-                        .addComponent(sssField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sssField)
                         .addComponent(jLabel3)
                         .addComponent(rateField)
-                        .addComponent(tinField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tinField)
                         .addComponent(jLabel6)
                         .addComponent(jLabel7)
                         .addComponent(pagibigField)
-                        .addComponent(taxStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(taxStatusField)
                         .addComponent(jLabel2)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel9)
-                                .addComponent(shiftStartField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(shiftStartField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel11))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(shiftEndField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel10))))
+                                .addComponent(jLabel10)))
+                        .addComponent(statusCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(saveBtn))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,6 +208,10 @@ public class SetupEmployee extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(shiftStartField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(shiftEndField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -232,6 +245,7 @@ public class SetupEmployee extends javax.swing.JFrame {
         String rate = "0";
         String shiftStart = "00:00";
         String shiftEnd = "00:00";
+        String status;
         String tin = "0";
         String philHealth = "0";
         String sss = "0";
@@ -248,6 +262,9 @@ public class SetupEmployee extends javax.swing.JFrame {
         if (!shiftEndField.getText().isEmpty()) {
             shiftEnd = shiftEndField.getText();
         }
+        
+        status = statusCBox.getSelectedItem().toString();
+        
         if (!tinField.getText().isEmpty()) {
             tin = tinField.getText();
         }
@@ -268,20 +285,32 @@ public class SetupEmployee extends javax.swing.JFrame {
         PreparedStatement st;
         try {
             st = (PreparedStatement) sgconn.prepareStatement(
-                    "INSERT INTO `employee`"
-                    + "(`id`, `name`, `department`, `rate`, `shiftStart`, `shiftEnd`,`tin`, `philHealth`, `sss`, `pagibig`, `taxStatus`) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+                    "INSERT INTO `employee`("
+                    + "`id`, "
+                    + "`name`, "
+                    + "`department`, "
+                    + "`rate`, "
+                    + "`shiftStart`, "
+                    + "`shiftEnd`, "
+                    + "`status`, "
+                    + "`tin`, "
+                    + "`philHealth`, "
+                    + "`sss`, "
+                    + "`pagibig`, "
+                    + "`taxStatus`"
+                    + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
             st.setString(1, id);
             st.setString(2, name);
             st.setString(3, department);
             st.setString(4, rate);
             st.setString(5, shiftStart);
             st.setString(6, shiftEnd);
-            st.setString(7, tin);
-            st.setString(8, philHealth);
-            st.setString(9, sss);
-            st.setString(10, pagibig);
-            st.setString(11, taxStatus);
+            st.setString(7, status);
+            st.setString(8, tin);
+            st.setString(9, philHealth);
+            st.setString(10, sss);
+            st.setString(11, pagibig);
+            st.setString(12, taxStatus);
             st.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(SetupEmployee.class.getName()).log(Level.SEVERE, null, ex);
@@ -319,6 +348,7 @@ public class SetupEmployee extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -335,6 +365,7 @@ public class SetupEmployee extends javax.swing.JFrame {
     public javax.swing.JTextField shiftEndField;
     public javax.swing.JTextField shiftStartField;
     public javax.swing.JTextField sssField;
+    private javax.swing.JComboBox<String> statusCBox;
     public javax.swing.JTextField taxStatusField;
     public javax.swing.JTextField tinField;
     // End of variables declaration//GEN-END:variables

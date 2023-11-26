@@ -4,6 +4,11 @@
  */
 package com.mycompany.wp2c2project;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
@@ -15,8 +20,6 @@ import java.util.TimeZone;
  * @author jejer
  */
 public class SummaryExample extends javax.swing.JFrame {
-
-    DefaultTableModel model;
 
     /**
      * Creates new form SummaryExample
@@ -42,7 +45,7 @@ public class SummaryExample extends javax.swing.JFrame {
 //        String timeInStr = attendance.timeIn.getText();
 //        String timeOutStr = attendance.timeOut.getText();
         String timeInStr = "8:30"; //sample time in
-        String timeOutStr = "8:30"; //sample time out
+        String timeOutStr = "17:30"; //sample time out
 
         //Time in & time out
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -56,6 +59,8 @@ public class SummaryExample extends javax.swing.JFrame {
             return;
         }
 
+        System.out.println(timeIn);
+
         long timeInMill = timeIn.getTime();
         long timeOutMill = timeOut.getTime();
 
@@ -65,17 +70,19 @@ public class SummaryExample extends javax.swing.JFrame {
         int timeOutHr = (int) (timeOutMill / (60 * 60 * 1000));
         int timeOutMin = (int) ((timeOutMill / (60 * 1000)) % 60);
 
+        //calculate day
         float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
         float days = hours / 8;
 
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
-        String shiftIntae = (String) rates.Accounting.getModel().getValueAt(0, 2);
-        System.out.println(shiftIntae);
-        
+        String shiftStart = (String) rates.Accounting.getModel().getValueAt(0, 2);
+        String shiftEnd = (String) rates.Accounting.getModel().getValueAt(0, 3);
+
+        //calculate late
         float late = 0;
         try {
-            Date thresholdTime = dateFormat.parse(shiftIntae);
+            Date thresholdTime = dateFormat.parse(shiftStart);
             if (timeIn.after(thresholdTime)) {
                 late = (float) (timeInMill - thresholdTime.getTime()) / (60 * 1000);
             }
@@ -83,10 +90,33 @@ public class SummaryExample extends javax.swing.JFrame {
             System.err.println("Error parsing time values: " + ex.getMessage());
         }
         float lateAmt = late * 2 / 60 * rpH;
-        
+
+        /*
+        dateType 0 = normal day
+        dateType 1 = spl hol / sun
+        dateType 2 = leg hol
+         */
+        int dateType = 0;
+        try {
+            Connection connection = Main.connectSG();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM time_card");
+            resultSet.next();
+            dateType = resultSet.getInt("dateType");
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        if (dateType == 1) {
+            rpH = (float) (rpH * 1.30);
+        } else if (dateType == 2) {
+            rpH = rpH * 2;
+        }
+
+        //calculate overtime
         float ot = 0;
         try {
-            Date thresholdTime = dateFormat.parse("17:00");
+            Date thresholdTime = dateFormat.parse(shiftEnd);
             if (timeOut.after(thresholdTime)) {
                 ot = (float) (timeOutMill - thresholdTime.getTime()) / (60 * 60 * 1000);
             }
@@ -124,16 +154,17 @@ public class SummaryExample extends javax.swing.JFrame {
         } catch (ParseException ex) {
             System.err.println("Error parsing time values: " + ex.getMessage());
         }
-        float ndAmt = .10f * rpH * nd;
-        
+        float ndAmt = (float) (nd * (rpH * 1.10));
+
+        //lagyan ko lang linya hehe ======================================================================
         float OD = 0;
         float TD = 0;
         float AA = 0;
-        
+
         float rWage = rpH * hours - lateAmt + ndAmt;
         float gross = rWage + ot + nd;
         float NP = gross - OD + TD + AA;
-                
+
         model.addRow(new Object[]{
             name,
             rate,
@@ -141,8 +172,25 @@ public class SummaryExample extends javax.swing.JFrame {
             late + " (" + lateAmt + ")",
             rWage,
             ot + " (" + otAmt + ")",
-            nd + " (" + ndAmt + ")", 0, 0, 0, 0,
-            gross, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, OD, TD, AA, NP, });
+            nd + " (" + ndAmt + ")",
+            0, //spc hol/sun
+            0, //spc hol/sun ot
+            0, //leg hol
+            gross,
+            0, //sss regular
+            0, //sss mpf
+            0, //philhealth
+            0, //w/tax
+            0, //sss loan-s
+            0, //sss loan-c
+            0, //pagibig contribution
+            0, //efund
+            0, //pagibig loan-s
+            0, //pagibig loan-c
+            OD,
+            TD,
+            AA,
+            NP,});
     }
 
     /**
@@ -168,11 +216,11 @@ public class SummaryExample extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Rate", "Days Worked", "Late (Min)", "Regular Wage", "Overtime", "Night Diff.", "Special Holiday/Sunday", "Special Holiday/Sunday (Overtime)", "Legal Holiday", "Legal Holiday (Overtime)", "Gross Income", "SSS Contribution (Regular)", "SSS Contribution (MPF)", "PhilHealth", "W/tax", "SSS (Loan-S)", "SSS (Loan-S)", "Pag-ibig Contribution", "EFUND", "Pag-ibig (Loan-S)", "Pag-ibig (Loan-C)", "Other Deductions", "Total Deductions", "Adjustment Allowance", "Net Pay"
+                "Name", "Rate", "Days Worked", "Late (Min)", "Regular Wage", "Overtime", "Night Diff.", "Special Holiday/Sunday", "Special Holiday/Sunday (Overtime)", "Legal Holiday", "Gross Income", "SSS Contribution (Regular)", "SSS Contribution (MPF)", "PhilHealth", "W/tax", "SSS (Loan-S)", "SSS (Loan-S)", "Pag-ibig Contribution", "EFUND", "Pag-ibig (Loan-S)", "Pag-ibig (Loan-C)", "Other Deductions", "Total Deductions", "Adjustment Allowance", "Net Pay"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, true, false
+                false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
