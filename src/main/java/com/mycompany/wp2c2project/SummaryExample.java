@@ -76,8 +76,8 @@ public class SummaryExample extends javax.swing.JFrame {
 
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
-        String shiftStart = (String) rates.Accounting.getModel().getValueAt(0, 2);
-        String shiftEnd = (String) rates.Accounting.getModel().getValueAt(0, 3);
+        String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 2);
+        String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 3);
                 
         float late = 0;
         try {
