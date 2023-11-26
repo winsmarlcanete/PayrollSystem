@@ -21,7 +21,6 @@ public class Login_Jon extends javax.swing.JFrame {
     /**
      * Creates new form LoginRegister
      */
-    
     public Login_Jon() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -162,11 +161,10 @@ public class Login_Jon extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String username = SGusername.getText();
         String password = String.valueOf(SGpass.getPassword());
-        
-        if(username.isEmpty() || password.isEmpty()){
-          JOptionPane.showMessageDialog(this, "Some fields are empty", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        else{
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Some fields are empty", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
             userLogin(username, password);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -178,7 +176,7 @@ public class Login_Jon extends javax.swing.JFrame {
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         Register frame = new Register();
         frame.setVisible(true);
-        
+
         dispose();
     }//GEN-LAST:event_jLabel4MouseClicked
 
@@ -238,29 +236,25 @@ public class Login_Jon extends javax.swing.JFrame {
 
     private void userLogin(String username, String password) {
         Connection sgconn = Main.connectSG();
-        if(sgconn != null){
+        if (sgconn != null) {
             try {
-                PreparedStatement st = (PreparedStatement)
-                        sgconn.prepareStatement("Select * from employee WHERE username = ? AND pass = ?");
-                
-
+                PreparedStatement st = (PreparedStatement) sgconn.prepareStatement("Select * from user WHERE username = ? AND pass = ?");
                 st.setString(1, username);
                 st.setString(2, password);
                 ResultSet res = st.executeQuery();
-                if(res.next()) {
+                if (res.next()) {
                     AdminHome frame = new AdminHome();
                     frame.setVisible(true);
                     dispose();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(this, "User not found.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else{
+        } else {
             System.out.println("Connection not available.");
         }
-        
+
     }
 }
-

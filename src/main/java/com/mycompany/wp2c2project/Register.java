@@ -6,7 +6,6 @@ package com.mycompany.wp2c2project;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -230,21 +229,20 @@ public class Register extends javax.swing.JFrame {
         String email = Email.getText();
         String password = String.valueOf(Pass.getPassword());
         String conpassword = String.valueOf(ConPass.getPassword());
-        
-        
-        if(!conpassword.equals(password)){
+
+        if (!conpassword.equals(password)) {
             JOptionPane.showMessageDialog(this, "Passwords don't match.", "Error", JOptionPane.ERROR_MESSAGE);
-        }else if(name.isEmpty() || username.isEmpty() || number.isEmpty() || email.isEmpty() || password.isEmpty() || conpassword.isEmpty()){
-          JOptionPane.showMessageDialog(this, "Some fields are empty.", "Error", JOptionPane.ERROR_MESSAGE);
-        }else{
+        } else if (name.isEmpty() || username.isEmpty() || number.isEmpty() || email.isEmpty() || password.isEmpty() || conpassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Some fields are empty.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
             userRegister(name, username, number, email, password, conpassword);
             RegisterFiles frame = new RegisterFiles();
             frame.setVisible(true);
 
             dispose();
         }
-        
-        
+
+
     }//GEN-LAST:event_ContinueBtnActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -325,12 +323,9 @@ public class Register extends javax.swing.JFrame {
 
     private void userRegister(String name, String username, String number, String email, String password, String conpassword) {
         Connection sgconn = Main.connectSG();
-        if(sgconn != null){
+        if (sgconn != null) {
             try {
-                PreparedStatement st = (PreparedStatement)
-                        sgconn.prepareStatement("INSERT INTO `employee`(`name`, `username`, `cell no.`, `email`, `pass`, `pass2`) VALUES (?,?,?,?,?,?)");
-                
-
+                PreparedStatement st = (PreparedStatement) sgconn.prepareStatement("INSERT INTO `user`(`name`, `username`, `cell no.`, `email`, `pass`, `pass2`) VALUES (?,?,?,?,?,?)");
                 st.setString(1, name);
                 st.setString(2, username);
                 st.setString(3, number);
@@ -339,11 +334,11 @@ public class Register extends javax.swing.JFrame {
                 st.setString(6, conpassword);
                 int res = st.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Account registered successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else{
+        } else {
             System.out.println("Connection not available.");
         }
     }

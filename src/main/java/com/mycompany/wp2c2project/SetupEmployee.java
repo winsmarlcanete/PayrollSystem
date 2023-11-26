@@ -76,7 +76,6 @@ public class SetupEmployee extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         shiftStartField = new javax.swing.JTextField();
         shiftEndField = new javax.swing.JTextField();
-        skipBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -145,14 +144,6 @@ public class SetupEmployee extends javax.swing.JFrame {
         shiftEndField.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         shiftEndField.setText("16:00");
 
-        skipBtn.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
-        skipBtn.setText("Skip");
-        skipBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                skipBtnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -184,10 +175,7 @@ public class SetupEmployee extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(shiftEndField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel10))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(saveBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(skipBtn)))
+                    .addComponent(saveBtn))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -232,9 +220,7 @@ public class SetupEmployee extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(taxStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saveBtn)
-                    .addComponent(skipBtn))
+                .addComponent(saveBtn)
                 .addGap(30, 30, 30))
         );
 
@@ -308,13 +294,6 @@ public class SetupEmployee extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_saveBtnActionPerformed
 
-    private void skipBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_skipBtnActionPerformed
-        int result = JOptionPane.showConfirmDialog(this, "Confirm skipping registering all new employees?", "Confirm", JOptionPane.WARNING_MESSAGE);
-        if (result == 0) {
-            dispose();
-        }
-    }//GEN-LAST:event_skipBtnActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -355,7 +334,6 @@ public class SetupEmployee extends javax.swing.JFrame {
     private javax.swing.JButton saveBtn;
     public javax.swing.JTextField shiftEndField;
     public javax.swing.JTextField shiftStartField;
-    private javax.swing.JButton skipBtn;
     public javax.swing.JTextField sssField;
     public javax.swing.JTextField taxStatusField;
     public javax.swing.JTextField tinField;

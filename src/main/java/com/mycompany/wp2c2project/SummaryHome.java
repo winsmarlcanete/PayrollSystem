@@ -153,7 +153,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 if (date != null) {
                     //check first if date data doesnt exist in the data base yet
                     int idCvt = (int) Double.parseDouble(id);
-                    st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card` WHERE `id` = ? AND `date` = ?");
+                    st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card` WHERE `empId` = ? AND `date` = ?");
                     st.setInt(1, idCvt);
                     st.setString(2, date);
                     resultSet = st.executeQuery();
@@ -164,7 +164,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         //timeIn
                         timeIn = readCell(i, timeInCol);
                         if (timeIn == null) {
-                            timeIn = "none";
+                            timeIn = "";
                         }
 
                         //timeOut
@@ -173,24 +173,17 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             timeOut = readCell(i, j);
                         }
                         if (timeOut == null) {
-                            timeOut = "none";
+                            timeOut = "";
                         }
 
                         //shiftStart
-                        st = (PreparedStatement) sgconn.prepareStatement("SELECT shiftStart FROM employee WHERE id = ?;");
+                        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM employee WHERE id = ?;");
                         st.setInt(1, idCvt);
                         resultSet = st.executeQuery();
                         resultSet.next();
                         shiftStart = resultSet.getString("shiftStart");
-                        System.out.println("getting shiftStart success");
-
-                        //shiftEnd
-                        st = (PreparedStatement) sgconn.prepareStatement("SELECT shiftEnd FROM employee WHERE id = ?;");
-                        st.setInt(1, idCvt);
-                        resultSet = st.executeQuery();
-                        resultSet.next();
                         shiftEnd = resultSet.getString("shiftEnd");
-                        System.out.println("getting shiftEnd success");
+                        System.out.println("getting shift success");
 
                         //for debugging
                         System.out.println("id: " + idCvt);
@@ -200,7 +193,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         //insert to table
                         st = (PreparedStatement) sgconn.prepareStatement(
                                 "INSERT INTO `time_card`"
-                                + "(`id`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`) "
+                                + "(`empId`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`) "
                                 + "VALUES (?,?,?,?,?,?,?)"
                         );
                         st.setString(1, id);
@@ -379,14 +372,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the FlatLaf look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         FlatLightLaf.setup();
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

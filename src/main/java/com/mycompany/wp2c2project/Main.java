@@ -3,6 +3,7 @@
  */
 package com.mycompany.wp2c2project;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -50,8 +51,8 @@ public class Main {
 
                     statement.executeUpdate(
                             "CREATE TABLE IF NOT EXISTS time_card ("
-                            + "idDate INT PRIMARY KEY AUTO_INCREMENT, "
-                            + "id INT NOT NULL, "
+                            + "dateId INT PRIMARY KEY AUTO_INCREMENT, "
+                            + "empId INT NOT NULL, "
                             + "date VARCHAR(5) NOT NULL, "
                             + "dateType INT NOT NULL, "
                             + "timeIn VARCHAR(5) NOT NULL, "
@@ -89,7 +90,7 @@ public class Main {
             conn = DriverManager.getConnection(SG_URL, USER, PASS);
             return conn;
         } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println("There were errors connecting to Snergy Graffix");
+            System.out.println("There were errors connecting to the database");
             return null;
         }
     }
@@ -97,6 +98,7 @@ public class Main {
     public static void main(String[] args) {
         Main main = new Main();
         main.setupDatabase();
+        FlatLightLaf.setup();
 
         Login_Jon ea = new Login_Jon();
         ea.setVisible(true);
