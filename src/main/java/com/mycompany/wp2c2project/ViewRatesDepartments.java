@@ -375,6 +375,17 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
 
         jButton3.setText("DELETE");
         jButton3.setFocusable(false);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jTextField11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField11ActionPerformed(evt);
+            }
+        });
 
         jLabel15.setText("ID");
 
@@ -713,6 +724,29 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
         showTableContent();
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Connection sgconn = Main.connectSG();
+        try {
+            int val4 = Integer.parseInt(jTextField11.getText());
+            
+            String sqlStatement = "DELETE FROM employee WHERE ID = ?"; 
+             
+            PreparedStatement updateQuery  = sgconn.prepareStatement(sqlStatement);
+            updateQuery.setInt(1, val4);
+            updateQuery.executeUpdate();
+              
+            }   catch (SQLException ex) {
+                    System.out.println(ex);
+                    
+            }
+        
+        showTableContent();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField11ActionPerformed
 
     /**
      * @param args the command line arguments
