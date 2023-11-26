@@ -93,9 +93,9 @@ public class Main {
         main.setupDatabase();
         FlatLightLaf.setup();
 
-        Login_Jon ea = new Login_Jon();
-        ea.setVisible(true);
-
+        AdminHome vr = new AdminHome();
+        vr.setVisible(true);
+        
 //        AdminHome frame = new AdminHome();
 //        frame.setVisible(true);
     }
