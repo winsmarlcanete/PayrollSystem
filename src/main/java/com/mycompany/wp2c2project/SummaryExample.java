@@ -76,7 +76,7 @@ public class SummaryExample extends javax.swing.JFrame {
         ViewRatesDepartments rates = new ViewRatesDepartments();
         String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 2);
         String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 3);
-                
+
         float late = 0;
         try {
             Date thresholdTime = dateFormat.parse(shiftStart);
