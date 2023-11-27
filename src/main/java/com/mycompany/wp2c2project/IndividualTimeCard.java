@@ -32,14 +32,6 @@ public class IndividualTimeCard extends javax.swing.JFrame {
     String dept;
 
     //time card
-    int dateId;
-    String date;
-    int dateType;
-    String timeIn;
-    String timeOut;
-    String shiftStart;
-    String shiftEnd;
-
     //total
     float daysTot;
     float lateTot;
@@ -63,17 +55,24 @@ public class IndividualTimeCard extends javax.swing.JFrame {
             deptLabel.setText(dept);
 
             //add row to table
-            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM time_card_" + empId + " WHERE empId = ?");
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM time_card WHERE empId = ?");
             st.setInt(1, empId);
             resultSet = st.executeQuery();
             while (resultSet.next()) {
-                dateId = resultSet.getInt("dateId");
-                date = resultSet.getString("date");
-                dateType = resultSet.getInt("dateType");
-                timeIn = resultSet.getString("timeIn");
-                timeOut = resultSet.getString("timeOut");
-                shiftStart = resultSet.getString("shiftStart");
-                shiftEnd = resultSet.getString("shiftEnd");
+                int dateId = resultSet.getInt("dateId");
+                String date = resultSet.getString("date");
+                int dateType = resultSet.getInt("dateType");
+                String shiftStart = resultSet.getString("shiftStart");
+                String shiftEnd = resultSet.getString("shiftEnd");
+                String timeIn = resultSet.getString("timeIn");
+                String timeOut = resultSet.getString("timeOut");
+                float day = resultSet.getFloat("day");
+                float late = resultSet.getFloat("late");
+                float ot = resultSet.getFloat("ot");
+                float nd = resultSet.getFloat("nd");
+                float spc = resultSet.getFloat("spc");
+                float spcOt = resultSet.getFloat("spcOt");
+                float leg = resultSet.getFloat("leg");
 
                 DefaultTableModel model = (DefaultTableModel) idvlTCTable.getModel();
                 model.addRow(new Object[]{
@@ -84,15 +83,15 @@ public class IndividualTimeCard extends javax.swing.JFrame {
                     shiftEnd,
                     timeIn,
                     timeOut,
-                    0, //day
-                    0, //late
-                    0, //ot
-                    0, //nd
-                    0, //spc hol/sun
-                    0, //spc hol/sun ot
-                    0, //leg hol          
+                    day,
+                    late,
+                    ot,
+                    nd,
+                    spc, 
+                    spcOt, 
+                    leg,    
                 });
-                System.out.println("getting dateId" + dateId + " success");
+                System.out.println("getting dateId " + dateId + " success");
             }
 
         } catch (SQLException ex) {

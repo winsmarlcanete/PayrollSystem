@@ -53,6 +53,27 @@ public class Main {
                             + "taxStatus VARCHAR(10) NOT NULL "
                             + ")");
 
+                    //time card
+                    statement.executeUpdate(
+                            "CREATE TABLE IF NOT EXISTS time_card ("
+                            + "dateId INT PRIMARY KEY AUTO_INCREMENT, "
+                            + "empId INT NOT NULL, "
+                            + "date VARCHAR(5) NOT NULL, "
+                            + "dateType INT NOT NULL, "
+                            + "shiftStart VARCHAR(5) NOT NULL, "
+                            + "shiftEnd VARCHAR(5) NOT NULL, "
+                            + "timeIn VARCHAR(5) NOT NULL, "
+                            + "timeOut VARCHAR(5) NOT NULL, "
+                            + "day FLOAT NOT NULL DEFAULT '0', "
+                            + "late FLOAT NOT NULL DEFAULT '0', "
+                            + "ot FLOAT NOT NULL DEFAULT '0', "
+                            + "nd FLOAT NOT NULL DEFAULT '0', "
+                            + "spc FLOAT NOT NULL DEFAULT '0', "
+                            + "spcOt FLOAT NOT NULL DEFAULT '0', "
+                            + "leg FLOAT NOT NULL DEFAULT '0' "
+                            + ")"
+                    );
+
                     //user
                     statement.executeUpdate(
                             "CREATE TABLE IF NOT EXISTS user ("
@@ -95,7 +116,7 @@ public class Main {
 
         AdminHome vr = new AdminHome();
         vr.setVisible(true);
-        
+
 //        AdminHome frame = new AdminHome();
 //        frame.setVisible(true);
     }
