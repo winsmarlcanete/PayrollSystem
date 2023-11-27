@@ -100,9 +100,7 @@ public class SummaryExample extends javax.swing.JFrame {
             Connection connection = Main.connectSG();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM time_card");
-            if (resultSet.next()) {
-                dateType = resultSet.getInt("dateType");
-            }
+            dateType = resultSet.getInt("dateType");
         } catch (SQLException e) {
             System.out.println(e);
         }

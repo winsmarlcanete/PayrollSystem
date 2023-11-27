@@ -220,8 +220,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
                             Date startOverlap;
                             Date endOverlap;
-                            long durationMillis;
-                            float durationHours;
 
                             //convert to hours and minutes
                             long timeInMill = timeInDate.getTime();
@@ -236,8 +234,8 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             startOverlap = timeInDate.after(shiftStartTreshold) ? timeInDate : shiftStartTreshold;
                             endOverlap = timeOutDate.before(shiftEndTreshold) ? timeOutDate : shiftEndTreshold;
 
-                            durationMillis = endOverlap.getTime() - startOverlap.getTime();
-                            durationHours = (float) durationMillis / (60 * 60 * 1000);
+                            long durationMillis = endOverlap.getTime() - startOverlap.getTime();
+                            float durationHours = (float) durationMillis / (60 * 60 * 1000);
                             durationHours = durationHours < 0 ? +24 : durationHours;
                             day = durationHours / 9;
 
@@ -263,15 +261,19 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             Date ndStartTreshold = dateFormat.parse("22:00");
                             Date ndEndTreshold = dateFormat.parse("06:00");
 
-                            if (timeInDate.after(thresholdTimeLate)) {
+                            if (timeInDate.after(timeOutDate)) { //time crossing midnight
                                 startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
                                 endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
-
-                                durationMillis = endOverlap.getTime() - startOverlap.getTime();
-                                durationHours = (float) durationMillis / (60 * 60 * 1000);
-                                System.out.println("nd duration: " + durationHours);
-                                durationHours = durationHours < 0 ? +24 : durationHours;
-                                nd = durationHours;
+                                nd = setDurationHours(startOverlap, endOverlap);
+                            } else { //time not crossing midnight
+                                if (timeOutDate.after(ndStartTreshold)) {
+                                    startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
+                                    nd = setDurationHours(startOverlap, endOverlap);
+                                }
+                                if (timeInDate.before(ndEndTreshold)) {
+                                    endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
+                                    nd = setDurationHours(startOverlap, endOverlap);
+                                }
                             }
                         }
 
@@ -335,6 +337,13 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
     private static float roundToNearestHalf(float number) {
         return (float) (Math.floor(number * 2) / 2.0);
+    }
+
+    private static float setDurationHours(Date startOverlap, Date endOverlap) {
+        long durationMillis = endOverlap.getTime() - startOverlap.getTime();
+        float durationHours = (float) durationMillis / (60 * 60 * 1000);
+        durationHours = durationHours < 0 ? +24 : durationHours;
+        return durationHours;
     }
 
     /**
