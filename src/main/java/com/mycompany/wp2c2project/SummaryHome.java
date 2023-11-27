@@ -159,30 +159,8 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 if (date != null) {
                     int idCvt = (int) Double.parseDouble(id);
 
-                    //create own time card database table for employee using employee id
-                    st.executeUpdate(
-                            "CREATE TABLE IF NOT EXISTS time_card_" + idCvt + " ("
-                            + "dateId INT PRIMARY KEY AUTO_INCREMENT, "
-                            + "empId INT NOT NULL, "
-                            + "date VARCHAR(5) NOT NULL, "
-                            + "dateType INT NOT NULL, "
-                            + "shiftStart VARCHAR(5) NOT NULL, "
-                            + "shiftEnd VARCHAR(5) NOT NULL, "
-                            + "timeIn VARCHAR(5) NOT NULL, "
-                            + "timeOut VARCHAR(5) NOT NULL, "
-                            + "day FLOAT NOT NULL DEFAULT '0', "
-                            + "late FLOAT NOT NULL DEFAULT '0', "
-                            + "ot FLOAT NOT NULL DEFAULT '0', "
-                            + "nd FLOAT NOT NULL DEFAULT '0', "
-                            + "spc FLOAT NOT NULL DEFAULT '0', "
-                            + "spcOt FLOAT NOT NULL DEFAULT '0', "
-                            + "leg FLOAT NOT NULL DEFAULT '0' "
-                            + ")"
-                    );
-                    System.out.println("created database table for " + id);
-
                     //check first if date data doesnt exist in the database yet
-                    st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card_" + idCvt + "` WHERE `empId` = ? AND `date` = ?");
+                    st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card` WHERE `empId` = ? AND `date` = ?");
                     st.setInt(1, idCvt);
                     st.setString(2, date);
                     resultSet = st.executeQuery();
@@ -224,15 +202,26 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         float day = 0;
                         float ot = 0;
                         float late = 0;
+                        float nd = 0;
+                        float spc = 0;
+                        float spcOt = 0;
+                        float leg = 0;
 
                         //check if there is timeIn to do attendance calculation
                         if (!"".equals(timeIn) && !"".equals(timeOut)) {
                             //Time in & time out
                             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                             dateFormat.setTimeZone(TimeZone.getTimeZone("PT"));
-                            Date timeInDate, timeOutDate;
-                            timeInDate = dateFormat.parse(timeIn);
-                            timeOutDate = dateFormat.parse(timeOut);
+
+                            Date timeInDate = dateFormat.parse(timeIn);
+                            Date timeOutDate = dateFormat.parse(timeOut);
+                            Date shiftStartTreshold = dateFormat.parse(shiftStart);
+                            Date shiftEndTreshold = dateFormat.parse(shiftEnd);
+
+                            Date startOverlap;
+                            Date endOverlap;
+                            long durationMillis;
+                            float durationHours;
 
                             //convert to hours and minutes
                             long timeInMill = timeInDate.getTime();
@@ -243,34 +232,50 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             int timeOutHr = (int) (timeOutMill / (60 * 60 * 1000));
                             int timeOutMin = (int) ((timeOutMill / (60 * 1000)) % 60);
 
-                            //calculate day (not done yet)
-                            float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
-                            day = hours / 9;
+                            //calculate day (needs rounding off logic)
+                            startOverlap = timeInDate.after(shiftStartTreshold) ? timeInDate : shiftStartTreshold;
+                            endOverlap = timeOutDate.before(shiftEndTreshold) ? timeOutDate : shiftEndTreshold;
 
-                            Date thresholdTime;
-
-                            //calculate late
-                            thresholdTime = dateFormat.parse(shiftStart);
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(thresholdTime);
-                            calendar.add(Calendar.MINUTE, 5);
-                            thresholdTime = calendar.getTime();
-                            if (timeInDate.after(thresholdTime)) {
-                                late = (float) roundToNearestHalf((timeInMill - thresholdTime.getTime()) / (60 * 1000));
-                            }
+                            durationMillis = endOverlap.getTime() - startOverlap.getTime();
+                            durationHours = (float) durationMillis / (60 * 60 * 1000);
+                            durationHours = durationHours < 0 ? +24 : durationHours;
+                            day = durationHours / 9;
 
                             //calculate overtime (✅ working omg)
-                            thresholdTime = dateFormat.parse(shiftEnd);
-                            if (timeOutDate.after(thresholdTime)) {
-                                ot = roundToNearestHalf((float) (timeOutMill - thresholdTime.getTime()) / (60 * 60 * 1000));
+                            if (timeOutDate.after(shiftEndTreshold)) {
+                                ot = roundToNearestHalf((float) (timeOutMill - shiftEndTreshold.getTime()) / (60 * 60 * 1000));
                             }
+
+                            //calculate late
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(shiftStartTreshold);
+                            calendar.add(Calendar.MINUTE, 5);
+                            Date thresholdTimeLate = calendar.getTime();
+                            if (timeInDate.after(thresholdTimeLate)) {
+                                late = roundToNearestHalf((float) (timeInMill - shiftStartTreshold.getTime()) / (60 * 1000)) * 2;
+                                if (timeOutDate.after(shiftEndTreshold) && ot == 0) {
+                                    float lateSubtract = roundToNearestHalf((float) (timeOutMill - shiftEndTreshold.getTime()) / (60 * 1000)) * 2;
+                                    late -= lateSubtract;
+                                }
+                            }
+
+                            //calculate nd
+                            Date ndStartTreshold = dateFormat.parse("22:00");
+                            Date ndEndTreshold = dateFormat.parse("06:00");
+
+                            startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
+                            endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
+
+                            durationMillis = endOverlap.getTime() - startOverlap.getTime();
+                            durationHours = (float) durationMillis / (60 * 60 * 1000);
+                            durationHours = durationHours < 0 ? +24 : durationHours;
+                            nd = durationHours;
                         }
 
                         // !!insert to time card database table!!
                         st = (PreparedStatement) sgconn.prepareStatement(
-                                "INSERT INTO `time_card_" + idCvt
-                                + "`(`empId`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`, `day`, `late`, `ot`) "
-                                + "VALUES (?,?,?,?,?,?,?,?,?,?)"
+                                "INSERT INTO `time_card`(`empId`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`, `day`, `late`, `ot`, `nd`, `spc`, `spcOt`, `leg`) "
+                                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                         );
                         st.setString(1, id);
                         st.setString(2, date);
@@ -282,6 +287,10 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         st.setFloat(8, day);
                         st.setFloat(9, late);
                         st.setFloat(10, ot);
+                        st.setFloat(11, nd);
+                        st.setFloat(12, spc);
+                        st.setFloat(13, spcOt);
+                        st.setFloat(14, leg);
                         st.executeUpdate();
                         System.out.println("insert data success");
 
@@ -322,7 +331,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     }
 
     private static float roundToNearestHalf(float number) {
-        return Math.round(number * 2) / 2.0f;
+        return (float) (Math.floor(number * 2) / 2.0);
     }
 
     /**
