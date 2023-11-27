@@ -78,7 +78,7 @@ public class SummaryExample extends javax.swing.JFrame {
         ViewRatesDepartments rates = new ViewRatesDepartments();
         String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 2);
         String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 3);
-                
+
         float late = 0;
         try {
             Date thresholdTime = dateFormat.parse(shiftStart);
@@ -100,8 +100,9 @@ public class SummaryExample extends javax.swing.JFrame {
             Connection connection = Main.connectSG();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM time_card");
-            resultSet.next();
-            dateType = resultSet.getInt("dateType");
+            if (resultSet.next()) {
+                dateType = resultSet.getInt("dateType");
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
