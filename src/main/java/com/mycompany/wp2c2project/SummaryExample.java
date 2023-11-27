@@ -74,8 +74,8 @@ public class SummaryExample extends javax.swing.JFrame {
 
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
-        String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 2);
-        String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 3);
+        String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 4);
+        String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 5);
 
         float late = 0;
         try {
@@ -112,18 +112,18 @@ public class SummaryExample extends javax.swing.JFrame {
         }
         
         //day = 1 if dateTYpe != 0
-//        try {
-//            Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
-//            Statement stmt = conn.createStatement();
-//            String sql = "UPDATE time_card SET day = 1 WHERE dateType != 0";
-//
-//            int rowsAffected = stmt.executeUpdate(sql);
-//
-//            System.out.println("Rows Affected: " + rowsAffected);
-//            System.out.println("Update Completed!");
-//        } catch (SQLException e) {
-//            System.out.println(e);
-//        }
+        try {
+            Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
+            Statement stmt = conn.createStatement();
+            String sql = "UPDATE time_card SET day = 1 WHERE dateType != 0";
+
+            int rowsAffected = stmt.executeUpdate(sql);
+
+            System.out.println("Rows Affected: " + rowsAffected);
+            System.out.println("Update Completed!");
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
         
         //calculate overtime
         float ot = 0;
