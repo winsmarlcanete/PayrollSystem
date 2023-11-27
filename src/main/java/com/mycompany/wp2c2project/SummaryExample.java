@@ -44,7 +44,7 @@ public class SummaryExample extends javax.swing.JFrame {
 
 //        String timeInStr = attendance.timeIn.getText();
 //        String timeOutStr = attendance.timeOut.getText();
-        String timeInStr = "8:30"; //sample time in
+        String timeInStr = "8:00"; //sample time in
         String timeOutStr = "17:30"; //sample time out
 
         //Time in & time out
@@ -111,20 +111,40 @@ public class SummaryExample extends javax.swing.JFrame {
             rpH = rpH * 2;
         }
         
-        //day = 1 if dateTYpe != 0
+        //time card flexibility khok khok
         try {
             Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
             Statement stmt = conn.createStatement();
-            String sql = "UPDATE time_card SET day = 1 WHERE dateType != 0";
-
-            int rowsAffected = stmt.executeUpdate(sql);
-
-            System.out.println("Rows Affected: " + rowsAffected);
+            String sql1 = "UPDATE time_card SET day = 1 WHERE dateType != 0";
+            String sql2 = "UPDATE time_card SET day = 1 WHERE timeIn != '' AND timeOut = ''";
+            float spcHrs = 0;
+            float spcOT = 0;
+            if (hours >= 8) {
+                spcHrs = 8;
+                spcOT = hours - 8;
+            } else {
+                spcHrs = hours;
+            }
+            String sql3 = "UPDATE time_card SET spc = " + spcHrs + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
+            String sql4 = "UPDATE time_card SET spcOt = " + spcOT + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
+            String sql5 = "UPDATE time_card SET leg = " + spcHrs + ", day = 0 WHERE dateType = 2 AND timeIn != ''";
+            
+            int rowsAffected1 = stmt.executeUpdate(sql1);
+            int rowsAffected2 = stmt.executeUpdate(sql2);
+            int rowsAffected3 = stmt.executeUpdate(sql3);
+            int rowsAffected4 = stmt.executeUpdate(sql4);
+            int rowsAffected5 = stmt.executeUpdate(sql5);
+            
+            System.out.println("Rows Affected1: " + rowsAffected1);
+            System.out.println("Rows Affected2: " + rowsAffected2);
+            System.out.println("Rows Affected3 " + rowsAffected3);
+            System.out.println("Rows Affected3 " + rowsAffected4);
+            System.out.println("Rows Affected5 " + rowsAffected5);
             System.out.println("Update Completed!");
         } catch (SQLException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
-        
+           
         //calculate overtime
         float ot = 0;
         try {
