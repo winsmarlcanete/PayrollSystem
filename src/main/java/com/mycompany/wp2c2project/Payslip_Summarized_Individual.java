@@ -410,7 +410,7 @@ public class Payslip_Summarized_Individual extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void PrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintActionPerformed
-        // TODO add your handling code here:
+        printRecord(PrintPanel);
     }//GEN-LAST:event_PrintActionPerformed
 
     /**
