@@ -27,7 +27,7 @@ public class Main {
         try {
             String databaseName = "wp2c2_payroll";
 
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             Connection sgconn = DriverManager.getConnection(SG_URL_SETUP, USER, PASS);
 
             if (sgconn != null) {
