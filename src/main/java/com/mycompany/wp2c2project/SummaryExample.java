@@ -59,8 +59,6 @@ public class SummaryExample extends javax.swing.JFrame {
             return;
         }
 
-        System.out.println(timeIn);
-
         long timeInMill = timeIn.getTime();
         long timeOutMill = timeOut.getTime();
 
@@ -72,7 +70,7 @@ public class SummaryExample extends javax.swing.JFrame {
 
         //calculate day
         float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
-        float days = hours / 8;
+        float days = hours / 9;
 
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
@@ -100,8 +98,9 @@ public class SummaryExample extends javax.swing.JFrame {
             Connection connection = Main.connectSG();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM time_card");
-            resultSet.next();
-            dateType = resultSet.getInt("dateType");
+            if (resultSet.next()) {
+                dateType = resultSet.getInt("dateType");
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -111,7 +110,21 @@ public class SummaryExample extends javax.swing.JFrame {
         } else if (dateType == 2) {
             rpH = rpH * 2;
         }
+        
+        //day = 1 if dateTYpe != 0
+        try {
+            Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
+            Statement stmt = conn.createStatement();
+            String sql = "UPDATE time_card SET day = 1 WHERE dateType != 0";
 
+            int rowsAffected = stmt.executeUpdate(sql);
+
+            System.out.println("Rows Affected: " + rowsAffected);
+            System.out.println("Update Completed!");
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
         //calculate overtime
         float ot = 0;
         try {
