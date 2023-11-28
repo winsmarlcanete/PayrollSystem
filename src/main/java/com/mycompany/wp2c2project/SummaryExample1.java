@@ -250,19 +250,17 @@ public class SummaryExample1 extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Name", "Rate", "Days Worked", "Late (Min)", "Regular Wage", "Overtime", "Night Diff.", "Special Holiday/Sunday", "Special Holiday/Sunday (Overtime)", "Legal Holiday", "Gross Income", "SSS Contribution (Regular)", "SSS Contribution (MPF)", "PhilHealth", "W/tax", "SSS (Loan-S)", "SSS (Loan-S)", "Pag-ibig Contribution", "EFUND", "Pag-ibig (Loan-S)", "Pag-ibig (Loan-C)", "Other Deductions", "Total Deductions", "Adjustment Allowance", "Net Pay"
-            }
+                new Object[][]{},
+                new String[]{
+                    "Name", "Rate", "Days Worked", "Late (Min)", "Regular Wage", "Overtime", "Night Diff.", "Special Holiday/Sunday", "Special Holiday/Sunday (Overtime)", "Legal Holiday", "Gross Income", "SSS Contribution (Regular)", "SSS Contribution (MPF)", "PhilHealth", "W/tax", "SSS (Loan-S)", "SSS (Loan-S)", "Pag-ibig Contribution", "EFUND", "Pag-ibig (Loan-S)", "Pag-ibig (Loan-C)", "Other Deductions", "Total Deductions", "Adjustment Allowance", "Net Pay"
+                }
         ) {
-            boolean[] canEdit = new boolean [] {
+            boolean[] canEdit = new boolean[]{
                 false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         table.getTableHeader().setReorderingAllowed(false);
@@ -300,37 +298,37 @@ public class SummaryExample1 extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButton3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1007, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                                .addGap(15, 15, 15)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel2)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jButton3)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(jButton4)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1007, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -349,96 +347,247 @@ public class SummaryExample1 extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        Connection sgconn = Main.connectSG();
+                Connection sgconn = Main.connectSG();
         PreparedStatement st;
         ResultSet resultSet;
+        XSSFWorkbook wb = new XSSFWorkbook();
 
         try {
             // Fetch data from the database
-            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `summary` WHERE `period` = ?");
+            st = sgconn.prepareStatement("SELECT * FROM `summary` WHERE `period` = ?");
             st.setString(1, "2023-10-20~2023-11-05");
             resultSet = st.executeQuery();
-            resultSet.next();
-            //from summary database
-            int empId = resultSet.getInt("empId");
-            float dayTot = resultSet.getFloat("dayTot");
-            float lateTot = resultSet.getFloat("lateTot");
-            float lateAmt = resultSet.getFloat("lateAmt");
-            float regWage = resultSet.getFloat("regWage");
-            float otTot = resultSet.getFloat("otTot");
-            float otAmt = resultSet.getFloat("otAmt");
-            float ndTot = resultSet.getFloat("ndTot");
-            float ndAmt = resultSet.getFloat("ndAmt");
-            float spcTot = resultSet.getFloat("spcTot");
-            float spcAmt = resultSet.getFloat("spcAmt");
-            float spcOtTot = resultSet.getFloat("spcOtTot");
-            float spcOtAmt = resultSet.getFloat("spcOtAmt");
-            float legTot = resultSet.getFloat("legTot");
-            float legAmt = resultSet.getFloat("legAmt");
-            float gross = resultSet.getFloat("gross");
-            float sssReg = resultSet.getFloat("sssReg");
-            float sssMpf = resultSet.getFloat("sssMpf");
-            float phealth = resultSet.getFloat("phealth");
-            float wtax = resultSet.getFloat("wtax");
-            float sssLoanS = resultSet.getFloat("sssLoanS");
-            float sssLoanC = resultSet.getFloat("sssLoanC");
-            float pagibigCont = resultSet.getFloat("pagibigCont");
-            float efund = resultSet.getFloat("efund");
-            float pagibigLoanS = resultSet.getFloat("pagibigLoanS");
-            float pagibigLoanC = resultSet.getFloat("pagibigLoanC");
-            float otherDedt = resultSet.getFloat("otherDedt");
-            float dedtTot = resultSet.getFloat("dedtTot");
-            float allowance = resultSet.getFloat("allowance");
-            float netPay = resultSet.getFloat("netPay");
 
-            //from employee database
-            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
-            st.setInt(1, empId);
-            ResultSet employeeResultSet = st.executeQuery();
-            employeeResultSet.next();
-            String department = employeeResultSet.getString("department");
-            String name = employeeResultSet.getString("name");
-            Float rate = employeeResultSet.getFloat("rate");
-            String status = employeeResultSet.getString("status");
-            String tin = employeeResultSet.getString("tin");
-            int philHealth = employeeResultSet.getInt("philHealth");
-            String sss = employeeResultSet.getString("sss");
-            int pagibig = employeeResultSet.getInt("pagibig");
-            String taxStatus = employeeResultSet.getString("taxStatus");
+            // Debug prints
+            if (!resultSet.next()) {
+                System.out.println("No data found in the ResultSet for the specified period.");
+                return; // or handle it accordingly
+            }
 
-            // Create the Excel workbook and sheet
-            XSSFWorkbook wb = new XSSFWorkbook();
-            sheet = wb.createSheet("Payslip Employees");
-            cellStyle = wb.createCellStyle();
+            // Create the sheet
+            XSSFSheet sheet = wb.createSheet("Payslip Employees");
+            XSSFCellStyle cellStyle = wb.createCellStyle();
             cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-            int rowNum;
+            int rowNum = 0;
             Row rowR;
-            //setValue
-            rowNum = 0;
-            rowR = sheet.createRow(rowNum);
-            insertCell(rowR, 1, "Department");
-            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 3));
-            insertCell(rowR, 2, "Payroll");
-            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 6));
-            insertCell(rowR, 4, "Pay Period");
-            insertCell(rowR, 7, "Pay Date");
-            insertCell(rowR, 8, "Tax Status");
 
-            rowNum = 1;
-            rowR = sheet.createRow(rowNum);
-            insertCell(rowR, 1, department);
-            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 3));
-            insertCell(rowR, 2, status);
-            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 6));
-            insertCell(rowR, 4, "2023-10-20~2023-11-05");
-            insertCell(rowR, 7, "Nov. 10, 2022"); //date now
-            insertCell(rowR, 8, taxStatus);
+            do {
+                // from summary database
+                int empId = resultSet.getInt("empId");
+                String dayTot = resultSet.getString("dayTot");
+                String lateTot = resultSet.getString("lateTot");
+                String lateAmt = resultSet.getString("lateAmt");
+                String regWage = resultSet.getString("regWage");
+                String otTot = resultSet.getString("otTot");
+                String otAmt = resultSet.getString("otAmt");
+                String ndTot = resultSet.getString("ndTot");
+                String ndAmt = resultSet.getString("ndAmt");
+                String spcTot = resultSet.getString("spcTot");
+                String spcAmt = resultSet.getString("spcAmt");
+                String spcOtTot = resultSet.getString("spcOtTot");
+                String spcOtAmt = resultSet.getString("spcOtAmt");
+                String legTot = resultSet.getString("legTot");
+                String legAmt = resultSet.getString("legAmt");
+                String gross = resultSet.getString("gross");
+                String sssReg = resultSet.getString("sssReg");
+                String sssMpf = resultSet.getString("sssMpf");
+                String phealth = resultSet.getString("phealth");
+                String wtax = resultSet.getString("wtax");
+                String sssLoanS = resultSet.getString("sssLoanS");
+                String sssLoanC = resultSet.getString("sssLoanC");
+                String pagibigCont = resultSet.getString("pagibigCont");
+                String efund = resultSet.getString("efund");
+                String pagibigLoanS = resultSet.getString("pagibigLoanS");
+                String pagibigLoanC = resultSet.getString("pagibigLoanC");
+                String otherDedt = resultSet.getString("otherDedt");
+                String dedtTot = resultSet.getString("dedtTot");
+                String allowance = resultSet.getString("allowance");
+                String netPay = resultSet.getString("netPay");
 
-            //auofit
-            for (int i = 1; i <= 8; i++) {
-                sheet.autoSizeColumn(i);
-            }
+                // Fetch additional data from the employee database
+                st = sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
+                st.setInt(1, empId);
+                ResultSet employeeResultSet = st.executeQuery();
+
+                // Debug prints
+                if (!employeeResultSet.next()) {
+                    System.out.println("No employee data found for empId: " + empId);
+                    continue; // skip to the next iteration
+                }
+
+                String department = employeeResultSet.getString("department");
+                String name = employeeResultSet.getString("name");
+                String rate = employeeResultSet.getString("rate");
+                String status = employeeResultSet.getString("status");
+                String tin = employeeResultSet.getString("tin");
+                String philHealth = employeeResultSet.getString("philHealth");
+                String sss = employeeResultSet.getString("sss");
+                String pagibig = employeeResultSet.getString("pagibig");
+                String taxStatus = employeeResultSet.getString("taxStatus");
+
+                // Set up the sheet and write data
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Department");
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 3));
+                insertCell(rowR, 2, "Payroll");
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 6));
+                insertCell(rowR, 4, "Pay Period");
+                insertCell(rowR, 7, "Pay Date");
+                insertCell(rowR, 8, "Tax Status");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, department);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 3));
+                insertCell(rowR, 2, status);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 6));
+                insertCell(rowR, 4, "2023-10-20~2023-11-05");
+                insertCell(rowR, 7, "Nov. 10, 2022"); // date now
+                insertCell(rowR, 8, taxStatus);
+
+                rowNum++;
+
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Employee Name:");
+                insertCell(rowR, 2, "Emp.ID");
+                insertCell(rowR, 3, "Daily Rate:");
+                insertCell(rowR, 4, "TIN:");
+                insertCell(rowR, 5, "Phil. Health No.");
+                insertCell(rowR, 6, "SSS No.");
+                insertCell(rowR, 7, " ");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, name);
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, rate);
+                insertCell(rowR, 4, tin);
+                insertCell(rowR, 5, philHealth);
+                insertCell(rowR, 6, sss);
+                insertCell(rowR, 7, " ");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+
+                rowR = sheet.createRow(rowNum);
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Days Worked");
+                insertCell(rowR, 2, dayTot);
+                insertCell(rowR, 3, regWage);
+                insertCell(rowR, 4, "SSS Cont.:");
+                insertCell(rowR, 5, sssReg);
+                insertCell(rowR, 6, "Allowance: ");
+                insertCell(rowR, 7, "-");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Late in Mins:");
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, " ");
+                insertCell(rowR, 4, "P.Health Cont.:");
+                insertCell(rowR, 5, phealth);
+                insertCell(rowR, 6, "SSS prem. Adj.");
+                insertCell(rowR, 7, "-");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Basic Pay");
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, regWage);
+                insertCell(rowR, 4, "W/Tax");
+                insertCell(rowR, 5, " ");
+                insertCell(rowR, 6, " ");
+                insertCell(rowR, 7, " ");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "OT Regular");
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, otTot);
+                insertCell(rowR, 4, "Pag-Ibig");
+                insertCell(rowR, 5, pagibigCont);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 6, 7));
+                insertCell(rowR, 6, "SSS Loan Payments");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Sun./spl./hol.");
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, spcTot);
+                insertCell(rowR, 4, "Vale: ");
+                insertCell(rowR, 5, " ");
+                insertCell(rowR, 6, " ");
+                insertCell(rowR, 7, " ");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Leg Holiday");
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, legTot);
+                insertCell(rowR, 4, "Comp. Loan");
+                insertCell(rowR, 5, " ");
+                insertCell(rowR, 6, "Salary Loan");
+                insertCell(rowR, 7, " ");
+                insertCell(rowR, 8, "Received by: ");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "OT Holiday");
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, otTot);
+                insertCell(rowR, 4, "SGC EFund");
+                insertCell(rowR, 5, efund);
+                insertCell(rowR, 6, "Calamity Loan");
+                insertCell(rowR, 7, " ");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+                insertCell(rowR, 1, "Night Diff'l");
+                insertCell(rowR, 2, " ");
+                insertCell(rowR, 3, ndTot);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 5));
+                insertCell(rowR, 4, "Other Deductions:");
+                insertCell(rowR, 6, "Stock Loan");
+                insertCell(rowR, 7, " ");
+                insertCell(rowR, 8, " ");
+
+                rowNum++;
+
+                rowR = sheet.createRow(rowNum);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 1, 2));
+                insertCell(rowR, 1, "GROSS INCOME:");
+                insertCell(rowR, 3, gross);
+                sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 5));
+                insertCell(rowR, 4, "TOTAL DEDUCTIONS:");
+                insertCell(rowR, 6, " ");
+                insertCell(rowR, 7, dedtTot);
+                insertCell(rowR, 8, netPay);
+
+                rowNum++;
+                rowR = sheet.createRow(rowNum);
+
+                sheet.setColumnWidth(1, 20 * 256);
+                sheet.setColumnWidth(2, 20 * 256);
+                sheet.setColumnWidth(3, 20 * 256);
+                sheet.setColumnWidth(4, 25 * 256);
+                sheet.setColumnWidth(5, 25 * 256);
+                sheet.setColumnWidth(6, 25 * 256);
+                sheet.setColumnWidth(7, 20 * 256);
+                sheet.setColumnWidth(8, 20 * 256);
+                
+                rowNum += 2;
+
+            } while (resultSet.next());
 
             // Write to the Excel file
             JFileChooser fileChooser = new JFileChooser();
@@ -449,13 +598,11 @@ public class SummaryExample1 extends javax.swing.JFrame {
                 FileOutputStream out = new FileOutputStream(file + ".xlsx");
                 wb.write(out);
                 out.close();
-                wb.close();
                 JOptionPane.showMessageDialog(null, "File Exported Successfully");
             }
         } catch (SQLException | IOException ex) {
             Logger.getLogger(SummaryExample1.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -481,4 +628,12 @@ public class SummaryExample1 extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
+
+    private void insertCell(Row rowR, int i, Float rate) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void insertCell(Row rowR, int i, int philHealth) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
