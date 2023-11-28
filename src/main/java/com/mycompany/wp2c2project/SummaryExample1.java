@@ -4,41 +4,63 @@
  */
 package com.mycompany.wp2c2project;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.table.DefaultTableModel;
 import java.text.ParseException;
+import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author jejer
  */
-public class SummaryExample extends javax.swing.JFrame {
+public class SummaryExample1 extends javax.swing.JFrame {
 
     /**
      * Creates new form SummaryExample
      */
-    public SummaryExample() {
+    public SummaryExample1() {
         initComponents();
+
+        Attendance attendance;
+        try {
+            attendance = new Attendance();
+        } catch (ParseException ex) {
+            System.err.println("Error creating Attendance instance: " + ex.getMessage());
+            return;
+        }
+        //table model
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
 
 //        String name = attendance.empName.getText();
         String name = "Jerwin"; //sample name
@@ -47,8 +69,8 @@ public class SummaryExample extends javax.swing.JFrame {
 
 //        String timeInStr = attendance.timeIn.getText();
 //        String timeOutStr = attendance.timeOut.getText();
-        String timeInStr = "7:00"; //sample time in
-        String timeOutStr = "12:30"; //sample time out
+        String timeInStr = "8:30"; //sample time in
+        String timeOutStr = "17:30"; //sample time out
 
         //Time in & time out
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -62,6 +84,8 @@ public class SummaryExample extends javax.swing.JFrame {
             return;
         }
 
+        System.out.println(timeIn);
+
         long timeInMill = timeIn.getTime();
         long timeOutMill = timeOut.getTime();
 
@@ -73,45 +97,12 @@ public class SummaryExample extends javax.swing.JFrame {
 
         //calculate day
         float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
-        float days = hours / 9;
-
-        //rounded time in and out
-        String roundedTimeIn = "";
-        String roundedTimeOut = "";
-        if (timeInMin < 30) {
-            roundedTimeIn = String.format("%02d:00", timeInHr);
-        } else {
-            roundedTimeIn = String.format("%02d:00", timeInHr + 1);
-        }
-
-        if (timeOutMin < 30) {
-            roundedTimeOut = String.format("%02d:00", timeOutHr);
-        } else {
-            roundedTimeOut = String.format("%02d:00", timeOutHr + 1);
-        }
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("HH:mm");
-        Date roundedTimeInDate, roundedTimeOutDate;
-        try {
-            roundedTimeInDate = dateTimeFormat.parse(roundedTimeIn);
-            roundedTimeOutDate = dateTimeFormat.parse(roundedTimeOut);
-        } catch (ParseException ex) {
-            Logger.getLogger(SummaryExample.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }
-
-        long roundedDayInMillis = roundedTimeOutDate.getTime() - roundedTimeInDate.getTime();
-        int roundedDayHours = (int) (roundedDayInMillis / (60 * 60 * 1000));
-        int roundedDayMinutes = (int) ((roundedDayInMillis / (60 * 1000)) % 60);
-
-        System.out.println("Rounded Time In: " + roundedTimeIn);
-        System.out.println("Rounded Time Out: " + roundedTimeOut);
-        System.out.println("Duration in Hours: " + timeInHr + "Minutes: " + timeInMin);
+        float days = hours / 8;
 
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
-
-        String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 4);
-        String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 5);
+        String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 2);
+        String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 3);
 
         float late = 0;
         try {
@@ -134,7 +125,9 @@ public class SummaryExample extends javax.swing.JFrame {
             Connection connection = Main.connectSG();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM time_card");
-            dateType = resultSet.getInt("dateType");
+            if (resultSet.next()) {
+                dateType = resultSet.getInt("dateType");
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -143,51 +136,6 @@ public class SummaryExample extends javax.swing.JFrame {
             rpH = (float) (rpH * 1.30);
         } else if (dateType == 2) {
             rpH = rpH * 2;
-        }
-
-        //time card flexibility khok khok
-        try {
-            Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
-            Statement stmt = conn.createStatement();
-            String sql1 = "UPDATE time_card SET day = 1 WHERE dateType != 0";
-            String sql2 = "UPDATE time_card SET day = 1 WHERE timeIn != '' AND timeOut = ''";
-            float spcHrs = 0;
-            float spcOT = 0;
-            if (hours >= 8) {
-                spcHrs = 8;
-                spcOT = hours - 8;
-            } else {
-                spcHrs = hours;
-            }
-            String sql3 = "UPDATE time_card SET spc = " + spcHrs + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
-            String sql4 = "UPDATE time_card SET spcOt = " + spcOT + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
-            String sql5 = "UPDATE time_card SET leg = " + spcHrs + ", day = 0 WHERE dateType = 2 AND timeIn != ''";
-
-            int rowsAffected6 = 0;
-            int rowsAffected7 = 0;
-            if (roundedDayHours >= 9) {
-                String sql6 = "UPDATE time_card SET day = 1 WHERE timeIn != ''";
-                rowsAffected6 = stmt.executeUpdate(sql6);
-            } else {
-                String sql7 = "UPDATE time_card SET day = " + days;
-                rowsAffected7 = stmt.executeUpdate(sql7);
-            }
-
-            int rowsAffected1 = stmt.executeUpdate(sql1);
-            int rowsAffected2 = stmt.executeUpdate(sql2);
-            int rowsAffected3 = stmt.executeUpdate(sql3);
-            int rowsAffected4 = stmt.executeUpdate(sql4);
-            int rowsAffected5 = stmt.executeUpdate(sql5);
-
-            System.out.println("Rows Affected1: " + rowsAffected1);
-            System.out.println("Rows Affected2: " + rowsAffected2);
-            System.out.println("Rows Affected3 " + rowsAffected3);
-            System.out.println("Rows Affected3 " + rowsAffected4);
-            System.out.println("Rows Affected5 " + rowsAffected5);
-            System.out.println("Rows Affected6 " + rowsAffected6);
-            System.out.println("Rows Affected7 " + rowsAffected7);
-            System.out.println("Update Completed!");
-        } catch (SQLException e) {
         }
 
         //calculate overtime
@@ -242,9 +190,6 @@ public class SummaryExample extends javax.swing.JFrame {
         float gross = rWage + ot + nd;
         float NP = gross - OD + TD + AA;
 
-        //table model
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-
         model.addRow(new Object[]{
             name,
             rate,
@@ -272,8 +217,18 @@ public class SummaryExample extends javax.swing.JFrame {
             AA,
             NP,});
     }
-    
 
+    XSSFSheet sheet;
+    CellStyle cellStyle;
+
+    private void insertCell(Row rowP, int columnP, String value) {
+        Cell cell = rowP.createCell(columnP);
+        if (cell != null) {
+            cell.setCellValue(value);
+            cell.setCellStyle(cellStyle);
+            System.out.println("Cell set at (" + rowP + ", " + columnP + "): " + value);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -394,88 +349,125 @@ public class SummaryExample extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        FileOutputStream excelFOU;
-        BufferedOutputStream excelBOU;
-        XSSFWorkbook excelJTableExporter;
+        Connection sgconn = Main.connectSG();
+        PreparedStatement st;
+        ResultSet resultSet;
 
-        JFileChooser ExcelFileChooser = new JFileChooser();
-        FileNameExtensionFilter extend = new FileNameExtensionFilter("EXCEL FILES", "xls", "xlsx", "xlsm");
+        try {
+            // Fetch data from the database
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `summary` WHERE `period` = ?");
+            st.setString(1, "2023-10-20~2023-11-05");
+            resultSet = st.executeQuery();
+            resultSet.next();
+            //from summary database
+            int empId = resultSet.getInt("empId");
+            float dayTot = resultSet.getFloat("dayTot");
+            float lateTot = resultSet.getFloat("lateTot");
+            float lateAmt = resultSet.getFloat("lateAmt");
+            float regWage = resultSet.getFloat("regWage");
+            float otTot = resultSet.getFloat("otTot");
+            float otAmt = resultSet.getFloat("otAmt");
+            float ndTot = resultSet.getFloat("ndTot");
+            float ndAmt = resultSet.getFloat("ndAmt");
+            float spcTot = resultSet.getFloat("spcTot");
+            float spcAmt = resultSet.getFloat("spcAmt");
+            float spcOtTot = resultSet.getFloat("spcOtTot");
+            float spcOtAmt = resultSet.getFloat("spcOtAmt");
+            float legTot = resultSet.getFloat("legTot");
+            float legAmt = resultSet.getFloat("legAmt");
+            float gross = resultSet.getFloat("gross");
+            float sssReg = resultSet.getFloat("sssReg");
+            float sssMpf = resultSet.getFloat("sssMpf");
+            float phealth = resultSet.getFloat("phealth");
+            float wtax = resultSet.getFloat("wtax");
+            float sssLoanS = resultSet.getFloat("sssLoanS");
+            float sssLoanC = resultSet.getFloat("sssLoanC");
+            float pagibigCont = resultSet.getFloat("pagibigCont");
+            float efund = resultSet.getFloat("efund");
+            float pagibigLoanS = resultSet.getFloat("pagibigLoanS");
+            float pagibigLoanC = resultSet.getFloat("pagibigLoanC");
+            float otherDedt = resultSet.getFloat("otherDedt");
+            float dedtTot = resultSet.getFloat("dedtTot");
+            float allowance = resultSet.getFloat("allowance");
+            float netPay = resultSet.getFloat("netPay");
 
-        ExcelFileChooser.setDialogTitle("Save As");
+            //from employee database
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
+            st.setInt(1, empId);
+            ResultSet employeeResultSet = st.executeQuery();
+            employeeResultSet.next();
+            String department = employeeResultSet.getString("department");
+            String name = employeeResultSet.getString("name");
+            Float rate = employeeResultSet.getFloat("rate");
+            String status = employeeResultSet.getString("status");
+            String tin = employeeResultSet.getString("tin");
+            int philHealth = employeeResultSet.getInt("philHealth");
+            String sss = employeeResultSet.getString("sss");
+            int pagibig = employeeResultSet.getInt("pagibig");
+            String taxStatus = employeeResultSet.getString("taxStatus");
 
-        ExcelFileChooser.setFileFilter(extend);
-        int excelchooser = ExcelFileChooser.showSaveDialog(null);
+            // Create the Excel workbook and sheet
+            XSSFWorkbook wb = new XSSFWorkbook();
+            sheet = wb.createSheet("Payslip Employees");
+            cellStyle = wb.createCellStyle();
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-        if (excelchooser == JFileChooser.APPROVE_OPTION) {
-            try {
-                excelJTableExporter = new XSSFWorkbook();
-                XSSFSheet excelSheet = excelJTableExporter.createSheet("Payslip Employees");
+            int rowNum;
+            Row rowR;
+            //setValue
+            rowNum = 0;
+            rowR = sheet.createRow(rowNum);
+            insertCell(rowR, 1, "Department");
+            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 3));
+            insertCell(rowR, 2, "Payroll");
+            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 6));
+            insertCell(rowR, 4, "Pay Period");
+            insertCell(rowR, 7, "Pay Date");
+            insertCell(rowR, 8, "Tax Status");
 
-                for (int i = 0; i < table.getRowCount(); i++) {
-                    XSSFRow excelRow = excelSheet.createRow(i);
+            rowNum = 1;
+            rowR = sheet.createRow(rowNum);
+            insertCell(rowR, 1, department);
+            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 3));
+            insertCell(rowR, 2, status);
+            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 6));
+            insertCell(rowR, 4, "2023-10-20~2023-11-05");
+            insertCell(rowR, 7, "Nov. 10, 2022"); //date now
+            insertCell(rowR, 8, taxStatus);
 
-                    for (int j = 0; j < table.getColumnCount(); j++) {
-                        XSSFCell excelCell = excelRow.createCell(j);
-                        Object value = table.getValueAt(i, j);
-
-                        if (value != null) {
-                            excelCell.setCellValue(value.toString());
-                        } else {
-                            excelCell.setCellValue(""); // Handle null values
-                        }
-                    }
-                }
-
-                excelFOU = new FileOutputStream(ExcelFileChooser.getSelectedFile() + ".xlsx");
-                excelBOU = new BufferedOutputStream(excelFOU);
-                excelJTableExporter.write(excelBOU);
-                JOptionPane.showMessageDialog(null, "File Exported Successfully");
-
-            } catch (IOException ex) {
-                Logger.getLogger(SummaryExample1.class.getName()).log(Level.SEVERE, null, ex);
+            //auofit
+            for (int i = 1; i <= 8; i++) {
+                sheet.autoSizeColumn(i);
             }
+
+            // Write to the Excel file
+            JFileChooser fileChooser = new JFileChooser();
+            int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                FileOutputStream out = new FileOutputStream(file + ".xlsx");
+                wb.write(out);
+                out.close();
+                wb.close();
+                JOptionPane.showMessageDialog(null, "File Exported Successfully");
+            }
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(SummaryExample1.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+        FlatLightLaf.setup();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SummaryExample().setVisible(true);
+                new SummaryExample1().setVisible(true);
             }
         });
     }

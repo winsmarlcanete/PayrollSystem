@@ -256,7 +256,7 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
 
         employeeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, "7:00", "16:00", null, null, null, null, null, null}
             },
             new String [] {
                 "ID", "Name", "Department", "Rate", "Shift Start", "Shift End", "TIN", "PhilHealth", "SSS", "Pag-Ibig", "Tax Status", "Status"
@@ -266,7 +266,7 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, true, true, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

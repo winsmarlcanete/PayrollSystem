@@ -149,8 +149,12 @@
                     <Column editable="false" title="Name" type="java.lang.String"/>
                     <Column editable="false" title="Department" type="java.lang.String"/>
                     <Column editable="false" title="Rate" type="java.lang.String"/>
-                    <Column editable="false" title="Shift Start" type="java.lang.String"/>
-                    <Column editable="false" title="Shift End" type="java.lang.String"/>
+                    <Column editable="true" title="Shift Start" type="java.lang.String">
+                      <Data value="7:00"/>
+                    </Column>
+                    <Column editable="true" title="Shift End" type="java.lang.String">
+                      <Data value="16:00"/>
+                    </Column>
                     <Column editable="false" title="TIN" type="java.lang.String"/>
                     <Column editable="false" title="PhilHealth" type="java.lang.String"/>
                     <Column editable="false" title="SSS" type="java.lang.String"/>

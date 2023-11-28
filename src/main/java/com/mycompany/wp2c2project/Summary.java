@@ -163,7 +163,7 @@ public class Summary extends javax.swing.JFrame {
         periodLb.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
         periodLb.setText("Period");
 
-        jLabel3.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Inter Medium", 0, 14)); // NOI18N
         jLabel3.setText("Payroll");
 
         jButton1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
