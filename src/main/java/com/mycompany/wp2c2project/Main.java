@@ -85,6 +85,14 @@ public class Main {
                             + "pass VARCHAR(25) NOT NULL, "
                             + "pass2 VARCHAR(25) NOT NULL "
                             + ")");
+                    
+                    statement.executeUpdate (
+                            "CREATE TABLE IF NOT EXISTS rates ("
+                            + "ID INT PRIMARY KEY AUTO_INCREMENT, "
+                            + "rateName VARCHAR(25) NOT NULL, "
+                            + "rateValue DOUBLE NOT NULL, "
+                            + "type VARCHAR(50) NOT NULL "
+                            + ")");
                     System.out.println("Database setup successful");
                 } catch (SQLException ex) {
                     Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);

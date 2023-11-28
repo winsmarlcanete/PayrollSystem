@@ -13,8 +13,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import javax.swing.table.DefaultTableModel;
+import java.util.TimeZone;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -25,6 +26,8 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,7 +40,7 @@ public class SummaryExample extends javax.swing.JFrame {
      */
     public SummaryExample() {
         initComponents();
-
+      
         Attendance attendance;
         try {
             attendance = new Attendance();
@@ -55,8 +58,8 @@ public class SummaryExample extends javax.swing.JFrame {
 
 //        String timeInStr = attendance.timeIn.getText();
 //        String timeOutStr = attendance.timeOut.getText();
-        String timeInStr = "8:30"; //sample time in
-        String timeOutStr = "17:30"; //sample time out
+        String timeInStr = "7:00"; //sample time in
+        String timeOutStr = "12:30"; //sample time out
 
         //Time in & time out
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -70,8 +73,6 @@ public class SummaryExample extends javax.swing.JFrame {
             return;
         }
 
-        System.out.println(timeIn);
-
         long timeInMill = timeIn.getTime();
         long timeOutMill = timeOut.getTime();
 
@@ -83,12 +84,45 @@ public class SummaryExample extends javax.swing.JFrame {
 
         //calculate day
         float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
-        float days = hours / 8;
+        float days = hours / 9;
+        
+        //rounded time in and out
+        String roundedTimeIn = "";
+        String roundedTimeOut = "";
+        if (timeInMin < 30) {
+            roundedTimeIn = String.format("%02d:00", timeInHr);
+        } else {
+            roundedTimeIn = String.format("%02d:00", timeInHr + 1);
+        }
 
+        if (timeOutMin < 30) {
+            roundedTimeOut = String.format("%02d:00", timeOutHr);
+        } else {
+            roundedTimeOut = String.format("%02d:00", timeOutHr + 1);
+        }
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("HH:mm");
+        Date roundedTimeInDate, roundedTimeOutDate;
+        try {
+            roundedTimeInDate = dateTimeFormat.parse(roundedTimeIn);
+            roundedTimeOutDate = dateTimeFormat.parse(roundedTimeOut);
+        } catch (ParseException ex) {
+            Logger.getLogger(SummaryExample.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+
+        long roundedDayInMillis = roundedTimeOutDate.getTime() - roundedTimeInDate.getTime();
+        int roundedDayHours = (int) (roundedDayInMillis / (60 * 60 * 1000));
+        int roundedDayMinutes = (int) ((roundedDayInMillis / (60 * 1000)) % 60); 
+        
+        System.out.println("Rounded Time In: " + roundedTimeIn);
+        System.out.println("Rounded Time Out: " + roundedTimeOut);
+        System.out.println("Duration in Hours: " + timeInHr + "Minutes: " + timeInMin);
+        
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
-        String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 2);
-        String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 3);
+
+        String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 4);
+        String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 5);
 
         float late = 0;
         try {
@@ -123,7 +157,53 @@ public class SummaryExample extends javax.swing.JFrame {
         } else if (dateType == 2) {
             rpH = rpH * 2;
         }
-
+        
+        //time card flexibility khok khok
+        try {
+            Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
+            Statement stmt = conn.createStatement();
+            String sql1 = "UPDATE time_card SET day = 1 WHERE dateType != 0";
+            String sql2 = "UPDATE time_card SET day = 1 WHERE timeIn != '' AND timeOut = ''";
+            float spcHrs = 0;
+            float spcOT = 0;
+            if (hours >= 8) {
+                spcHrs = 8;
+                spcOT = hours - 8;
+            } else {
+                spcHrs = hours;
+            }
+            String sql3 = "UPDATE time_card SET spc = " + spcHrs + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
+            String sql4 = "UPDATE time_card SET spcOt = " + spcOT + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
+            String sql5 = "UPDATE time_card SET leg = " + spcHrs + ", day = 0 WHERE dateType = 2 AND timeIn != ''";
+            
+            int rowsAffected6 = 0;
+            int rowsAffected7 = 0;
+            if (roundedDayHours >=9) {
+                String sql6 = "UPDATE time_card SET day = 1 WHERE timeIn != ''";
+                rowsAffected6 = stmt.executeUpdate(sql6);
+            } else {
+                String sql7 = "UPDATE time_card SET day = " + days;
+                rowsAffected7 = stmt.executeUpdate(sql7);
+            }
+            
+            int rowsAffected1 = stmt.executeUpdate(sql1);
+            int rowsAffected2 = stmt.executeUpdate(sql2);
+            int rowsAffected3 = stmt.executeUpdate(sql3);
+            int rowsAffected4 = stmt.executeUpdate(sql4);
+            int rowsAffected5 = stmt.executeUpdate(sql5);
+            
+            System.out.println("Rows Affected1: " + rowsAffected1);
+            System.out.println("Rows Affected2: " + rowsAffected2);
+            System.out.println("Rows Affected3 " + rowsAffected3);
+            System.out.println("Rows Affected3 " + rowsAffected4);
+            System.out.println("Rows Affected5 " + rowsAffected5);
+            System.out.println("Rows Affected6 " + rowsAffected6);
+            System.out.println("Rows Affected7 " + rowsAffected7);
+            System.out.println("Update Completed!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
         //calculate overtime
         float ot = 0;
         try {
