@@ -59,12 +59,10 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
     private String readCell(int rowP, int columnP) {
         Row row = sheet.getRow(rowP);
-        Cell cell = row.getCell(columnP);
+        Cell cell = row != null ? row.getCell(columnP) : null;
         String data = null;
 
-        if (cell == null) {
-            JOptionPane.showMessageDialog(this, "Please check if the file is correct", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
+        if (cell != null) {
             FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
             switch (formulaEvaluator.evaluateInCell(cell).getCellType()) {
                 case NUMERIC -> {
@@ -90,7 +88,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     }
 
     String name;
-    String id;
+    int id;
     String department;
 
     int infoCol1 = 9;
@@ -100,16 +98,16 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     private void readEmployeeInfo() {
         sheet = wb.getSheetAt(readSheet);
 
-        name = readCell(3, infoCol1);
-        id = readCell(4, infoCol1);
-        department = readCell(3, infoCol2);
+        name = readCell(3, infoCol1) != null ? readCell(3, infoCol1) : "none";
+        id = (int) Float.parseFloat(readCell(4, infoCol1) != null ? readCell(4, infoCol1) : "1001");
+        department = readCell(3, infoCol2) != null ? readCell(3, infoCol2) : "none";
 
-        if (Double.parseDouble(id) < 1000 && sheet != null) {
+        if (id < 1000 && sheet != null) {
             if (sgconn != null) {
                 try {
                     //find if record exists
-                    st = sgconn.prepareStatement("SELECT EXISTS(SELECT * FROM `employee` WHERE `id` = ?)");
-                    st.setString(1, id);
+                    st = sgconn.prepareStatement("SELECT EXISTS(SELECT * FROM `employee` WHERE `empId` = ?)");
+                    st.setInt(1, id);
                     resultSet = st.executeQuery();
 
                     if (resultSet.next() && resultSet.getInt(1) == 0) {
@@ -127,7 +125,9 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 JOptionPane.showMessageDialog(this, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Time card uploaded successfully", "Success", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Time card uploaded successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
+            SummaryExample sumExJava = new SummaryExample();
+            sumExJava.setVisible(true);
         }
     }
 
@@ -152,22 +152,18 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 String timeIn;
                 String timeOut = null;
 
-                int dayTot = 0;
-
                 date = readCell(i, dateCol);
 
                 if (date != null) {
-                    int idCvt = (int) Double.parseDouble(id);
-
                     //check first if date data doesnt exist in the database yet
                     st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card` WHERE `empId` = ? AND `date` = ?");
-                    st.setInt(1, idCvt);
+                    st.setInt(1, id);
                     st.setString(2, date);
                     resultSet = st.executeQuery();
                     resultSet.next();
                     int rowCount = resultSet.getInt(1);
 
-                    System.out.println("id: " + idCvt);
+                    System.out.println("id: " + id);
                     System.out.println("date: " + date);
 
                     if (rowCount == 0) {
@@ -187,8 +183,8 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         timeOut = timeOut != null ? timeOut : "";
 
                         //get shift start & end
-                        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM employee WHERE id = ?;");
-                        st.setInt(1, idCvt);
+                        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM employee WHERE empId = ?;");
+                        st.setInt(1, id);
                         resultSet = st.executeQuery();
                         resultSet.next();
                         shiftStart = resultSet.getString("shiftStart");
@@ -207,7 +203,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         float spcOt = 0;
                         float leg = 0;
 
-                        //check if there is timeIn to do attendance calculation
+                        //check if there is timeIn before doing attendance calculation
                         if (!"".equals(timeIn) && !"".equals(timeOut)) {
                             //Time in & time out
                             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -251,10 +247,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             Date thresholdTimeLate = calendar.getTime();
                             if (timeInDate.after(thresholdTimeLate)) {
                                 late = roundToNearestHalf((float) (timeInMill - shiftStartTreshold.getTime()) / (60 * 1000)) * 2;
-                                if (timeOutDate.after(shiftEndTreshold) && ot == 0) {
-                                    float lateSubtract = roundToNearestHalf((float) (timeOutMill - shiftEndTreshold.getTime()) / (60 * 1000)) * 2;
-                                    late -= lateSubtract;
-                                }
                             }
 
                             //calculate nd
@@ -279,10 +271,24 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
                         // !!insert to time card database table!!
                         st = (PreparedStatement) sgconn.prepareStatement(
-                                "INSERT INTO `time_card`(`empId`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`, `day`, `late`, `ot`, `nd`, `spc`, `spcOt`, `leg`) "
-                                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                                "INSERT INTO `time_card`("
+                                + "`empId`, "
+                                + "`date`, "
+                                + "`dateType`, "
+                                + "`timeIn`, "
+                                + "`timeOut`, "
+                                + "`shiftStart`,"
+                                + "`shiftEnd`, "
+                                + "`day`, "
+                                + "`late`, "
+                                + "`ot`, "
+                                + "`nd`, "
+                                + "`spc`, "
+                                + "`spcOt`, "
+                                + "`leg`"
+                                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                         );
-                        st.setString(1, id);
+                        st.setInt(1, id);
                         st.setString(2, date);
                         st.setInt(3, dateType);
                         st.setString(4, timeIn);
@@ -299,8 +305,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         st.executeUpdate();
                         System.out.println("insert data success");
 
-                        // !!calculation for summary should be here (totals)!!
-                        dayTot += 0;
                     } else {
                         System.out.println("date data already exists");
                     }
@@ -313,7 +317,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             Logger.getLogger(SummaryHome.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //insert totals for summary table here
         //iterate columns
         infoCol1 += 15;
         infoCol2 += 15;
@@ -332,6 +335,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             timeOutColEnd = 3;
             readSheet++;
         }
+        getTotal();
         readEmployeeInfo();
     }
 
@@ -344,6 +348,109 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         float durationHours = (float) durationMillis / (60 * 60 * 1000);
         durationHours = durationHours < 0 ? +24 : durationHours;
         return durationHours;
+    }
+
+    private void getTotal() {
+        try {
+            float dayTot = 0;
+            float lateTot = 0;
+            float otTot = 0;
+            float ndTot = 0;
+            float spcTot = 0;
+            float spcOtTot = 0;
+            float legTot = 0;
+
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
+            st.setInt(1, id);
+            resultSet = st.executeQuery();
+            while (resultSet.next()) {
+                dayTot += resultSet.getFloat("day");
+                lateTot += resultSet.getFloat("late");
+                otTot += resultSet.getFloat("ot");
+                ndTot += resultSet.getFloat("nd");
+                spcTot += resultSet.getFloat("spc");
+                spcOtTot += resultSet.getFloat("spcOt");
+                legTot += resultSet.getFloat("leg");
+            }
+
+            System.out.println("dayTot: " + dayTot);
+            System.out.println("lateTot: " + lateTot);
+            System.out.println("otTot: " + otTot);
+            System.out.println("ndTot: " + ndTot);
+            System.out.println("spcTot: " + spcTot);
+            System.out.println("spcOtTot: " + spcOtTot);
+            System.out.println("legTot: " + legTot);
+
+            //summary calculation
+            String period = "date kunwari"; //wip
+
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
+            st.setInt(1, id);
+            resultSet = st.executeQuery();
+            resultSet.next();
+            float rate = resultSet.getFloat("rate");
+            float rph = rate / 8;
+
+            //amt calculation
+            float lateAmt = rph / 60 * lateTot;
+            float regWage = rate * dayTot - lateTot;
+
+            float otAmt = rph * 1.25f * otTot;
+            float ndAmt = rph * 0.1f * ndTot;
+            float spcAmt = rph * 1.3f * spcTot;
+            float spcOtAmt = rph * 1.3f * 1.3f * spcOtTot;
+            float legAmt = rph * legTot;
+            float gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
+
+            float netPay = gross;
+
+            //insert to summary database    
+            st = (PreparedStatement) sgconn.prepareStatement(
+                    "INSERT INTO `summary`("
+                    + "`empId`, "
+                    + "`period`, "
+                    + "`rph`, "
+                    + "`dayTot`, "
+                    + "`lateTot`, "
+                    + "`otTot`, "
+                    + "`ndTot`, "
+                    + "`spcTot`, "
+                    + "`spcOtTot`, "
+                    + "`legTot`, "
+                    + "`lateAmt`, "
+                    + "`otAmt`, "
+                    + "`ndAmt`, "
+                    + "`spcAmt`, "
+                    + "`spcOtAmt`, "
+                    + "`legAmt`, "
+                    + "`regWage`, "
+                    + "`gross`, "
+                    + "`netPay` "
+                    + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            );
+            st.setInt(1, id);
+            st.setString(2, period);
+            st.setFloat(3, rph);
+            st.setFloat(4, dayTot);
+            st.setFloat(5, lateTot);
+            st.setFloat(6, otTot);
+            st.setFloat(7, ndTot);
+            st.setFloat(8, spcTot);
+            st.setFloat(9, spcOtTot);
+            st.setFloat(10, legTot);
+            st.setFloat(11, lateAmt);
+            st.setFloat(12, otAmt);
+            st.setFloat(13, ndAmt);
+            st.setFloat(14, spcAmt);
+            st.setFloat(15, spcOtAmt);
+            st.setFloat(16, legAmt);
+            st.setFloat(17, regWage);
+            st.setFloat(18, gross);
+            st.setFloat(19, netPay);
+            st.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(SummaryHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -361,6 +468,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         jLabel2 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         fileName = new javax.swing.JLabel();
+        dayTotLb = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -397,6 +505,9 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         fileName.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
         fileName.setText("No file selected");
 
+        dayTotLb.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        dayTotLb.setText("No file selected");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -404,6 +515,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dayTotLb)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(jButton2)
@@ -423,7 +535,9 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fileName, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addComponent(dayTotLb, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -502,6 +616,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel dayTotLb;
     private javax.swing.JLabel fileName;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

@@ -39,10 +39,10 @@ public class Main {
                     statement.executeUpdate("USE " + databaseName);
                     statement.executeUpdate(
                             "CREATE TABLE IF NOT EXISTS employee ("
-                            + "id INT PRIMARY KEY, "
+                            + "empId INT PRIMARY KEY, "
                             + "name VARCHAR(20) NOT NULL, "
                             + "department VARCHAR(20) NOT NULL, "
-                            + "rate DOUBLE NOT NULL, "
+                            + "rate FLOAT NOT NULL, "
                             + "shiftStart VARCHAR(5) NOT NULL, "
                             + "shiftEnd VARCHAR(5) NOT NULL, "
                             + "status VARCHAR(20) NOT NULL, "
@@ -51,7 +51,8 @@ public class Main {
                             + "sss VARCHAR(20) NOT NULL, "
                             + "pagibig INT(20) NOT NULL, "
                             + "taxStatus VARCHAR(10) NOT NULL "
-                            + ")");
+                            + ")"
+                    );
 
                     //time card
                     statement.executeUpdate(
@@ -74,6 +75,44 @@ public class Main {
                             + ")"
                     );
 
+                    //summary
+                    statement.executeUpdate("CREATE TABLE IF NOT EXISTS `summary` ("
+                            + "`sumId` int  (11) NOT NULL, "
+                            + "`empId` int  (11) NOT NULL, "
+                            + "`period` varchar(50) NOT NULL, "
+                            + "`rph` float NOT NULL, "
+                            + "`dayTot` float NOT NULL, "
+                            + "`lateTot` float NOT NULL, "
+                            + "`otTot` float NOT NULL, "
+                            + "`ndTot` float NOT NULL, "
+                            + "`spcTot` float NOT NULL, "
+                            + "`spcOtTot` float NOT NULL, "
+                            + "`legTot` float NOT NULL, "
+                            + "`lateAmt` float NOT NULL, "
+                            + "`otAmt` float NOT NULL, "
+                            + "`ndAmt` float NOT NULL, "
+                            + "`spcAmt` float NOT NULL, "
+                            + "`spcOtAmt` float NOT NULL, "
+                            + "`legAmt` float NOT NULL, "
+                            + "`regWage` float NOT NULL, "
+                            + "`gross` float NOT NULL, "
+                            + "`sssReg` float NOT NULL DEFAULT '0', "
+                            + "`sssMpf` float NOT NULL DEFAULT '0', "
+                            + "`phealth` float NOT NULL DEFAULT '0', "
+                            + "`wtax` float NOT NULL DEFAULT '0', "
+                            + "`sssLoanS` float NOT NULL DEFAULT '0', "
+                            + "`sssLoanC` float NOT NULL DEFAULT '0', "
+                            + "`pagibigCont` float NOT NULL DEFAULT '0', "
+                            + "`efund` float NOT NULL DEFAULT '0', "
+                            + "`pagibigLoanS` float NOT NULL DEFAULT '0', "
+                            + "`pagibigLoanC` float NOT NULL DEFAULT '0', "
+                            + "`otherDedt` float NOT NULL DEFAULT '0', "
+                            + "`dedtTot` float NOT NULL DEFAULT '0', "
+                            + "`allowance` float NOT NULL DEFAULT '0', "
+                            + "`netPay` float NOT NULL "
+                            + ")"
+                    );
+
                     //user
                     statement.executeUpdate(
                             "CREATE TABLE IF NOT EXISTS user ("
@@ -84,7 +123,9 @@ public class Main {
                             + "email VARCHAR(25) NOT NULL, "
                             + "pass VARCHAR(25) NOT NULL, "
                             + "pass2 VARCHAR(25) NOT NULL "
-                            + ")");
+                            + ")"
+                    );
+
                     System.out.println("Database setup successful");
                 } catch (SQLException ex) {
                     Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);

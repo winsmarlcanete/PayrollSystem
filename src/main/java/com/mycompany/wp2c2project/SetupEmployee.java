@@ -8,10 +8,8 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 interface SetupEmployeeCallback {
 
@@ -27,7 +25,7 @@ public class SetupEmployee extends javax.swing.JFrame {
     /**
      * Creates new form registerEmployee
      */
-    private String id = "0";
+    private int id = 0;
     private String name = "none";
     private String department = "none";
 
@@ -242,7 +240,7 @@ public class SetupEmployee extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        String rate = "0";
+        float rate = 0;
         String shiftStart = "00:00";
         String shiftEnd = "00:00";
         String status;
@@ -254,7 +252,7 @@ public class SetupEmployee extends javax.swing.JFrame {
 
         //!! need checking !!
         if (!rateField.getText().isEmpty()) {
-            rate = rateField.getText();
+            rate = Float.parseFloat(rateField.getText());
         }
         if (!shiftStartField.getText().isEmpty()) {
             shiftStart = shiftStartField.getText();
@@ -262,9 +260,9 @@ public class SetupEmployee extends javax.swing.JFrame {
         if (!shiftEndField.getText().isEmpty()) {
             shiftEnd = shiftEndField.getText();
         }
-        
+
         status = statusCBox.getSelectedItem().toString();
-        
+
         if (!tinField.getText().isEmpty()) {
             tin = tinField.getText();
         }
@@ -286,7 +284,7 @@ public class SetupEmployee extends javax.swing.JFrame {
         try {
             st = (PreparedStatement) sgconn.prepareStatement(
                     "INSERT INTO `employee`("
-                    + "`id`, "
+                    + "`empId`, "
                     + "`name`, "
                     + "`department`, "
                     + "`rate`, "
@@ -299,10 +297,10 @@ public class SetupEmployee extends javax.swing.JFrame {
                     + "`pagibig`, "
                     + "`taxStatus`"
                     + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-            st.setString(1, id);
+            st.setInt(1, id);
             st.setString(2, name);
             st.setString(3, department);
-            st.setString(4, rate);
+            st.setFloat(4, rate);
             st.setString(5, shiftStart);
             st.setString(6, shiftEnd);
             st.setString(7, status);
