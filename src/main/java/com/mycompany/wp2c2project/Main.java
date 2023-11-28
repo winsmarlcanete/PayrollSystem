@@ -65,10 +65,10 @@ public class Main {
                             + "shiftEnd VARCHAR(5) NOT NULL, "
                             + "timeIn VARCHAR(5) NOT NULL, "
                             + "timeOut VARCHAR(5) NOT NULL, "
-                            + "day FLOAT NOT NULL DEFAULT '0', "
-                            + "late FLOAT NOT NULL DEFAULT '0', "
-                            + "ot FLOAT NOT NULL DEFAULT '0', "
-                            + "nd FLOAT NOT NULL DEFAULT '0', "
+                            + "day FLOAT NOT NULL, "
+                            + "late FLOAT NOT NULL, "
+                            + "ot FLOAT NOT NULL, "
+                            + "nd FLOAT NOT NULL, "
                             + "spc FLOAT NOT NULL DEFAULT '0', "
                             + "spcOt FLOAT NOT NULL DEFAULT '0', "
                             + "leg FLOAT NOT NULL DEFAULT '0' "
@@ -77,7 +77,7 @@ public class Main {
 
                     //summary
                     statement.executeUpdate("CREATE TABLE IF NOT EXISTS `summary` ("
-                            + "`sumId` int  (11) NOT NULL, "
+                            + "`sumId` INT PRIMARY KEY AUTO_INCREMENT, "
                             + "`empId` int  (11) NOT NULL, "
                             + "`period` varchar(50) NOT NULL, "
                             + "`rph` float NOT NULL, "
@@ -123,6 +123,16 @@ public class Main {
                             + "email VARCHAR(25) NOT NULL, "
                             + "pass VARCHAR(25) NOT NULL, "
                             + "pass2 VARCHAR(25) NOT NULL "
+                            + ")"
+                    );
+
+                    //rates
+                    statement.executeUpdate(
+                            "CREATE TABLE IF NOT EXISTS rates ("
+                            + "ID INT PRIMARY KEY AUTO_INCREMENT, "
+                            + "rateName VARCHAR(25) NOT NULL, "
+                            + "rateValue DOUBLE NOT NULL, "
+                            + "type VARCHAR(50) NOT NULL "
                             + ")"
                     );
 

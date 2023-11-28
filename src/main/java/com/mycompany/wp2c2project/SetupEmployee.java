@@ -36,7 +36,8 @@ public class SetupEmployee extends javax.swing.JFrame {
         name = summaryHome.name;
         department = summaryHome.department;
 
-        nameLabel.setText(name);
+        nameLb.setText(name);
+        deptLb.setText(department);
     }
 
     private SetupEmployeeCallback callback;
@@ -54,7 +55,7 @@ public class SetupEmployee extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        nameLabel = new javax.swing.JLabel();
+        nameLb = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         rateField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -76,11 +77,12 @@ public class SetupEmployee extends javax.swing.JFrame {
         shiftEndField = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         statusCBox = new javax.swing.JComboBox<>();
+        deptLb = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        nameLabel.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
-        nameLabel.setText("Name");
+        nameLb.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        nameLb.setText("Name");
 
         jLabel2.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         jLabel2.setText("Rate");
@@ -147,7 +149,11 @@ public class SetupEmployee extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         jLabel11.setText("Status");
 
+        statusCBox.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         statusCBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Regular", "Probationary" }));
+
+        deptLb.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        deptLb.setText("Department");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,34 +161,36 @@ public class SetupEmployee extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel8)
-                        .addComponent(jLabel1)
-                        .addComponent(nameLabel)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel4)
-                        .addComponent(philHealthField)
-                        .addComponent(sssField)
-                        .addComponent(jLabel3)
-                        .addComponent(rateField)
-                        .addComponent(tinField)
-                        .addComponent(jLabel6)
-                        .addComponent(jLabel7)
-                        .addComponent(pagibigField)
-                        .addComponent(taxStatusField)
-                        .addComponent(jLabel2)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel9)
-                                .addComponent(shiftStartField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel11))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(shiftEndField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel10)))
-                        .addComponent(statusCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(saveBtn))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(deptLb)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(saveBtn)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel8)
+                            .addComponent(nameLb)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(philHealthField)
+                            .addComponent(sssField)
+                            .addComponent(jLabel3)
+                            .addComponent(rateField)
+                            .addComponent(tinField)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(pagibigField)
+                            .addComponent(taxStatusField)
+                            .addComponent(jLabel2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addComponent(shiftStartField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(shiftEndField, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10)))
+                            .addComponent(statusCBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -191,10 +199,12 @@ public class SetupEmployee extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(nameLabel)
+                .addComponent(nameLb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addComponent(deptLb)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,7 +222,7 @@ public class SetupEmployee extends javax.swing.JFrame {
                 .addComponent(statusCBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tinField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
@@ -230,9 +240,9 @@ public class SetupEmployee extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(taxStatusField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(saveBtn)
-                .addGap(30, 30, 30))
+                .addGap(40, 40, 40)
+                .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -344,6 +354,7 @@ public class SetupEmployee extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JLabel deptLb;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -355,7 +366,7 @@ public class SetupEmployee extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    public javax.swing.JLabel nameLabel;
+    public javax.swing.JLabel nameLb;
     public javax.swing.JTextField pagibigField;
     public javax.swing.JTextField philHealthField;
     public javax.swing.JTextField rateField;
