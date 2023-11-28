@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
-import java.util.TimeZone;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,16 +39,6 @@ public class SummaryExample extends javax.swing.JFrame {
      */
     public SummaryExample() {
         initComponents();
-      
-        Attendance attendance;
-        try {
-            attendance = new Attendance();
-        } catch (ParseException ex) {
-            System.err.println("Error creating Attendance instance: " + ex.getMessage());
-            return;
-        }
-        //table model
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
 
 //        String name = attendance.empName.getText();
         String name = "Jerwin"; //sample name
@@ -85,7 +74,7 @@ public class SummaryExample extends javax.swing.JFrame {
         //calculate day
         float hours = timeOutHr - timeInHr + (float) (timeOutMin - timeInMin) / 60;
         float days = hours / 9;
-        
+
         //rounded time in and out
         String roundedTimeIn = "";
         String roundedTimeOut = "";
@@ -112,12 +101,12 @@ public class SummaryExample extends javax.swing.JFrame {
 
         long roundedDayInMillis = roundedTimeOutDate.getTime() - roundedTimeInDate.getTime();
         int roundedDayHours = (int) (roundedDayInMillis / (60 * 60 * 1000));
-        int roundedDayMinutes = (int) ((roundedDayInMillis / (60 * 1000)) % 60); 
-        
+        int roundedDayMinutes = (int) ((roundedDayInMillis / (60 * 1000)) % 60);
+
         System.out.println("Rounded Time In: " + roundedTimeIn);
         System.out.println("Rounded Time Out: " + roundedTimeOut);
         System.out.println("Duration in Hours: " + timeInHr + "Minutes: " + timeInMin);
-        
+
         //get shift start time from table in ViewRatesDepartments
         ViewRatesDepartments rates = new ViewRatesDepartments();
 
@@ -145,9 +134,7 @@ public class SummaryExample extends javax.swing.JFrame {
             Connection connection = Main.connectSG();
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM time_card");
-            if (resultSet.next()) {
-                dateType = resultSet.getInt("dateType");
-            }
+            dateType = resultSet.getInt("dateType");
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -157,7 +144,7 @@ public class SummaryExample extends javax.swing.JFrame {
         } else if (dateType == 2) {
             rpH = rpH * 2;
         }
-        
+
         //time card flexibility khok khok
         try {
             Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
@@ -175,23 +162,23 @@ public class SummaryExample extends javax.swing.JFrame {
             String sql3 = "UPDATE time_card SET spc = " + spcHrs + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
             String sql4 = "UPDATE time_card SET spcOt = " + spcOT + ", day = 0 WHERE dateType = 1 AND timeIn != ''";
             String sql5 = "UPDATE time_card SET leg = " + spcHrs + ", day = 0 WHERE dateType = 2 AND timeIn != ''";
-            
+
             int rowsAffected6 = 0;
             int rowsAffected7 = 0;
-            if (roundedDayHours >=9) {
+            if (roundedDayHours >= 9) {
                 String sql6 = "UPDATE time_card SET day = 1 WHERE timeIn != ''";
                 rowsAffected6 = stmt.executeUpdate(sql6);
             } else {
                 String sql7 = "UPDATE time_card SET day = " + days;
                 rowsAffected7 = stmt.executeUpdate(sql7);
             }
-            
+
             int rowsAffected1 = stmt.executeUpdate(sql1);
             int rowsAffected2 = stmt.executeUpdate(sql2);
             int rowsAffected3 = stmt.executeUpdate(sql3);
             int rowsAffected4 = stmt.executeUpdate(sql4);
             int rowsAffected5 = stmt.executeUpdate(sql5);
-            
+
             System.out.println("Rows Affected1: " + rowsAffected1);
             System.out.println("Rows Affected2: " + rowsAffected2);
             System.out.println("Rows Affected3 " + rowsAffected3);
@@ -201,9 +188,8 @@ public class SummaryExample extends javax.swing.JFrame {
             System.out.println("Rows Affected7 " + rowsAffected7);
             System.out.println("Update Completed!");
         } catch (SQLException e) {
-            e.printStackTrace();
         }
-        
+
         //calculate overtime
         float ot = 0;
         try {
@@ -256,6 +242,9 @@ public class SummaryExample extends javax.swing.JFrame {
         float gross = rWage + ot + nd;
         float NP = gross - OD + TD + AA;
 
+        //table model
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+
         model.addRow(new Object[]{
             name,
             rate,
@@ -283,6 +272,8 @@ public class SummaryExample extends javax.swing.JFrame {
             AA,
             NP,});
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -403,64 +394,47 @@ public class SummaryExample extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-           FileOutputStream excelFOU = null;
-    BufferedOutputStream excelBOU = null;
-    XSSFWorkbook excelJTableExporter = null;
+        FileOutputStream excelFOU;
+        BufferedOutputStream excelBOU;
+        XSSFWorkbook excelJTableExporter;
 
-    JFileChooser ExcelFileChooser = new JFileChooser("C:\\Users\\Jon Gleur Tan\\OneDrive\\Desktop\\ExportExcel");
-    FileNameExtensionFilter extend = new FileNameExtensionFilter("EXCEL FILES", "xls", "xlsx", "xlsm");
+        JFileChooser ExcelFileChooser = new JFileChooser();
+        FileNameExtensionFilter extend = new FileNameExtensionFilter("EXCEL FILES", "xls", "xlsx", "xlsm");
 
-    ExcelFileChooser.setDialogTitle("Save As");
+        ExcelFileChooser.setDialogTitle("Save As");
 
-    ExcelFileChooser.setFileFilter(extend);
-    int excelchooser = ExcelFileChooser.showSaveDialog(null);
+        ExcelFileChooser.setFileFilter(extend);
+        int excelchooser = ExcelFileChooser.showSaveDialog(null);
 
-    if (excelchooser == JFileChooser.APPROVE_OPTION) {
+        if (excelchooser == JFileChooser.APPROVE_OPTION) {
+            try {
+                excelJTableExporter = new XSSFWorkbook();
+                XSSFSheet excelSheet = excelJTableExporter.createSheet("Payslip Employees");
 
-        try {
-            excelJTableExporter = new XSSFWorkbook();
-            XSSFSheet excelSheet = excelJTableExporter.createSheet("Payslip Employees");
+                for (int i = 0; i < table.getRowCount(); i++) {
+                    XSSFRow excelRow = excelSheet.createRow(i);
 
-            for (int i = 0; i < table.getRowCount(); i++) {
-                XSSFRow excelRow = excelSheet.createRow(i);
+                    for (int j = 0; j < table.getColumnCount(); j++) {
+                        XSSFCell excelCell = excelRow.createCell(j);
+                        Object value = table.getValueAt(i, j);
 
-                for (int j = 0; j < table.getColumnCount(); j++) {
-                    XSSFCell excelCell = excelRow.createCell(j);
-
-                    Object value = table.getValueAt(i, j);
-                    if (value != null) {
-                        excelCell.setCellValue(value.toString());
-                    } else {
-                        excelCell.setCellValue(""); // Handle null values
+                        if (value != null) {
+                            excelCell.setCellValue(value.toString());
+                        } else {
+                            excelCell.setCellValue(""); // Handle null values
+                        }
                     }
                 }
-            }
 
-            excelFOU = new FileOutputStream(ExcelFileChooser.getSelectedFile() + ".xlsx");
-            excelBOU = new BufferedOutputStream(excelFOU);
-            excelJTableExporter.write(excelBOU);
-            JOptionPane.showMessageDialog(null, "File Exported Successfully");
+                excelFOU = new FileOutputStream(ExcelFileChooser.getSelectedFile() + ".xlsx");
+                excelBOU = new BufferedOutputStream(excelFOU);
+                excelJTableExporter.write(excelBOU);
+                JOptionPane.showMessageDialog(null, "File Exported Successfully");
 
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "File not found exception: " + ex.getMessage());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "IO exception: " + ex.getMessage());
-        } finally {
-            try {
-                if (excelBOU != null) {
-                    excelBOU.close();
-                }
-                if (excelFOU != null) {
-                    excelFOU.close();
-                }
             } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error closing streams: " + ex.getMessage());
+                Logger.getLogger(SummaryExample1.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -59,12 +59,10 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
     private String readCell(int rowP, int columnP) {
         Row row = sheet.getRow(rowP);
-        Cell cell = row.getCell(columnP);
+        Cell cell = row != null ? row.getCell(columnP) : null;
         String data = null;
 
-        if (cell == null) {
-            JOptionPane.showMessageDialog(this, "Please check if the file is correct", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
+        if (cell != null) {
             FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
             switch (formulaEvaluator.evaluateInCell(cell).getCellType()) {
                 case NUMERIC -> {
@@ -90,8 +88,9 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     }
 
     String name;
-    String id;
+    int id;
     String department;
+    String period;
 
     int infoCol1 = 9;
     int infoCol2 = 1;
@@ -100,16 +99,18 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     private void readEmployeeInfo() {
         sheet = wb.getSheetAt(readSheet);
 
-        name = readCell(3, infoCol1);
-        id = readCell(4, infoCol1);
-        department = readCell(3, infoCol2);
+        name = readCell(3, infoCol1) != null ? readCell(3, infoCol1) : "none";
+        id = (int) Float.parseFloat(readCell(4, infoCol1) != null ? readCell(4, infoCol1) : "1001");
+        department = readCell(3, infoCol2) != null ? readCell(3, infoCol2) : "none";
 
-        if (Double.parseDouble(id) < 1000 && sheet != null) {
+        System.out.println("id: " + id);
+
+        if (id < 1000 && sheet != null) {
             if (sgconn != null) {
                 try {
                     //find if record exists
-                    st = sgconn.prepareStatement("SELECT EXISTS(SELECT * FROM `employee` WHERE `id` = ?)");
-                    st.setString(1, id);
+                    st = sgconn.prepareStatement("SELECT EXISTS(SELECT * FROM `employee` WHERE `empId` = ?)");
+                    st.setInt(1, id);
                     resultSet = st.executeQuery();
 
                     if (resultSet.next() && resultSet.getInt(1) == 0) {
@@ -127,7 +128,9 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 JOptionPane.showMessageDialog(this, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Time card uploaded successfully", "Success", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Time card uploaded successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
+            SummaryExample sumExJava = new SummaryExample();
+            sumExJava.setVisible(true);
         }
     }
         
@@ -152,32 +155,21 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 String timeIn;
                 String timeOut = null;
 
-                int dayTot = 0;
-
                 date = readCell(i, dateCol);
 
                 if (date != null) {
-                    int idCvt = (int) Double.parseDouble(id);
-
-                    //check first if date data doesnt exist in the database yet
                     st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `time_card` WHERE `empId` = ? AND `date` = ?");
-                    st.setInt(1, idCvt);
+                    st.setInt(1, id);
                     st.setString(2, date);
                     resultSet = st.executeQuery();
                     resultSet.next();
                     int rowCount = resultSet.getInt(1);
 
-                    System.out.println("id: " + idCvt);
                     System.out.println("date: " + date);
 
+                    //check first if date data doesnt exist in the database yet
                     if (rowCount == 0) {
                         // !!get time in/out & shift start/end!!
-
-                        //set dateType = 1 if date is sunday
-                        String[] dateArr = date.split(" ");
-                        String dayOfWeek = dateArr[1];
-                        dateType = dayOfWeek.equalsIgnoreCase("Su") ? 1 : 0;
-
                         //get timeIn/Out
                         timeIn = readCell(i, timeInCol);
                         for (int j = timeOutColStart; j >= timeOutColEnd && (timeOut == null || "".equals(timeOut)); j--) {
@@ -187,8 +179,8 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         timeOut = timeOut != null ? timeOut : "";
 
                         //get shift start & end
-                        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM employee WHERE id = ?;");
-                        st.setInt(1, idCvt);
+                        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM employee WHERE empId = ?;");
+                        st.setInt(1, id);
                         resultSet = st.executeQuery();
                         resultSet.next();
                         shiftStart = resultSet.getString("shiftStart");
@@ -203,11 +195,8 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         float ot = 0;
                         float late = 0;
                         float nd = 0;
-                        float spc = 0;
-                        float spcOt = 0;
-                        float leg = 0;
 
-                        //check if there is timeIn to do attendance calculation
+                        //check if there is timeIn before doing attendance calculation
                         if (!"".equals(timeIn) && !"".equals(timeOut)) {
                             //Time in & time out
                             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
@@ -215,72 +204,85 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
                             Date timeInDate = dateFormat.parse(timeIn);
                             Date timeOutDate = dateFormat.parse(timeOut);
-                            Date shiftStartTreshold = dateFormat.parse(shiftStart);
-                            Date shiftEndTreshold = dateFormat.parse(shiftEnd);
+                            Date shiftStartThreshold = dateFormat.parse(shiftStart);
+                            Date shiftEndThreshold = dateFormat.parse(shiftEnd);
 
                             Date startOverlap;
                             Date endOverlap;
-                            long durationMillis;
-                            float durationHours;
 
                             //convert to hours and minutes
                             long timeInMill = timeInDate.getTime();
                             long timeOutMill = timeOutDate.getTime();
 
-                            int timeInHr = (int) (timeInMill / (60 * 60 * 1000));
-                            int timeInMin = (int) ((timeInMill / (60 * 1000)) % 60);
-                            int timeOutHr = (int) (timeOutMill / (60 * 60 * 1000));
-                            int timeOutMin = (int) ((timeOutMill / (60 * 1000)) % 60);
+                            //set dateType = 1 if date is sunday
+                            String[] dateArr = date.split(" ");
+                            String dayOfWeek = dateArr[1];
+                            dateType = dayOfWeek.equalsIgnoreCase("Su") ? 1 : 0;
 
                             //calculate day (needs rounding off logic)
-                            startOverlap = timeInDate.after(shiftStartTreshold) ? timeInDate : shiftStartTreshold;
-                            endOverlap = timeOutDate.before(shiftEndTreshold) ? timeOutDate : shiftEndTreshold;
+                            if (dateType == 0) {
+                                startOverlap = timeInDate.after(shiftStartThreshold) ? timeInDate : shiftStartThreshold;
+                                endOverlap = timeOutDate.before(shiftEndThreshold) ? timeOutDate : shiftEndThreshold;
 
-                            durationMillis = endOverlap.getTime() - startOverlap.getTime();
-                            durationHours = (float) durationMillis / (60 * 60 * 1000);
-                            durationHours = durationHours < 0 ? +24 : durationHours;
-                            day = durationHours / 9;
-                            
+                                long durationMillis = endOverlap.getTime() - startOverlap.getTime();
+                                float durationHours = (float) durationMillis / (60 * 60 * 1000);
+                                durationHours = durationHours < 0 ? +24 : durationHours;
+                                day = durationHours / 9;
+                            } else {
+                                day = 1;
+                            }
+
                             //calculate overtime (✅ working omg)
-                            if (timeOutDate.after(shiftEndTreshold)) {
-                                ot = roundToNearestHalf((float) (timeOutMill - shiftEndTreshold.getTime()) / (60 * 60 * 1000));
+                            if (timeOutDate.after(shiftEndThreshold)) {
+                                ot = roundToNearestHalf((float) (timeOutMill - shiftEndThreshold.getTime()) / (60 * 60 * 1000));
                             }
 
                             //calculate late
                             Calendar calendar = Calendar.getInstance();
-                            calendar.setTime(shiftStartTreshold);
+                            calendar.setTime(shiftStartThreshold);
                             calendar.add(Calendar.MINUTE, 5);
                             Date thresholdTimeLate = calendar.getTime();
                             if (timeInDate.after(thresholdTimeLate)) {
-                                late = roundToNearestHalf((float) (timeInMill - shiftStartTreshold.getTime()) / (60 * 1000)) * 2;
-                                if (timeOutDate.after(shiftEndTreshold) && ot == 0) {
-                                    float lateSubtract = roundToNearestHalf((float) (timeOutMill - shiftEndTreshold.getTime()) / (60 * 1000)) * 2;
-                                    late -= lateSubtract;
-                                }
+                                late = roundToNearestHalf((float) (timeInMill - shiftStartThreshold.getTime()) / (60 * 1000)) * 2;
                             }
 
                             //calculate nd
                             Date ndStartTreshold = dateFormat.parse("22:00");
                             Date ndEndTreshold = dateFormat.parse("06:00");
 
-                            if (timeInDate.after(thresholdTimeLate)) {
+                            if (timeInDate.after(timeOutDate)) { //time crossing midnight
                                 startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
                                 endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
-
-                                durationMillis = endOverlap.getTime() - startOverlap.getTime();
-                                durationHours = (float) durationMillis / (60 * 60 * 1000);
-                                System.out.println("nd duration: " + durationHours);
-                                durationHours = durationHours < 0 ? +24 : durationHours;
-                                nd = durationHours;
+                                nd = setDurationHours(startOverlap, endOverlap);
+                            } else { //time not crossing midnight
+                                if (timeOutDate.after(ndStartTreshold)) {
+                                    startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
+                                    nd = setDurationHours(startOverlap, timeOutDate);
+                                }
+                                if (timeInDate.before(ndEndTreshold)) {
+                                    endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
+                                    nd = setDurationHours(timeInDate, endOverlap);
+                                }
                             }
                         }
 
                         // !!insert to time card database table!!
                         st = (PreparedStatement) sgconn.prepareStatement(
-                                "INSERT INTO `time_card`(`empId`, `date`, `dateType`, `timeIn`, `timeOut`, `shiftStart`,`shiftEnd`, `day`, `late`, `ot`, `nd`, `spc`, `spcOt`, `leg`) "
-                                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                                "INSERT INTO `time_card`("
+                                + "`empId`, "
+                                + "`date`, "
+                                + "`dateType`, "
+                                + "`timeIn`, "
+                                + "`timeOut`, "
+                                + "`shiftStart`,"
+                                + "`shiftEnd`, "
+                                + "`day`, "
+                                + "`late`, "
+                                + "`ot`, "
+                                + "`nd` "
+                                + ") VALUES (?,?,?,?,?,?,?,?,?,?,?)"
                         );
-                        st.setString(1, id);
+                        st.setInt(1, id);
                         st.setString(2, date);
                         st.setInt(3, dateType);
                         st.setString(4, timeIn);
@@ -291,14 +293,9 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         st.setFloat(9, late);
                         st.setFloat(10, ot);
                         st.setFloat(11, nd);
-                        st.setFloat(12, spc);
-                        st.setFloat(13, spcOt);
-                        st.setFloat(14, leg);
                         st.executeUpdate();
                         System.out.println("insert data success");
 
-                        // !!calculation for summary should be here (totals)!!
-                        dayTot += 0;
                     } else {
                         System.out.println("date data already exists");
                     }
@@ -311,7 +308,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             Logger.getLogger(SummaryHome.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //insert totals for summary table here
         //iterate columns
         infoCol1 += 15;
         infoCol2 += 15;
@@ -330,11 +326,130 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             timeOutColEnd = 3;
             readSheet++;
         }
+        getTotal();
         readEmployeeInfo();
     }
 
     private static float roundToNearestHalf(float number) {
         return (float) (Math.floor(number * 2) / 2.0);
+    }
+
+    private static float setDurationHours(Date startOverlap, Date endOverlap) {
+        long durationMillis = endOverlap.getTime() - startOverlap.getTime();
+        float durationHours = (float) durationMillis / (60 * 60 * 1000);
+        durationHours = durationHours < 0 ? +24 : durationHours;
+        return durationHours;
+    }
+
+    private void getTotal() {
+        try {
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT COUNT(*) FROM `summary` WHERE `empId` = ? AND `period` = ?");
+            st.setInt(1, id);
+            st.setString(2, period);
+            resultSet = st.executeQuery();
+            resultSet.next();
+
+            //check if payroll period already exists before proceeding
+            if (resultSet.getInt(1) == 0) {
+                float dayTot = 0;
+                float lateTot = 0;
+                float otTot = 0;
+                float ndTot = 0;
+                float spcTot = 0;
+                float spcOtTot = 0;
+                float legTot = 0;
+
+                st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
+                st.setInt(1, id);
+                resultSet = st.executeQuery();
+                while (resultSet.next()) {
+                    dayTot += resultSet.getFloat("day");
+                    lateTot += resultSet.getFloat("late");
+                    otTot += resultSet.getFloat("ot");
+                    ndTot += resultSet.getFloat("nd");
+                    spcTot += resultSet.getFloat("spc");
+                    spcOtTot += resultSet.getFloat("spcOt");
+                    legTot += resultSet.getFloat("leg");
+                }
+
+                System.out.println("dayTot: " + dayTot);
+                System.out.println("lateTot: " + lateTot);
+                System.out.println("otTot: " + otTot);
+                System.out.println("ndTot: " + ndTot);
+                System.out.println("spcTot: " + spcTot);
+                System.out.println("spcOtTot: " + spcOtTot);
+                System.out.println("legTot: " + legTot);
+
+                st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
+                st.setInt(1, id);
+                resultSet = st.executeQuery();
+                resultSet.next();
+                float rate = resultSet.getFloat("rate");
+                float rph = rate / 8;
+
+                //amt calculation
+                float lateAmt = rph / 60 * lateTot;
+                float regWage = rate * dayTot - lateTot;
+
+                float otAmt = rph * 1.25f * otTot;
+                float ndAmt = rph * 0.1f * ndTot;
+                float spcAmt = rph * 1.3f * spcTot;
+                float spcOtAmt = rph * 1.3f * 1.3f * spcOtTot;
+                float legAmt = rph * legTot;
+                float gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
+
+                float netPay = gross;
+
+                //insert to summary database    
+                st = (PreparedStatement) sgconn.prepareStatement(
+                        "INSERT INTO `summary`("
+                        + "`empId`, "
+                        + "`period`, "
+                        + "`rph`, "
+                        + "`dayTot`, "
+                        + "`lateTot`, "
+                        + "`otTot`, "
+                        + "`ndTot`, "
+                        + "`spcTot`, "
+                        + "`spcOtTot`, "
+                        + "`legTot`, "
+                        + "`lateAmt`, "
+                        + "`otAmt`, "
+                        + "`ndAmt`, "
+                        + "`spcAmt`, "
+                        + "`spcOtAmt`, "
+                        + "`legAmt`, "
+                        + "`regWage`, "
+                        + "`gross`, "
+                        + "`netPay` "
+                        + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                );
+                st.setInt(1, id);
+                st.setString(2, period);
+                st.setFloat(3, rph);
+                st.setFloat(4, dayTot);
+                st.setFloat(5, lateTot);
+                st.setFloat(6, otTot);
+                st.setFloat(7, ndTot);
+                st.setFloat(8, spcTot);
+                st.setFloat(9, spcOtTot);
+                st.setFloat(10, legTot);
+                st.setFloat(11, lateAmt);
+                st.setFloat(12, otAmt);
+                st.setFloat(13, ndAmt);
+                st.setFloat(14, spcAmt);
+                st.setFloat(15, spcOtAmt);
+                st.setFloat(16, legAmt);
+                st.setFloat(17, regWage);
+                st.setFloat(18, gross);
+                st.setFloat(19, netPay);
+                st.executeUpdate();
+            } else {
+                System.out.println("summary period already exists: " + period);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SummaryHome.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -428,8 +543,9 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        SummaryExample frame = new SummaryExample();
-        frame.setVisible(true);
+        Summary summaryFrame = new Summary(this);
+        summaryFrame.showSummary("2023-10-20~2023-11-05");
+        summaryFrame.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -468,12 +584,11 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         if (wb != null) {
             sheet = wb.getSheetAt(2);
         }
-        if (!"Employee Attendance Table".equals(readCell(0, 11))) {
-            JOptionPane.showMessageDialog(this, "Please check if the file is correct", "Error", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-
-            //initiate read employee info loop
+        if ("Employee Attendance Table".equals(readCell(0, 11))) {
+            period = readCell(4, 1);
             readEmployeeInfo();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please check if the file is correct", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

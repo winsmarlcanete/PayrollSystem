@@ -12,6 +12,13 @@
         <exec.mainClass>com.mycompany.wp2c2project.WP2C2Project</exec.mainClass>
     </properties>
     <name>WP2C2_Payroll</name>
+    <repositories>
+        <repository>
+            <id>unknown-jars-temp-repo</id>
+            <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+    </repositories>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
@@ -54,6 +61,5 @@
             <artifactId>xmlbeans</artifactId>
             <version>5.2.0</version>
         </dependency>
-
     </dependencies>
 </project>

@@ -26,22 +26,21 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     /**
      * Creates new form Modifications
      */
-
     static void centerTableValue(JTable tableName) {
         JTable JTable = tableName;
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-        tableName.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
-        tableName.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
-        tableName.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tableName.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        tableName.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        tableName.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
     }
-    
+
     static void cellEditor(JTable tableName) {
-        JTable JTable  = tableName;
+        JTable JTable = tableName;
         tableName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                int row= tableName.rowAtPoint(e.getPoint());
-                int col= tableName.columnAtPoint(e.getPoint());
+                int row = tableName.rowAtPoint(e.getPoint());
+                int col = tableName.columnAtPoint(e.getPoint());
                 String cellValue = (String) tableName.getValueAt(row, col);
                 String colName = tableName.getColumnName(col);
                 if (col == 1) {
@@ -54,22 +53,21 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                     }
                 }
             }
-         }
+        }
         );
     }
-    
+
     static void cellEditorForShift(JTable tableName) {
         JTable JTable = tableName;
         tableName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                int row= tableName.rowAtPoint(e.getPoint());
-                int col= tableName.columnAtPoint(e.getPoint());
+                int row = tableName.rowAtPoint(e.getPoint());
+                int col = tableName.columnAtPoint(e.getPoint());
                 String cellValue = (String) tableName.getValueAt(row, col);
                 String colName = tableName.getColumnName(col);
                 if (col >= 2) {
                     String newInput = JOptionPane.showInputDialog(null, "Enter new " + colName);
-                    
-                    
+
                     if (newInput != null) {
                         try {
                             int inputValue = Integer.parseInt(newInput);
@@ -80,107 +78,104 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
                             if (numOfDigits == 3) {
                                 int hours = Integer.parseInt(Integer.toString(inputValue).substring(0, 1));
                                 int mins = Integer.parseInt(Integer.toString(inputValue).substring(1, 3));
-                                
+
                                 if (mins <= 59) {
                                     String time = Integer.toString(hours) + ":" + Integer.toString(mins);
                                     tableName.setValueAt(time, row, col);
                                 } else {
                                     tableName.setValueAt(cellValue, row, col);
-                                    JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
                                 }
-                                
+
                             } else if (numOfDigits == 4) {
                                 int hours = Integer.parseInt(Integer.toString(inputValue).substring(0, 2));
                                 int mins = Integer.parseInt(Integer.toString(inputValue).substring(2, 4));
-                                
+
                                 if (mins <= 59) {
                                     String time = Integer.toString(hours) + ":" + Integer.toString(mins);
                                     tableName.setValueAt(time, row, col);
                                 } else {
                                     tableName.setValueAt(cellValue, row, col);
-                                    JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
                                 }
-                                
+
                                 if (hours <= 24) {
                                     String time = Integer.toString(hours) + ":" + Integer.toString(mins);
                                     tableName.setValueAt(time, row, col);
                                 } else {
                                     tableName.setValueAt(cellValue, row, col);
-                                    JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
                                 }
-                                
+
                             } else {
-                                JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         } catch (NumberFormatException t) {
-                            JOptionPane.showMessageDialog(null, "Invalid input.","Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         tableName.setValueAt(cellValue, row, col);
                     }
                 }
             }
-         }
+        }
         );
     }
-        
+
     public ViewRatesDepartments() {
         initComponents();
-        
+
         showTableContent();
-        
+
         employeeTable.addMouseListener(new MouseListener() {
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-        @Override
-        public void mousePressed(MouseEvent e) {
-            //scv means selected cell value
-            String scv1 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,0);
-            String scv2 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,1);
-            String scv3 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,2);
-            String scv4 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,3);
-            String scv5 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,4);
-            String scv6 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,5);
-            String scv7 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,6);
-            String scv8 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,7);
-            String scv9 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,8);
-            String scv10 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,9);
-            String scv11 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,10);
-            String scv12 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow() ,11);
-            
-            jTextField1.setText(scv2);
-            jTextField2.setText(scv4);
-            jTextField3.setText(scv5);
-            jTextField4.setText(scv6);
-            jTextField5.setText(scv7);
-            jTextField6.setText(scv8);
-            jTextField7.setText(scv9);
-            jTextField8.setText(scv10);
-            jTextField9.setText(scv11);
-            jTextField10.setText(scv12);
-            jTextField11.setText(scv1);
-           
-            
-            
-            
-           
-            
-        }
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
-        @Override
-        public void mouseEntered(MouseEvent e) {
-        }
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                //scv means selected cell value
+                String scv1 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 0);
+                String scv2 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 1);
+                String scv3 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 2);
+                String scv4 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 3);
+                String scv5 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 4);
+                String scv6 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 5);
+                String scv7 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 6);
+                String scv8 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 7);
+                String scv9 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 8);
+                String scv10 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 9);
+                String scv11 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 10);
+                String scv12 = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 11);
+
+                jTextField1.setText(scv2);
+                jTextField2.setText(scv4);
+                jTextField3.setText(scv5);
+                jTextField4.setText(scv6);
+                jTextField5.setText(scv7);
+                jTextField6.setText(scv8);
+                jTextField7.setText(scv9);
+                jTextField8.setText(scv10);
+                jTextField9.setText(scv11);
+                jTextField10.setText(scv12);
+                jTextField11.setText(scv1);
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
         });
 
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -651,67 +646,66 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         if (jTextField1.getText().isEmpty() || jTextField2.getText().isEmpty()) {
+        if (jTextField1.getText().isEmpty() || jTextField2.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Make sure to enter all fields!", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             Connection sgconn = Main.connectSG();
-        try {
-            String en = jTextField1.getText();
-            String dep = jComboBox1.getSelectedItem().toString();
-            Double rate = Double.valueOf(jTextField2.getText());
-            String shiftS = jTextField3.getText();
-            String shiftE = jTextField4.getText();
-            String tin = jTextField5.getText();
-            Integer pH = Integer.valueOf(jTextField6.getText());
-            String sss = jTextField7.getText();
-            Integer pagIbig = Integer.valueOf(jTextField8.getText());
-            String taxS = jTextField9.getText();
-            String status = jTextField10.getText();
-            Integer id = Integer.valueOf(jTextField11.getText());
-            
-            
-             PreparedStatement pstmt = sgconn.prepareStatement("UPDATE employee SET name = ?, department = ?, rate = ? "
-                     + ", shiftStart = ?, shiftEnd = ?, tin = ?, philHealth = ?, sss = ?, pagibig = ?, taxStatus = ?, status = ? WHERE ID = ?");
-             pstmt.setString(1, en);
-             pstmt.setString(2, dep);
-             pstmt.setDouble(3, rate);
-             pstmt.setString(4, shiftS);
-             pstmt.setString(5, shiftE);
-             pstmt.setString(6, tin);
-             pstmt.setInt(7, pH);
-             pstmt.setString(8, sss);
-             pstmt.setInt(9, pagIbig);
-             pstmt.setString(10, taxS);
-             pstmt.setString(11, status);
-             pstmt.setInt(12, id);
-             pstmt.executeUpdate();
-                
-            
-            }   catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
-                    
-        // Code block of sending data to database ends here
-        }}
+            try {
+                String en = jTextField1.getText();
+                String dep = jComboBox1.getSelectedItem().toString();
+                Double rate = Double.valueOf(jTextField2.getText());
+                String shiftS = jTextField3.getText();
+                String shiftE = jTextField4.getText();
+                String tin = jTextField5.getText();
+                Integer pH = Integer.valueOf(jTextField6.getText());
+                String sss = jTextField7.getText();
+                Integer pagIbig = Integer.valueOf(jTextField8.getText());
+                String taxS = jTextField9.getText();
+                String status = jTextField10.getText();
+                Integer id = Integer.valueOf(jTextField11.getText());
+
+                PreparedStatement pstmt = sgconn.prepareStatement("UPDATE employee SET name = ?, department = ?, rate = ? "
+                        + ", shiftStart = ?, shiftEnd = ?, tin = ?, philHealth = ?, sss = ?, pagibig = ?, taxStatus = ?, status = ? WHERE ID = ?");
+                pstmt.setString(1, en);
+                pstmt.setString(2, dep);
+                pstmt.setDouble(3, rate);
+                pstmt.setString(4, shiftS);
+                pstmt.setString(5, shiftE);
+                pstmt.setString(6, tin);
+                pstmt.setInt(7, pH);
+                pstmt.setString(8, sss);
+                pstmt.setInt(9, pagIbig);
+                pstmt.setString(10, taxS);
+                pstmt.setString(11, status);
+                pstmt.setInt(12, id);
+                pstmt.executeUpdate();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // Code block of sending data to database ends here
+            }
+        }
         showTableContent();
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Connection sgconn = Main.connectSG();
         try {
             int val4 = Integer.parseInt(jTextField11.getText());
-            
-            String sqlStatement = "DELETE FROM employee WHERE ID = ?"; 
-             
-            PreparedStatement updateQuery  = sgconn.prepareStatement(sqlStatement);
+
+            String sqlStatement = "DELETE FROM employee WHERE ID = ?";
+
+            PreparedStatement updateQuery = sgconn.prepareStatement(sqlStatement);
             updateQuery.setInt(1, val4);
             updateQuery.executeUpdate();
-              
-            }   catch (SQLException ex) {
-                    System.out.println(ex);
-                    
-            }
-        
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+
+        }
+
         showTableContent();
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -799,30 +793,29 @@ public class ViewRatesDepartments extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void showTableContent() {
-        DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) employeeTable.getModel();
         model.setRowCount(0);
-        
+
         try {
-        String sql = "SELECT * FROM employee";
-        Connection sgconn = Main.connectSG();
-        PreparedStatement pst = sgconn.prepareStatement(sql);
-        ResultSet rs  = pst.executeQuery();
-        
-        
-        while(rs.next()){
-            model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)
-            ,rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)
-            ,rs.getString(10),rs.getString(11),rs.getString(12)});
-        }
+            String sql = "SELECT * FROM employee";
+            Connection sgconn = Main.connectSG();
+            PreparedStatement pst = sgconn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                model.addRow(new String[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+                     rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+                     rs.getString(10), rs.getString(11), rs.getString(12)});
+            }
         } catch (Exception e) {
             System.out.println("error par");
         }
-        
+
         // Centers the value of table (loop)
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-        for(int x=0;x<4;x++){
-         employeeTable.getColumnModel().getColumn(x).setCellRenderer( centerRenderer );
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int x = 0; x < 4; x++) {
+            employeeTable.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
         }
     }
 }
