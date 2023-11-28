@@ -135,9 +135,6 @@ public class IndividualTimeCard extends javax.swing.JFrame {
         otTotLb = new javax.swing.JLabel();
         lateTotLb = new javax.swing.JLabel();
         daysTotLb = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -222,14 +219,6 @@ public class IndividualTimeCard extends javax.swing.JFrame {
 
         daysTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         daysTotLb.setText("0");
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -349,9 +338,6 @@ public class IndividualTimeCard extends javax.swing.JFrame {
     public javax.swing.JLabel daysTotLb;
     public javax.swing.JLabel deptLabel;
     private javax.swing.JTable idvlTCTable;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel lateTotLb;
     public javax.swing.JLabel legTotLb;

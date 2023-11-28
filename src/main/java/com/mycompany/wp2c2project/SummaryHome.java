@@ -46,11 +46,12 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         initComponents();
     }
 
+    Connection sgconn = Main.connectSG();
+    ResultSet resultSet;
+    PreparedStatement st;
+
     Sheet sheet = null;
     Workbook wb = null;
-    ResultSet resultSet;
-    Connection sgconn = Main.connectSG();
-    PreparedStatement st;
 
     @Override
     public void onSetupEmployeeFinished() {
@@ -128,12 +129,14 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 JOptionPane.showMessageDialog(this, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Time card uploaded successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
-            SummaryExample sumExJava = new SummaryExample();
-            sumExJava.setVisible(true);
+            //JOptionPane.showMessageDialog(this, "Time card uploaded successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
+            Summary summaryFrame = new Summary(this);
+            summaryFrame.showSummary(period);
+            summaryFrame.setVisible(true);
+            dispose();
         }
     }
-        
+
     int dateCol = 0;
     int timeInCol = 1;
     int timeOutColStart = 12;
@@ -190,6 +193,11 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                         //for debugging
                         System.out.println("timeIn: " + timeIn);
 
+                        //set dateType = 1 if date is sunday
+                        String[] dateArr = date.split(" ");
+                        String dayOfWeek = dateArr[1];
+                        dateType = dayOfWeek.equalsIgnoreCase("Su") ? 1 : 0;
+
                         // !!calculation for attendance!!
                         float day = 0;
                         float ot = 0;
@@ -214,14 +222,14 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             long timeInMill = timeInDate.getTime();
                             long timeOutMill = timeOutDate.getTime();
 
-                            //set dateType = 1 if date is sunday
-                            String[] dateArr = date.split(" ");
-                            String dayOfWeek = dateArr[1];
-                            dateType = dayOfWeek.equalsIgnoreCase("Su") ? 1 : 0;
-
                             //calculate day (needs rounding off logic)
                             if (dateType == 0) {
-                                startOverlap = timeInDate.after(shiftStartThreshold) ? timeInDate : shiftStartThreshold;
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(shiftStartThreshold);
+                                calendar.add(Calendar.MINUTE, 30);
+                                Date shiftStartLateThreshold = calendar.getTime();
+
+                                startOverlap = timeInDate.after(shiftStartLateThreshold) ? timeInDate : shiftStartThreshold;
                                 endOverlap = timeOutDate.before(shiftEndThreshold) ? timeOutDate : shiftEndThreshold;
 
                                 long durationMillis = endOverlap.getTime() - startOverlap.getTime();
@@ -359,6 +367,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 float spcOtTot = 0;
                 float legTot = 0;
 
+                //calculate total
                 st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
                 st.setInt(1, id);
                 resultSet = st.executeQuery();
@@ -380,6 +389,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 System.out.println("spcOtTot: " + spcOtTot);
                 System.out.println("legTot: " + legTot);
 
+                //calculate rates
                 st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
                 st.setInt(1, id);
                 resultSet = st.executeQuery();
@@ -388,14 +398,22 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                 float rph = rate / 8;
 
                 //amt calculation
+                st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `rate` WHERE `id` = ?");
+                Main main = new Main();
+                float otRate = main.selectRateData(2);
+                float ndRate = main.selectRateData(3);
+                float spcRate = main.selectRateData(4);
+                float spcOtRate = main.selectRateData(5);
+                float legRate = main.selectRateData(6);
+
                 float lateAmt = rph / 60 * lateTot;
                 float regWage = rate * dayTot - lateTot;
 
-                float otAmt = rph * 1.25f * otTot;
-                float ndAmt = rph * 0.1f * ndTot;
-                float spcAmt = rph * 1.3f * spcTot;
-                float spcOtAmt = rph * 1.3f * 1.3f * spcOtTot;
-                float legAmt = rph * legTot;
+                float otAmt = rph * otRate * otTot;
+                float ndAmt = rph * ndRate * ndTot;
+                float spcAmt = rph * spcRate * spcTot;
+                float spcOtAmt = rph * spcOtRate * spcOtTot;
+                float legAmt = rph * legRate * legTot;
                 float gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
 
                 float netPay = gross;

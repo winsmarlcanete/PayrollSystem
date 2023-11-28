@@ -6,6 +6,8 @@ package com.mycompany.wp2c2project;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -23,12 +25,16 @@ public class Main {
     static final String USER = "root";
     static final String PASS = "";
 
+    Connection sgconn = connectSG();
+    ResultSet resultSet;
+    PreparedStatement st;
+
     public void setupDatabase() {
         try {
             String databaseName = "wp2c2_payroll";
 
             Class.forName("com.mysql.jdbc.Driver");
-            Connection sgconn = DriverManager.getConnection(SG_URL_SETUP, USER, PASS);
+            sgconn = DriverManager.getConnection(SG_URL_SETUP, USER, PASS);
 
             if (sgconn != null) {
                 try {
@@ -129,12 +135,16 @@ public class Main {
                     //rates
                     statement.executeUpdate(
                             "CREATE TABLE IF NOT EXISTS rates ("
-                            + "ID INT PRIMARY KEY AUTO_INCREMENT, "
-                            + "rateName VARCHAR(25) NOT NULL, "
-                            + "rateValue DOUBLE NOT NULL, "
-                            + "type VARCHAR(50) NOT NULL "
+                            + "id INT PRIMARY KEY AUTO_INCREMENT, "
+                            + "rateValue FLOAT NOT NULL "
                             + ")"
                     );
+                    insertRateData(2.0f);
+                    insertRateData(1.25f);
+                    insertRateData(0.1f);
+                    insertRateData(1.3f);
+                    insertRateData(1.69f);
+                    insertRateData(1f);
 
                     System.out.println("Database setup successful");
                 } catch (SQLException ex) {
@@ -145,6 +155,26 @@ public class Main {
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void insertRateData(float rateValue) throws SQLException {
+        String insertDataQuery = "INSERT INTO rates (rateValue) VALUES (?)";
+
+        try (PreparedStatement statement = sgconn.prepareStatement(insertDataQuery)) {
+            statement.setFloat(1, rateValue);
+
+            statement.executeUpdate();
+        }
+    }
+
+    public float selectRateData(int rateId) throws SQLException {
+        String insertDataQuery = "SELECT * FROM `rates` WHERE `id` = ?";
+        try (PreparedStatement st = sgconn.prepareStatement(insertDataQuery)) {
+            st.setInt(1, rateId);
+            resultSet = st.executeQuery();
+            resultSet.next();
+            return resultSet.getFloat("rateValue");
         }
     }
 
@@ -160,6 +190,102 @@ public class Main {
         }
     }
 
+    public void calculateSummary() throws SQLException {
+        PreparedStatement summaryStatement = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `summary`");
+        ResultSet summaryResultSet = summaryStatement.executeQuery();
+        while (summaryResultSet.next()) {
+            int sumId = summaryResultSet.getInt("sumId");
+            int empId = summaryResultSet.getInt("empId");
+            float dayTot = summaryResultSet.getFloat("dayTot");
+            float lateTot = summaryResultSet.getFloat("lateTot");
+            float lateAmt = summaryResultSet.getFloat("lateAmt");
+            float regWage = summaryResultSet.getFloat("regWage");
+            float otTot = summaryResultSet.getFloat("otTot");
+            float otAmt = summaryResultSet.getFloat("otAmt");
+            float ndTot = summaryResultSet.getFloat("ndTot");
+            float ndAmt = summaryResultSet.getFloat("ndAmt");
+            float spcTot = summaryResultSet.getFloat("spcTot");
+            float spcAmt = summaryResultSet.getFloat("spcAmt");
+            float spcOtTot = summaryResultSet.getFloat("spcOtTot");
+            float spcOtAmt = summaryResultSet.getFloat("spcOtAmt");
+            float legTot = summaryResultSet.getFloat("legTot");
+            float legAmt = summaryResultSet.getFloat("legAmt");
+            float gross = summaryResultSet.getFloat("gross");
+            float sssReg = summaryResultSet.getFloat("sssReg");
+            float sssMpf = summaryResultSet.getFloat("sssMpf");
+            float phealth = summaryResultSet.getFloat("phealth");
+            float wtax = summaryResultSet.getFloat("wtax");
+            float sssLoanS = summaryResultSet.getFloat("sssLoanS");
+            float sssLoanC = summaryResultSet.getFloat("sssLoanC");
+            float pagibigCont = summaryResultSet.getFloat("pagibigCont");
+            float efund = summaryResultSet.getFloat("efund");
+            float pagibigLoanS = summaryResultSet.getFloat("pagibigLoanS");
+            float pagibigLoanC = summaryResultSet.getFloat("pagibigLoanC");
+            float otherDedt = summaryResultSet.getFloat("otherDedt");
+            float dedtTot = summaryResultSet.getFloat("dedtTot");
+            float allowance = summaryResultSet.getFloat("allowance");
+            float netPay = summaryResultSet.getFloat("netPay");
+
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
+            st.setInt(1, empId);
+            resultSet = st.executeQuery();
+            resultSet.next();
+            float rate = resultSet.getFloat("rate");
+
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `rate` WHERE `id` = ?");
+            //float lateRate = selectRateData(1);
+            float otRate = selectRateData(2);
+            float ndRate = selectRateData(3);
+            float spcRate = selectRateData(4);
+            float spcOtRate = selectRateData(5);
+            float legRate = selectRateData(6);
+
+            float rph = rate / 8;
+            //lateAmt = rph / 60 * lateTot;
+            //regWage = rate * dayTot - lateTot;
+            otAmt = rph * otRate * otTot;
+            ndAmt = rph * ndRate * ndTot;
+            spcAmt = rph * spcRate * spcTot;
+            spcOtAmt = rph * spcOtRate * spcOtTot;
+            legAmt = rph * legRate * legTot;
+            gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
+
+            netPay = gross - dedtTot + allowance;
+
+            //update summary database with corresponding sumId    
+            st = (PreparedStatement) sgconn.prepareStatement(
+                    "UPDATE `summary` SET "
+                    //+ "`rph` = ?, "
+                    //+ "`dayTot` = ?, "
+                    //+ "`lateTot` = ?, "
+                    //+ "`otTot` = ?, "
+                    //+ "`ndTot` = ?, "
+                    //+ "`spcTot` = ?, "
+                    //+ "`spcOtTot` = ?, "
+                    //+ "`legTot` = ?, "
+                    //+ "`lateAmt` = ?, "
+                    + "`otAmt` = ?, "
+                    + "`ndAmt` = ?, "
+                    + "`spcAmt` = ?, "
+                    + "`spcOtAmt` = ?, "
+                    + "`legAmt` = ?, "
+                    //+ "`regWage` = ?, "
+                    + "`gross` = ?, "
+                    + "`netPay` = ? "
+                    + " WHERE empId = ?"
+            );
+            st.setFloat(1, otAmt);
+            st.setFloat(2, ndAmt);
+            st.setFloat(3, spcAmt);
+            st.setFloat(4, spcOtAmt);
+            st.setFloat(5, legAmt);
+            st.setFloat(6, gross);
+            st.setFloat(7, netPay);
+            st.setFloat(8, empId);
+            st.executeUpdate();
+        }
+    }
+
     public static void main(String[] args) {
         Main main = new Main();
         main.setupDatabase();
@@ -167,8 +293,5 @@ public class Main {
 
         AdminHome vr = new AdminHome();
         vr.setVisible(true);
-
-//        AdminHome frame = new AdminHome();
-//        frame.setVisible(true);
     }
 }

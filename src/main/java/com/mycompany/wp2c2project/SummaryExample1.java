@@ -100,7 +100,7 @@ public class SummaryExample1 extends javax.swing.JFrame {
         float days = hours / 8;
 
         //get shift start time from table in ViewRatesDepartments
-        ViewRatesDepartments rates = new ViewRatesDepartments();
+        ViewEmployees rates = new ViewEmployees();
         String shiftStart = (String) rates.employeeTable.getModel().getValueAt(0, 2);
         String shiftEnd = (String) rates.employeeTable.getModel().getValueAt(0, 3);
 
