@@ -130,7 +130,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
             JOptionPane.showMessageDialog(this, "Time card uploaded successfully", "Success", JOptionPane.PLAIN_MESSAGE);
         }
     }
-
+        
     int dateCol = 0;
     int timeInCol = 1;
     int timeOutColStart = 12;
@@ -240,7 +240,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             durationHours = (float) durationMillis / (60 * 60 * 1000);
                             durationHours = durationHours < 0 ? +24 : durationHours;
                             day = durationHours / 9;
-
+                            
                             //calculate overtime (✅ working omg)
                             if (timeOutDate.after(shiftEndTreshold)) {
                                 ot = roundToNearestHalf((float) (timeOutMill - shiftEndTreshold.getTime()) / (60 * 60 * 1000));
@@ -482,7 +482,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
      */
     public static void main(String args[]) {
         FlatLightLaf.setup();
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
