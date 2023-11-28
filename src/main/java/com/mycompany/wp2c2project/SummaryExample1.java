@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,12 +31,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author jejer
  */
-public class SummaryExample extends javax.swing.JFrame {
+public class SummaryExample1 extends javax.swing.JFrame {
 
     /**
      * Creates new form SummaryExample
      */
-    public SummaryExample() {
+    public SummaryExample1() {
         initComponents();
 
         Attendance attendance;
@@ -204,6 +205,20 @@ public class SummaryExample extends javax.swing.JFrame {
             NP,});
     }
 
+    private ResultSet fetchDataFromDatabase() throws SQLException {
+        String jdbcUrl = "jdbc:mysql://localhost:3306/your_database_name";
+        String username = "your_username";
+        String password = "your_password";
+
+        Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+
+        // Example SQL query. Replace it with your actual query.
+        String sql = "SELECT Department, Rate, ShiftStart, ShiftEnd, Status, TIN, PhilHealth, SSS, PagIbig, TaxStatus FROM your_table_name";
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        return statement.executeQuery();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -323,64 +338,89 @@ public class SummaryExample extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-           FileOutputStream excelFOU = null;
-    BufferedOutputStream excelBOU = null;
-    XSSFWorkbook excelJTableExporter = null;
+        FileOutputStream excelFOU = null;
+        BufferedOutputStream excelBOU = null;
+        XSSFWorkbook excelJTableExporter = null;
+        ResultSet resultSet = null;
 
-    JFileChooser ExcelFileChooser = new JFileChooser("C:\\Users\\Jon Gleur Tan\\OneDrive\\Desktop\\ExportExcel");
-    FileNameExtensionFilter extend = new FileNameExtensionFilter("EXCEL FILES", "xls", "xlsx", "xlsm");
+        JFileChooser ExcelFileChooser = new JFileChooser("C:\\Users\\Jon Gleur Tan\\OneDrive\\Desktop\\ExportExcel");
+        FileNameExtensionFilter extend = new FileNameExtensionFilter("EXCEL FILES", "xls", "xlsx", "xlsm");
 
-    ExcelFileChooser.setDialogTitle("Save As");
+        ExcelFileChooser.setDialogTitle("Save As");
 
-    ExcelFileChooser.setFileFilter(extend);
-    int excelchooser = ExcelFileChooser.showSaveDialog(null);
+        ExcelFileChooser.setFileFilter(extend);
+        int excelchooser = ExcelFileChooser.showSaveDialog(null);
 
-    if (excelchooser == JFileChooser.APPROVE_OPTION) {
+        if (excelchooser == JFileChooser.APPROVE_OPTION) {
+            try {
+                // Fetch data from the database
+                resultSet = fetchDataFromDatabase();
 
-        try {
-            excelJTableExporter = new XSSFWorkbook();
-            XSSFSheet excelSheet = excelJTableExporter.createSheet("Payslip Employees");
+                // Create the Excel workbook and sheet
+                excelJTableExporter = new XSSFWorkbook();
+                XSSFSheet excelSheet = excelJTableExporter.createSheet("Payslip Employees");
 
-            for (int i = 0; i < table.getRowCount(); i++) {
-                XSSFRow excelRow = excelSheet.createRow(i);
+                // Export data from the JTable
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                int rowCount = model.getRowCount();
+                int colCount = model.getColumnCount();
 
-                for (int j = 0; j < table.getColumnCount(); j++) {
-                    XSSFCell excelCell = excelRow.createCell(j);
+                for (int i = 0; i < rowCount; i++) {
+                    XSSFRow excelRow = excelSheet.createRow(i);
 
-                    Object value = table.getValueAt(i, j);
-                    if (value != null) {
-                        excelCell.setCellValue(value.toString());
-                    } else {
-                        excelCell.setCellValue(""); // Handle null values
+                    for (int j = 0; j < colCount; j++) {
+                        XSSFCell excelCell = excelRow.createCell(j);
+                        excelCell.setCellValue(model.getValueAt(i, j).toString());
                     }
                 }
-            }
 
-            excelFOU = new FileOutputStream(ExcelFileChooser.getSelectedFile() + ".xlsx");
-            excelBOU = new BufferedOutputStream(excelFOU);
-            excelJTableExporter.write(excelBOU);
-            JOptionPane.showMessageDialog(null, "File Exported Successfully");
+                // Move to the next row for data from the database
+                int rowIndex = rowCount;
 
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "File not found exception: " + ex.getMessage());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "IO exception: " + ex.getMessage());
-        } finally {
-            try {
-                if (excelBOU != null) {
-                    excelBOU.close();
+                // Export data from the ResultSet
+                while (resultSet.next()) {
+                    XSSFRow excelRow = excelSheet.createRow(rowIndex++);
+                    excelRow.createCell(0).setCellValue(resultSet.getString("Department"));
+                    excelRow.createCell(1).setCellValue(resultSet.getString("Rate"));
+                    excelRow.createCell(2).setCellValue(resultSet.getString("ShiftStart"));
+                    excelRow.createCell(3).setCellValue(resultSet.getString("ShiftEnd"));
+                    excelRow.createCell(4).setCellValue(resultSet.getString("Status"));
+                    excelRow.createCell(5).setCellValue(resultSet.getString("TIN"));
+                    excelRow.createCell(6).setCellValue(resultSet.getString("PhilHealth"));
+                    excelRow.createCell(7).setCellValue(resultSet.getString("SSS"));
+                    excelRow.createCell(8).setCellValue(resultSet.getString("PagIbig"));
+                    excelRow.createCell(9).setCellValue(resultSet.getString("TaxStatus"));
                 }
-                if (excelFOU != null) {
-                    excelFOU.close();
-                }
+
+                // Write to the Excel file
+                excelFOU = new FileOutputStream(ExcelFileChooser.getSelectedFile() + ".xlsx");
+                excelBOU = new BufferedOutputStream(excelFOU);
+                excelJTableExporter.write(excelBOU);
+                JOptionPane.showMessageDialog(null, "File Exported Successfully");
+
+            } catch (SQLException | FileNotFoundException ex) {
+                ex.printStackTrace();
             } catch (IOException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error closing streams: " + ex.getMessage());
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                    if (excelBOU != null) {
+                        excelBOU.close();
+                    }
+                    if (excelFOU != null) {
+                        excelFOU.close();
+                    }
+                    if (excelJTableExporter != null) {
+                        excelJTableExporter.close();
+                    }
+                } catch (IOException | SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
-    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -401,27 +441,28 @@ public class SummaryExample extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
+            java.util.logging.Logger.getLogger(SummaryExample1.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
+            java.util.logging.Logger.getLogger(SummaryExample1.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
+            java.util.logging.Logger.getLogger(SummaryExample1.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SummaryExample.class
+            java.util.logging.Logger.getLogger(SummaryExample1.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SummaryExample().setVisible(true);
+                new SummaryExample1().setVisible(true);
             }
         });
     }

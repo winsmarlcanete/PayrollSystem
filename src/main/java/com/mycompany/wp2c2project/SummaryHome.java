@@ -263,13 +263,16 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             Date ndStartTreshold = dateFormat.parse("22:00");
                             Date ndEndTreshold = dateFormat.parse("06:00");
 
-                            startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
-                            endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
+                            if (timeInDate.after(thresholdTimeLate)) {
+                                startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
+                                endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
 
-                            durationMillis = endOverlap.getTime() - startOverlap.getTime();
-                            durationHours = (float) durationMillis / (60 * 60 * 1000);
-                            durationHours = durationHours < 0 ? +24 : durationHours;
-                            nd = durationHours;
+                                durationMillis = endOverlap.getTime() - startOverlap.getTime();
+                                durationHours = (float) durationMillis / (60 * 60 * 1000);
+                                System.out.println("nd duration: " + durationHours);
+                                durationHours = durationHours < 0 ? +24 : durationHours;
+                                nd = durationHours;
+                            }
                         }
 
                         // !!insert to time card database table!!
