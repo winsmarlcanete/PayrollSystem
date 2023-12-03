@@ -6,6 +6,7 @@ package wp2c2project.frames;
 
 import wp2c2project.classes.Main;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -36,6 +37,7 @@ public class ViewRates extends javax.swing.JFrame {
     public ViewRates() {
         try {
             initComponents();
+            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/wp2c2_logo.png")));
 
             lateRateLb.setText(String.valueOf(getRateValue(1)));
             otRateLb.setText(String.valueOf(getRateValue(2)));

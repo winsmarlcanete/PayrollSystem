@@ -4,6 +4,8 @@
  */
 package wp2c2project.frames;
 
+import java.awt.Toolkit;
+
 /**
  *
  * @author Windows
@@ -15,6 +17,7 @@ public class AboutFrame extends javax.swing.JFrame {
      */
     public AboutFrame() {
         initComponents();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/wp2c2_logo.png")));
     }
 
     /**

@@ -6,6 +6,7 @@ package wp2c2project.frames;
 
 import wp2c2project.classes.Main;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,6 +50,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
     public SummaryHome() {
         try {
             initComponents();
+            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/wp2c2_logo.png")));
 
             //show uploaded summaries
             Set<String> uniquePeriods = new HashSet<>();

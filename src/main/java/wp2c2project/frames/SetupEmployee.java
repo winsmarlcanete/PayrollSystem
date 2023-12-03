@@ -6,6 +6,7 @@ package wp2c2project.frames;
 
 import wp2c2project.classes.Main;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -32,7 +33,8 @@ public class SetupEmployee extends javax.swing.JFrame {
 
     public SetupEmployee(SummaryHome summaryHome) {
         initComponents();
-
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/wp2c2_logo.png")));
+        
         id = summaryHome.id;
         name = summaryHome.name;
         department = summaryHome.department;

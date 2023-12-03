@@ -6,6 +6,7 @@ package wp2c2project.frames;
 
 import wp2c2project.classes.Main;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
@@ -129,6 +130,7 @@ public class ViewEmployees extends javax.swing.JFrame {
     public ViewEmployees() {
         initComponents();
         showTableContent();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/wp2c2_logo.png")));
     }
 
     private void showTableContent() {
