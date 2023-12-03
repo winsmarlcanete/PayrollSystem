@@ -102,6 +102,7 @@ public class ViewRates extends javax.swing.JFrame {
         jButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("WP2C2 System");
 
         updateBtn.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
         updateBtn.setText("Update");
