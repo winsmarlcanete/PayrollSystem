@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.wp2c2project;
+package wp2c2project.frames;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import java.sql.Connection;

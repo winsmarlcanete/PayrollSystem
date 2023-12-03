@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.wp2c2project;
+package wp2c2project.frames;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import java.io.File;
@@ -32,6 +32,9 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
+import wp2c2project.classes.Employee;
+import wp2c2project.classes.Timecard;
 
 /**
  *
@@ -222,7 +225,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             long timeInMill = timeInDate.getTime();
                             long timeOutMill = timeOutDate.getTime();
 
-                            //calculate day (needs rounding off logic)
+                            //calculate day (needs proper rounding off logic)
                             if (dateType == 0) {
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.setTime(shiftStartThreshold);
@@ -257,7 +260,6 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
                             //calculate nd
                             Date ndStartTreshold = dateFormat.parse("22:00");
                             Date ndEndTreshold = dateFormat.parse("06:00");
-
                             if (timeInDate.after(timeOutDate)) { //time crossing midnight
                                 startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
                                 endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
@@ -500,7 +502,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         jLabel1.setText("Earlier summaries");
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setText("October 6-20");
+        jButton2.setText("Uploaded summary");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -562,7 +564,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Summary summaryFrame = new Summary(this);
-        summaryFrame.showSummary("2023-10-20~2023-11-05");
+        summaryFrame.showSummary("2023-10-20~2023-11-05"); //placeholder
         summaryFrame.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed

@@ -1,4 +1,4 @@
-package com.mycompany.wp2c2project;
+package wp2c2project.frames;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import java.text.SimpleDateFormat;

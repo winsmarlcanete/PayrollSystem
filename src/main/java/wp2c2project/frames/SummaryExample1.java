@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.wp2c2project;
+package wp2c2project.frames;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import java.io.BufferedOutputStream;
@@ -347,7 +347,7 @@ public class SummaryExample1 extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-                Connection sgconn = Main.connectSG();
+        Connection sgconn = Main.connectSG();
         PreparedStatement st;
         ResultSet resultSet;
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -584,7 +584,7 @@ public class SummaryExample1 extends javax.swing.JFrame {
                 sheet.setColumnWidth(6, 25 * 256);
                 sheet.setColumnWidth(7, 20 * 256);
                 sheet.setColumnWidth(8, 20 * 256);
-                
+
                 rowNum += 2;
 
             } while (resultSet.next());

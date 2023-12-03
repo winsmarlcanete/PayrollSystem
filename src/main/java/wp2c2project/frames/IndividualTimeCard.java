@@ -1,0 +1,633 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package wp2c2project.frames;
+
+import com.formdev.flatlaf.FlatLightLaf;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author jejer
+ */
+public class IndividualTimeCard extends javax.swing.JFrame {
+
+    /**
+     * Creates new form IndividualTimeCard
+     */
+    ResultSet resultSet;
+    Connection sgconn = Main.connectSG();
+    PreparedStatement st;
+
+    //employee details
+    int empId = 1; //placeholder
+    String empName;
+    String dept;
+    String period;
+
+    //time card
+    //total
+    float dayTot;
+    float lateTot;
+    float otTot;
+    float ndTot;
+    float spcTot;
+    float spcOtTot;
+    float legTot;
+
+    public IndividualTimeCard(Summary summary) {
+        initComponents();
+
+        periodLb.setText(period);
+
+        try {
+            insertTable();
+            insertTotal();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(IndividualTimeCard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void transferData(String period, int empId) {
+        //this.period = period;
+        //this.empId = empId;
+    }
+
+    private void insertTotal() throws SQLException {
+        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM summary WHERE empId = ?");
+        st.setInt(1, empId);
+        resultSet = st.executeQuery();
+        resultSet.next();
+        dayTot = resultSet.getFloat("dayTot");
+        lateTot = resultSet.getFloat("lateTot");
+        otTot = resultSet.getFloat("otTot");
+        ndTot = resultSet.getFloat("ndTot");
+        spcTot = resultSet.getFloat("spcTot");
+        spcOtTot = resultSet.getFloat("spcOtTot");
+        legTot = resultSet.getFloat("legTot");
+
+        dayTotLb.setText(String.valueOf(dayTot));
+        lateTotLb.setText(String.valueOf(lateTot));
+        otTotLb.setText(String.valueOf(otTot));
+        ndTotLb.setText(String.valueOf(ndTot));
+        spcTotLb.setText(String.valueOf(spcTot));
+        spcOtTotLb.setText(String.valueOf(spcOtTot));
+        legTotLb.setText(String.valueOf(legTot));
+    }
+
+    private void insertTable() throws SQLException {
+        DefaultTableModel model = (DefaultTableModel) idvlTCTable.getModel();
+        int rowCount = model.getRowCount();
+        //Remove rows one by one from the end of the table
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+
+        System.out.println(empId);
+
+        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM employee WHERE empId = ?");
+        st.setInt(1, empId);
+        resultSet = st.executeQuery();
+        resultSet.next();
+        empName = resultSet.getString("name");
+        dept = resultSet.getString("department");
+        nameLabel.setText(empName);
+        deptLabel.setText(dept);
+
+        //add row to table
+        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM time_card WHERE empId = ?");
+        st.setInt(1, empId);
+        resultSet = st.executeQuery();
+        while (resultSet.next()) {
+            int dateId = resultSet.getInt("dateId");
+            String date = resultSet.getString("date");
+            int dateType = resultSet.getInt("dateType");
+            String shiftStart = resultSet.getString("shiftStart");
+            String shiftEnd = resultSet.getString("shiftEnd");
+            String timeIn = resultSet.getString("timeIn");
+            String timeOut = resultSet.getString("timeOut");
+            day = resultSet.getFloat("day");
+            late = resultSet.getFloat("late");
+            ot = resultSet.getFloat("ot");
+            nd = resultSet.getFloat("nd");
+            spc = resultSet.getFloat("spc");
+            spcOt = resultSet.getFloat("spcOt");
+            leg = resultSet.getFloat("leg");
+
+            model.addRow(new Object[]{
+                dateId,
+                date,
+                dateType,
+                shiftStart,
+                shiftEnd,
+                timeIn,
+                timeOut,
+                day,
+                late,
+                ot,
+                nd,
+                spc,
+                spcOt,
+                leg,});
+
+            System.out.println("getting dateId " + dateId + " success");
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        nameLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        idvlTCTable = new javax.swing.JTable();
+        periodLb = new javax.swing.JLabel();
+        deptLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        periodLabel1 = new javax.swing.JLabel();
+        periodLabel2 = new javax.swing.JLabel();
+        periodLabel3 = new javax.swing.JLabel();
+        periodLabel4 = new javax.swing.JLabel();
+        periodLabel5 = new javax.swing.JLabel();
+        periodLabel6 = new javax.swing.JLabel();
+        periodLabel7 = new javax.swing.JLabel();
+        periodLabel8 = new javax.swing.JLabel();
+        spcOtTotLb = new javax.swing.JLabel();
+        legTotLb = new javax.swing.JLabel();
+        spcTotLb = new javax.swing.JLabel();
+        ndTotLb = new javax.swing.JLabel();
+        otTotLb = new javax.swing.JLabel();
+        lateTotLb = new javax.swing.JLabel();
+        dayTotLb = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        nameLabel.setFont(new java.awt.Font("Inter", 1, 18)); // NOI18N
+        nameLabel.setText("Name");
+
+        idvlTCTable.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        idvlTCTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Date ID", "Date", "Type", "Shift Start", "Shift End", "Time In", "Time Out", "Day", "Late", "Overtime", "Night Differential", "Special Holiday/Sunday", "Special Holiday/Sunday Overtime", "Legal Holiday"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true, true, true, true, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        idvlTCTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(idvlTCTable);
+
+        periodLb.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLb.setText("Payroll period");
+
+        deptLabel.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        deptLabel.setText("Department");
+
+        jButton1.setText("Update");
+        jButton1.setToolTipText("");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        periodLabel1.setFont(new java.awt.Font("Inter", 1, 12)); // NOI18N
+        periodLabel1.setText("Total");
+
+        periodLabel2.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel2.setText("Days");
+
+        periodLabel3.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel3.setText("Late");
+
+        periodLabel4.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel4.setText("Overtime");
+
+        periodLabel5.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel5.setText("Night Differential");
+
+        periodLabel6.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel6.setText("Special Holiday/Sunday");
+
+        periodLabel7.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel7.setText("Special Holiday/Sunday Overtime");
+
+        periodLabel8.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
+        periodLabel8.setText("Legal Holiday");
+
+        spcOtTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        spcOtTotLb.setText("0");
+
+        legTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        legTotLb.setText("0");
+
+        spcTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        spcTotLb.setText("0");
+
+        ndTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        ndTotLb.setText("0");
+
+        otTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        otTotLb.setText("0");
+
+        lateTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        lateTotLb.setText("0");
+
+        dayTotLb.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        dayTotLb.setText("0");
+
+        jButton2.setText("Back");
+        jButton2.setToolTipText("");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nameLabel)
+                            .addComponent(deptLabel)
+                            .addComponent(periodLb)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(periodLabel1)
+                                    .addComponent(periodLabel2)
+                                    .addComponent(periodLabel3)
+                                    .addComponent(periodLabel4)
+                                    .addComponent(periodLabel5)
+                                    .addComponent(periodLabel6)
+                                    .addComponent(periodLabel8)
+                                    .addComponent(periodLabel7))
+                                .addGap(38, 38, 38)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(legTotLb)
+                                    .addComponent(spcTotLb)
+                                    .addComponent(ndTotLb)
+                                    .addComponent(otTotLb)
+                                    .addComponent(lateTotLb)
+                                    .addComponent(spcOtTotLb)
+                                    .addComponent(dayTotLb))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)))))
+                .addGap(43, 43, 43))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addComponent(periodLb)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(nameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deptLabel)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(periodLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(periodLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(dayTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lateTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(otTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ndTotLb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spcTotLb)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(periodLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spcOtTotLb, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(periodLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(legTotLb, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    public Object GetData(int row_index, int col_index) {
+        return idvlTCTable.getModel().getValueAt(row_index, col_index);
+    }
+
+    int dateId;
+    int dateType;
+    String shiftStart;
+    String shiftEnd;
+    String timeIn;
+    String timeOut;
+
+    float day;
+    float late;
+    float ot;
+    float nd;
+    float spc;
+    float spcOt;
+    float leg;
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            DefaultTableModel model = (DefaultTableModel) idvlTCTable.getModel();
+            int rowCount = model.getRowCount();
+            for (int i = rowCount - 1; i >= 0; i--) {
+                dateId = (int) GetData(i, 0);
+                Object data = GetData(i, 2);
+                if (data instanceof Integer) {
+                    // If the data is an Integer, use it directly
+                    dateType = (int) data;
+                } else if (data instanceof String string) {
+                    // If the data is a String, parse it to an Integer
+                    dateType = Integer.parseInt(string);
+                }
+
+                shiftStart = String.valueOf(GetData(i, 3));
+                shiftEnd = String.valueOf(GetData(i, 4));
+                timeIn = String.valueOf(GetData(i, 5));
+                timeOut = String.valueOf(GetData(i, 6));
+
+                if (!"".equals(timeIn) && !"".equals(timeOut)) {
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                    dateFormat.setTimeZone(TimeZone.getTimeZone("PT"));
+
+                    Date timeInDate = dateFormat.parse(timeIn);
+                    Date timeOutDate = dateFormat.parse(timeOut);
+                    Date shiftStartThreshold = dateFormat.parse(shiftStart);
+                    Date shiftEndThreshold = dateFormat.parse(shiftEnd);
+
+                    Date startOverlap;
+                    Date endOverlap;
+
+                    //convert to hours and minutes
+                    long timeInMill = timeInDate.getTime();
+                    long timeOutMill = timeOutDate.getTime();
+
+                    //calculate day (needs proper rounding off logic)
+                    switch (dateType) {
+                        case 0 -> {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(shiftStartThreshold);
+                            calendar.add(Calendar.MINUTE, 30);
+                            Date shiftStartLateThreshold = calendar.getTime();
+                            startOverlap = timeInDate.after(shiftStartLateThreshold) ? timeInDate : shiftStartThreshold;
+                            endOverlap = timeOutDate.before(shiftEndThreshold) ? timeOutDate : shiftEndThreshold;
+                            long durationMillis = endOverlap.getTime() - startOverlap.getTime();
+                            float durationHours = (float) durationMillis / (60 * 60 * 1000);
+                            durationHours = durationHours < 0 ? +24 : durationHours;
+                            day = durationHours / 9;
+
+                            //calculate overtime (✅ working omg)
+                            ot = 0;
+                            if (timeOutDate.after(shiftEndThreshold)) {
+                                ot = roundToNearestHalf((float) (timeOutMill - shiftEndThreshold.getTime()) / (60 * 60 * 1000));
+                            }
+
+                            //calculate late
+                            late = 0;
+                            calendar.setTime(shiftStartThreshold);
+                            calendar.add(Calendar.MINUTE, 5);
+                            Date thresholdTimeLate = calendar.getTime();
+                            if (timeInDate.after(thresholdTimeLate)) {
+                                late = roundToNearestHalf((float) (timeInMill - shiftStartThreshold.getTime()) / (60 * 1000)) * 2;
+                            }
+                            spc = 0;
+                            spcOt = 0;
+                            leg = 0;
+                        }
+                        case 1 -> {
+                            long durationMillis = timeOutDate.getTime() - timeInDate.getTime();
+                            float durationHours = (float) durationMillis / (60 * 60 * 1000);
+                            durationHours = durationHours < 0 ? +24 : durationHours;
+                            if (durationHours < 8) {
+                                spc = durationHours;
+                                spcOt = 0;
+                            } else {
+                                spc = 8;
+                                float spcOtDuration = durationHours - 8;
+                                spcOt = spcOtDuration;
+                            }
+                            late = 0;
+                            ot = 0;
+                            day = 0;
+                            leg = 0;
+                        }
+                        case 2 -> {
+                            long durationMillis = timeOutDate.getTime() - timeInDate.getTime();
+                            float durationHours = (float) durationMillis / (60 * 60 * 1000);
+                            durationHours = durationHours < 0 ? +24 : durationHours;
+                            leg = durationHours;
+                            late = 0;
+                            ot = 0;
+                            day = 0;
+                            spc = 0;
+                            spcOt = 0;
+                        }
+                        case 3 -> {
+                            day = 1;
+                            late = 0;
+                            ot = 0;
+                            spc = 0;
+                            spcOt = 0;
+                            leg = 0;
+                        }
+                        default -> {
+                        }
+                    }
+
+                    //calculate nd
+                    nd = 0;
+                    Date ndStartTreshold = dateFormat.parse("22:00");
+                    Date ndEndTreshold = dateFormat.parse("06:00");
+                    if (timeInDate.after(timeOutDate)) { //time crossing midnight
+                        startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
+                        endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
+                        nd = setDurationHours(startOverlap, endOverlap);
+                    } else { //time not crossing midnight
+                        if (timeOutDate.after(ndStartTreshold)) {
+                            startOverlap = timeInDate.after(ndStartTreshold) ? timeInDate : ndStartTreshold;
+                            nd = setDurationHours(startOverlap, timeOutDate);
+                        }
+                        if (timeInDate.before(ndEndTreshold)) {
+                            endOverlap = timeOutDate.before(ndEndTreshold) ? timeOutDate : ndEndTreshold;
+                            nd = setDurationHours(timeInDate, endOverlap);
+                        }
+                    }
+                } else if (dateType != 0) {
+                    day = 1;
+                    resetTime();
+                } else {
+                    day = 0;
+                    resetTime();
+                }
+
+                //update
+                // !!insert to time card database table!!
+                st = (PreparedStatement) sgconn.prepareStatement(
+                        "UPDATE `time_card` SET "
+                        + "`dateType` = ?, "
+                        + "`timeIn` = ?, "
+                        + "`timeOut` = ?, "
+                        + "`shiftStart` = ?,"
+                        + "`shiftEnd` = ?, "
+                        + "`day` = ?, "
+                        + "`late` = ?, "
+                        + "`ot` = ?, "
+                        + "`nd` = ?, "
+                        + "`spc` = ?, "
+                        + "`spcOt` = ?, "
+                        + "`leg` = ? "
+                        + " WHERE dateId = ?"
+                );
+                st.setInt(1, dateType);
+                st.setString(2, timeIn);
+                st.setString(3, timeOut);
+                st.setString(4, shiftStart);
+                st.setString(5, shiftEnd);
+                st.setFloat(6, day);
+                st.setFloat(7, late);
+                st.setFloat(8, ot);
+                st.setFloat(9, nd);
+                st.setFloat(10, spc);
+                st.setFloat(11, spcOt);
+                st.setFloat(12, leg);
+                st.setInt(13, dateId);
+                st.executeUpdate();
+            }
+            Main main = new Main();
+            main.calculateSummary();
+
+            insertTable();
+            insertTotal();
+        } catch (SQLException | ParseException ex) {
+            Logger.getLogger(IndividualTimeCard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void resetTime() {
+        late = 0;
+        ot = 0;
+        nd = 0;
+        spc = 0;
+        spcOt = 0;
+        leg = 0;
+    }
+
+    private static float roundToNearestHalf(float number) {
+        return (float) (Math.floor(number * 2) / 2.0);
+    }
+
+    private static float setDurationHours(Date startOverlap, Date endOverlap) {
+        long durationMillis = endOverlap.getTime() - startOverlap.getTime();
+        float durationHours = (float) durationMillis / (60 * 60 * 1000);
+        durationHours = durationHours < 0 ? +24 : durationHours;
+        return durationHours;
+    }
+
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        SummaryHome summaryHome = new SummaryHome();
+        summaryHome.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        FlatLightLaf.setup();
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                Summary summary = new Summary(new SummaryHome());
+                new IndividualTimeCard(summary).setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JLabel dayTotLb;
+    public javax.swing.JLabel deptLabel;
+    private javax.swing.JTable idvlTCTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JLabel lateTotLb;
+    public javax.swing.JLabel legTotLb;
+    public javax.swing.JLabel nameLabel;
+    public javax.swing.JLabel ndTotLb;
+    public javax.swing.JLabel otTotLb;
+    public javax.swing.JLabel periodLabel1;
+    public javax.swing.JLabel periodLabel2;
+    public javax.swing.JLabel periodLabel3;
+    public javax.swing.JLabel periodLabel4;
+    public javax.swing.JLabel periodLabel5;
+    public javax.swing.JLabel periodLabel6;
+    public javax.swing.JLabel periodLabel7;
+    public javax.swing.JLabel periodLabel8;
+    public javax.swing.JLabel periodLb;
+    public javax.swing.JLabel spcOtTotLb;
+    public javax.swing.JLabel spcTotLb;
+    // End of variables declaration//GEN-END:variables
+}
