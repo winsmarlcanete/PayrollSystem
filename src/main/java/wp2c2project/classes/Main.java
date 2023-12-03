@@ -79,7 +79,8 @@ public class Main {
                             + "nd FLOAT NOT NULL, "
                             + "spc FLOAT NOT NULL DEFAULT '0', "
                             + "spcOt FLOAT NOT NULL DEFAULT '0', "
-                            + "leg FLOAT NOT NULL DEFAULT '0' "
+                            + "leg FLOAT NOT NULL DEFAULT '0', "
+                            + "`period` varchar(50) NOT NULL "
                             + ")"
                     );
 
