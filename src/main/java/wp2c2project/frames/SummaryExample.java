@@ -4,6 +4,7 @@
  */
 package wp2c2project.frames;
 
+import wp2c2project.classes.Main;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -147,7 +148,7 @@ public class SummaryExample extends javax.swing.JFrame {
 
         //time card flexibility khok khok
         try {
-            Connection conn = DriverManager.getConnection(Main.SG_URL, Main.USER, Main.PASS);
+             Connection conn = Main.connectSG();
             Statement stmt = conn.createStatement();
             String sql1 = "UPDATE time_card SET day = 1 WHERE dateType != 0";
             String sql2 = "UPDATE time_card SET day = 1 WHERE timeIn != '' AND timeOut = ''";

@@ -4,6 +4,7 @@
  */
 package wp2c2project.frames;
 
+import wp2c2project.classes.Main;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

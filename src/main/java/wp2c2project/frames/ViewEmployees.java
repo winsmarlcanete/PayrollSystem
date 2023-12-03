@@ -4,6 +4,7 @@
  */
 package wp2c2project.frames;
 
+import wp2c2project.classes.Main;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -16,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import wp2c2project.classes.Summary;
 
 /**
  *
@@ -122,61 +124,38 @@ public class ViewEmployees extends javax.swing.JFrame {
         );
     }
 
+    int selectedId;
+
     public ViewEmployees() {
         initComponents();
-
         showTableContent();
+    }
 
-        employeeTable.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
+    private void showTableContent() {
+        DefaultTableModel model = (DefaultTableModel) employeeTable.getModel();
+        model.setRowCount(0);
+
+        try {
+            String sql = "SELECT * FROM employee";
+            Connection sgconn = Main.connectSG();
+            PreparedStatement pst = sgconn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                model.addRow(new String[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+                    rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+                    rs.getString(10), rs.getString(11), rs.getString(12)});
             }
+        } catch (Exception e) {
+            System.out.println("error par");
+        }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                //scv means selected cell value
-                String idTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 0);
-                String nameTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 1);
-                String departmentTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 2);
-                String rateTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 3);
-                String shiftSTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 4);
-                String shiftETable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 5);
-                String statusTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 6);
-                String tinTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 7);
-                String philhealthTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 8);
-                String sssTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 9);
-                String pagibigTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 10);
-                String taxSTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 11);
-
-                idTF.setText(idTable);
-                employeeNameTF.setText(nameTable);
-                departmentTF.setText(departmentTable);
-                rateTF.setText(rateTable);
-                shiftStartTF.setText(shiftSTable);
-                shiftEndTF.setText(shiftETable);
-                tinTF.setText(tinTable);
-                philhealthTF.setText(philhealthTable);
-                sssTF.setText(sssTable);
-                pagibigTF.setText(pagibigTable);
-                taxStatusTF.setText(taxSTable);
-                statusTF.setText(statusTable);
-                
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
-        });
-
+        // Centers the value of table (loop)
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int x = 0; x < 4; x++) {
+            employeeTable.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
+        }
     }
 
     /**
@@ -218,8 +197,6 @@ public class ViewEmployees extends javax.swing.JFrame {
         statusTF = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        idTF = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
         departmentTF = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -277,6 +254,11 @@ public class ViewEmployees extends javax.swing.JFrame {
             }
         });
         employeeTable.getTableHeader().setReorderingAllowed(false);
+        employeeTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                employeeTableMousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(employeeTable);
         if (employeeTable.getColumnModel().getColumnCount() > 0) {
             employeeTable.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -286,35 +268,11 @@ public class ViewEmployees extends javax.swing.JFrame {
 
         jLabel5.setText("Employee Name");
 
-        employeeNameTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employeeNameTFActionPerformed(evt);
-            }
-        });
-
         jLabel6.setText("Salary Rate Per Day");
-
-        rateTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rateTFActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("Shift Start");
 
-        shiftStartTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                shiftStartTFActionPerformed(evt);
-            }
-        });
-
         jLabel8.setText("Shift End");
-
-        shiftEndTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                shiftEndTFActionPerformed(evt);
-            }
-        });
 
         jLabel9.setText("TIN");
 
@@ -328,13 +286,7 @@ public class ViewEmployees extends javax.swing.JFrame {
 
         jLabel14.setText("Status");
 
-        tinTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tinTFActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("UPDATE");
+        jButton2.setText("Update");
         jButton2.setFocusable(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -342,21 +294,13 @@ public class ViewEmployees extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("DELETE");
+        jButton3.setText("Delete");
         jButton3.setFocusable(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
-
-        idTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idTFActionPerformed(evt);
-            }
-        });
-
-        jLabel15.setText("ID");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -370,18 +314,14 @@ public class ViewEmployees extends javax.swing.JFrame {
                             .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(philhealthTF, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(140, 140, 140)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(sssTF, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel13)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel5Layout.createSequentialGroup()
-                                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jButton3)))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton3))))
                     .addComponent(jLabel10)
                     .addComponent(jSeparator1)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -468,15 +408,12 @@ public class ViewEmployees extends javax.swing.JFrame {
                     .addComponent(pagibigTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(taxStatusTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel15))
+                .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(statusTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton3))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -569,8 +506,7 @@ public class ViewEmployees extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -592,62 +528,52 @@ public class ViewEmployees extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void employeeNameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeNameTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_employeeNameTFActionPerformed
-
-    private void shiftStartTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shiftStartTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_shiftStartTFActionPerformed
-
-    private void shiftEndTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shiftEndTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_shiftEndTFActionPerformed
-
-    private void tinTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tinTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tinTFActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-            Connection sgconn = Main.connectSG();
-            try {
-                String en = employeeNameTF.getText();
-                String dep = departmentTF.getText();
-                Double rate = Double.valueOf(rateTF.getText());
-                String shiftS = shiftStartTF.getText();
-                String shiftE = shiftEndTF.getText();
-                String tin = tinTF.getText();
-                Integer pH = Integer.valueOf(philhealthTF.getText());
-                String sss = sssTF.getText();
-                Integer pagIbig = Integer.valueOf(pagibigTF.getText());
-                String taxS = taxStatusTF.getText();
-                String status = statusTF.getText();
-                Integer id = Integer.valueOf(idTF.getText());
 
-                PreparedStatement pstmt = sgconn.prepareStatement("UPDATE employee SET name = ?, department = ?, rate = ? "
-                        + ", shiftStart = ?, shiftEnd = ?, tin = ?, philHealth = ?, sss = ?, pagibig = ?, taxStatus = ?, status = ? WHERE empId = ?");
-                pstmt.setString(1, en);
-                pstmt.setString(2, dep);
-                pstmt.setDouble(3, rate);
-                pstmt.setString(4, shiftS);
-                pstmt.setString(5, shiftE);
-                pstmt.setString(6, tin);
-                pstmt.setInt(7, pH);
-                pstmt.setString(8, sss);
-                pstmt.setInt(9, pagIbig);
-                pstmt.setString(10, taxS);
-                pstmt.setString(11, status);
-                pstmt.setInt(12, id);
-                pstmt.executeUpdate();
+        Connection sgconn = Main.connectSG();
+        try {
+            String en = employeeNameTF.getText();
+            String dep = departmentTF.getText();
+            Double rate = Double.valueOf(rateTF.getText());
+            String shiftS = shiftStartTF.getText();
+            String shiftE = shiftEndTF.getText();
+            String tin = tinTF.getText();
+            Integer pH = Integer.valueOf(philhealthTF.getText());
+            String sss = sssTF.getText();
+            Integer pagIbig = Integer.valueOf(pagibigTF.getText());
+            String taxS = taxStatusTF.getText();
+            String status = statusTF.getText();
 
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
-                System.out.println(ex);
+            PreparedStatement pstmt = sgconn.prepareStatement("UPDATE employee SET name = ?, department = ?, rate = ? "
+                    + ", shiftStart = ?, shiftEnd = ?, tin = ?, philHealth = ?, sss = ?, pagibig = ?, taxStatus = ?, status = ? WHERE empId = ?");
+            pstmt.setString(1, en);
+            pstmt.setString(2, dep);
+            pstmt.setDouble(3, rate);
+            pstmt.setString(4, shiftS);
+            pstmt.setString(5, shiftE);
+            pstmt.setString(6, tin);
+            pstmt.setInt(7, pH);
+            pstmt.setString(8, sss);
+            pstmt.setInt(9, pagIbig);
+            pstmt.setString(10, taxS);
+            pstmt.setString(11, status);
+            pstmt.setInt(12, selectedId);
+            pstmt.executeUpdate();
 
-                // Code block of sending data to database ends here
+            pstmt = sgconn.prepareStatement("SELECT * FROM `summary` WHERE `empId` = ?");
+            pstmt.setInt(1, selectedId);
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                Summary summary = new Summary(0, selectedId, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+                summary.calcTime();
             }
-        
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println(ex);
+
+            // Code block of sending data to database ends here
+        }
+
         showTableContent();
 
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -655,12 +581,10 @@ public class ViewEmployees extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Connection sgconn = Main.connectSG();
         try {
-            int val4 = Integer.parseInt(idTF.getText());
-
             String sqlStatement = "DELETE FROM employee WHERE empId = ?";
 
             PreparedStatement updateQuery = sgconn.prepareStatement(sqlStatement);
-            updateQuery.setInt(1, val4);
+            updateQuery.setInt(1, selectedId);
             updateQuery.executeUpdate();
 
         } catch (SQLException ex) {
@@ -671,13 +595,34 @@ public class ViewEmployees extends javax.swing.JFrame {
         showTableContent();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void idTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idTFActionPerformed
+    private void employeeTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeeTableMousePressed
+        //scv means selected cell value
+        String idTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 0);
+        String nameTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 1);
+        String departmentTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 2);
+        String rateTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 3);
+        String shiftSTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 4);
+        String shiftETable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 5);
+        String statusTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 6);
+        String tinTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 7);
+        String philhealthTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 8);
+        String sssTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 9);
+        String pagibigTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 10);
+        String taxSTable = (String) employeeTable.getValueAt(employeeTable.getSelectedRow(), 11);
 
-    private void rateTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rateTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rateTFActionPerformed
+        selectedId = Integer.parseInt(idTable);
+        employeeNameTF.setText(nameTable);
+        departmentTF.setText(departmentTable);
+        rateTF.setText(rateTable);
+        shiftStartTF.setText(shiftSTable);
+        shiftEndTF.setText(shiftETable);
+        tinTF.setText(tinTable);
+        philhealthTF.setText(philhealthTable);
+        sssTF.setText(sssTable);
+        pagibigTF.setText(pagibigTable);
+        taxStatusTF.setText(taxSTable);
+        statusTF.setText(statusTable);
+    }//GEN-LAST:event_employeeTableMousePressed
 
     /**
      * @param args the command line arguments
@@ -697,7 +642,6 @@ public class ViewEmployees extends javax.swing.JFrame {
     private javax.swing.JTextField departmentTF;
     private javax.swing.JTextField employeeNameTF;
     public javax.swing.JTable employeeTable;
-    private javax.swing.JTextField idTF;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -706,7 +650,6 @@ public class ViewEmployees extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -732,31 +675,4 @@ public class ViewEmployees extends javax.swing.JFrame {
     private javax.swing.JTextField taxStatusTF;
     private javax.swing.JTextField tinTF;
     // End of variables declaration//GEN-END:variables
-
-    private void showTableContent() {
-        DefaultTableModel model = (DefaultTableModel) employeeTable.getModel();
-        model.setRowCount(0);
-
-        try {
-            String sql = "SELECT * FROM employee";
-            Connection sgconn = Main.connectSG();
-            PreparedStatement pst = sgconn.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-
-            while (rs.next()) {
-                model.addRow(new String[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                    rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-                    rs.getString(10), rs.getString(11), rs.getString(12)});
-            }
-        } catch (Exception e) {
-            System.out.println("error par");
-        }
-
-        // Centers the value of table (loop)
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int x = 0; x < 4; x++) {
-            employeeTable.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
-        }
-    }
 }

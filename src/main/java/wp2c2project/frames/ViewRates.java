@@ -4,6 +4,7 @@
  */
 package wp2c2project.frames;
 
+import wp2c2project.classes.Main;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -239,7 +240,7 @@ public class ViewRates extends javax.swing.JFrame {
             updateRateValue(6, Float.parseFloat(legRateLb.getText()));
 
             Main main = new Main();
-            main.calculateSummary();
+            main.calcSummaryDedt();
 
             JOptionPane.showMessageDialog(this, "Rates updated successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
             

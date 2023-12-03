@@ -4,6 +4,7 @@
  */
 package wp2c2project.frames;
 
+import wp2c2project.classes.Main;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.io.BufferedOutputStream;
 import java.io.File;

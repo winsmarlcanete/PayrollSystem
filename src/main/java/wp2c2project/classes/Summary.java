@@ -4,6 +4,11 @@
  */
 package wp2c2project.classes;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author jejer
@@ -17,7 +22,7 @@ public class Summary {
     private float dayTot;
     private float lateTot;
     private float otTot;
-    private float ndTod;
+    private float ndTot;
     private float spcTot;
     private float spcOtTot;
     private float legTot;
@@ -44,7 +49,7 @@ public class Summary {
     private float allowance;
     private float netPay;
 
-    public Summary(int sumId, int empId, String period, float rph, float dayTot, float lateTot, float otTot, float ndTod, float spcTot, float spcOtTot, float legTot, float lateAmt, float otAmt, float ndAmt, float spcAmt, float spcOtAmt, float legAmt, float regWage, float gross, float sssReg, float sssMpf, float phealth, float wtax, float sssLoanS, float sssLoanC, float pagibigCont, float efund, float pagibigLoanS, float pagibigLoanC, float otherDedt, float dedtTot, float allowance, float netPay) {
+    public Summary(int sumId, int empId, String period, float rph, float dayTot, float lateTot, float otTot, float ndTot, float spcTot, float spcOtTot, float legTot, float lateAmt, float otAmt, float ndAmt, float spcAmt, float spcOtAmt, float legAmt, float regWage, float gross, float sssReg, float sssMpf, float phealth, float wtax, float sssLoanS, float sssLoanC, float pagibigCont, float efund, float pagibigLoanS, float pagibigLoanC, float otherDedt, float dedtTot, float allowance, float netPay) {
         this.sumId = sumId;
         this.empId = empId;
         this.period = period;
@@ -52,7 +57,7 @@ public class Summary {
         this.dayTot = dayTot;
         this.lateTot = lateTot;
         this.otTot = otTot;
-        this.ndTod = ndTod;
+        this.ndTot = ndTot;
         this.spcTot = spcTot;
         this.spcOtTot = spcOtTot;
         this.legTot = legTot;
@@ -78,6 +83,58 @@ public class Summary {
         this.dedtTot = dedtTot;
         this.allowance = allowance;
         this.netPay = netPay;
+    }
+
+    public void calcTime() throws SQLException {
+        Connection sgconn = Main.connectSG();
+        ResultSet resultSet;
+        PreparedStatement st;
+
+        //calculate total
+        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
+        st.setInt(1, empId);
+        resultSet = st.executeQuery();
+        while (resultSet.next()) {
+            dayTot += resultSet.getFloat("day");
+            lateTot += resultSet.getFloat("late");
+            otTot += resultSet.getFloat("ot");
+            ndTot += resultSet.getFloat("nd");
+            spcTot += resultSet.getFloat("spc");
+            spcOtTot += resultSet.getFloat("spcOt");
+            legTot += resultSet.getFloat("leg");
+        }
+
+        //calculate rates
+        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
+        st.setInt(1, empId);
+        resultSet = st.executeQuery();
+        resultSet.next();
+        float rate = resultSet.getFloat("rate");
+        rph = rate / 8;
+
+        //amt calculation
+        Main main = new Main();
+        float otRate = main.selectRateData(2);
+        float ndRate = main.selectRateData(3);
+        float spcRate = main.selectRateData(4);
+        float spcOtRate = main.selectRateData(5);
+        float legRate = main.selectRateData(6);
+
+        lateAmt = rph / 60 * lateTot;
+        regWage = rate * dayTot - lateTot;
+
+        otAmt = rph * otRate * otTot;
+        ndAmt = rph * ndRate * ndTot;
+        spcAmt = rph * spcRate * spcTot;
+        spcOtAmt = rph * spcOtRate * spcOtTot;
+        legAmt = rph * legRate * legTot;
+        gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
+
+        netPay = gross;
+    }
+    
+    public void updateSummary(){
+        
     }
 
     public int getSumId() {
@@ -136,12 +193,12 @@ public class Summary {
         this.otTot = otTot;
     }
 
-    public float getNdTod() {
-        return ndTod;
+    public float getNdTot() {
+        return ndTot;
     }
 
-    public void setNdTod(float ndTod) {
-        this.ndTod = ndTod;
+    public void setNdTot(float ndTot) {
+        this.ndTot = ndTot;
     }
 
     public float getSpcTot() {
