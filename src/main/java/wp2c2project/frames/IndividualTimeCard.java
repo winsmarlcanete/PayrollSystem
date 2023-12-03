@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import wp2c2project.classes.Summary;
 import wp2c2project.classes.Timecard;
 
 /**
@@ -436,8 +437,15 @@ public class IndividualTimeCard extends javax.swing.JFrame {
                 st.setInt(13, dateId);
                 st.executeUpdate();
             }
-            Main main = new Main();
-            main.calcSummaryDedt();
+
+            PreparedStatement summaryStatement = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `summary`");
+            ResultSet summaryResultSet = summaryStatement.executeQuery();
+            while (summaryResultSet.next()) {
+                int empId = summaryResultSet.getInt("empId");
+                Summary summary = new Summary(0, empId, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+                summary.calcTime();
+                summary.updateTime();
+            }
 
             insertTable();
             insertTotal();

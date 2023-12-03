@@ -25,6 +25,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import wp2c2project.classes.Summary;
 
 /**
  *
@@ -60,6 +61,7 @@ public class SummaryFrame extends javax.swing.JFrame {
             while (resultSet.next()) {
                 //from summary database
                 int empId = resultSet.getInt("empId");
+                float rph = resultSet.getFloat("rph");
                 float dayTot = resultSet.getFloat("dayTot");
                 float lateTot = resultSet.getFloat("lateTot");
                 float lateAmt = resultSet.getFloat("lateAmt");
@@ -104,7 +106,7 @@ public class SummaryFrame extends javax.swing.JFrame {
                     empId,
                     department,
                     name,
-                    rate,
+                    rate + " (" + rph + ")",
                     dayTot,
                     lateTot + " (" + lateAmt + ")",
                     regWage,
@@ -353,8 +355,16 @@ public class SummaryFrame extends javax.swing.JFrame {
                 st.setInt(15, empId);
                 st.executeUpdate();
 
-                Main main = new Main();
-                main.calcSummaryDedt();
+                // update summary time calculation
+                PreparedStatement summaryStatement = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `summary`");
+                ResultSet summaryResultSet = summaryStatement.executeQuery();
+                while (summaryResultSet.next()) {
+                    int empId = summaryResultSet.getInt("empId");
+                    Summary summary = new Summary(0, empId, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+                    summary.calcTime();
+                    summary.updateTime();
+                }
+
             } catch (SQLException ex) {
                 Logger.getLogger(SummaryFrame.class.getName()).log(Level.SEVERE, null, ex);
             }

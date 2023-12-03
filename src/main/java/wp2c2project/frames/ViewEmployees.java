@@ -146,7 +146,7 @@ public class ViewEmployees extends javax.swing.JFrame {
                     rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
                     rs.getString(10), rs.getString(11), rs.getString(12)});
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("error par");
         }
 
@@ -232,7 +232,7 @@ public class ViewEmployees extends javax.swing.JFrame {
 
         employeeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, "7:00", "16:00", null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "Name", "Department", "Rate", "Shift Start", "Shift End", "Status", "TIN", "PhilHealth", "SSS", "Pag-Ibig Fund", "taxStatus"
@@ -563,10 +563,11 @@ public class ViewEmployees extends javax.swing.JFrame {
             pstmt = sgconn.prepareStatement("SELECT * FROM `summary` WHERE `empId` = ?");
             pstmt.setInt(1, selectedId);
             ResultSet resultSet = pstmt.executeQuery();
-            while (resultSet.next()) {
-                Summary summary = new Summary(0, selectedId, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
-                summary.calcTime();
-            }
+            resultSet.next();
+
+            Summary summary = new Summary(0, selectedId, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+            summary.calcTime();
+            summary.updateTime();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "An error has occured.", "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println(ex);

@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import wp2c2project.frames.AdminHome;
+import wp2c2project.frames.Login_Jarbox;
 import wp2c2project.frames.Login_Jon;
 
 /**
@@ -192,131 +192,12 @@ public class Main {
         }
     }
 
-    public void calcSummaryDedt() throws SQLException {
-        PreparedStatement summaryStatement = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `summary`");
-        ResultSet summaryResultSet = summaryStatement.executeQuery();
-        while (summaryResultSet.next()) {
-            int sumId = summaryResultSet.getInt("sumId");
-            int empId = summaryResultSet.getInt("empId");
-            float lateAmt = summaryResultSet.getFloat("lateAmt");
-            float regWage = summaryResultSet.getFloat("regWage");
-            float otAmt = summaryResultSet.getFloat("otAmt");
-            float ndAmt = summaryResultSet.getFloat("ndAmt");
-            float spcAmt = summaryResultSet.getFloat("spcAmt");
-            float spcOtAmt = summaryResultSet.getFloat("spcOtAmt");
-            float legAmt = summaryResultSet.getFloat("legAmt");
-            float gross = summaryResultSet.getFloat("gross");
-            float sssReg = summaryResultSet.getFloat("sssReg");
-            float sssMpf = summaryResultSet.getFloat("sssMpf");
-            float phealth = summaryResultSet.getFloat("phealth");
-            float wtax = summaryResultSet.getFloat("wtax");
-            float sssLoanS = summaryResultSet.getFloat("sssLoanS");
-            float sssLoanC = summaryResultSet.getFloat("sssLoanC");
-            float pagibigCont = summaryResultSet.getFloat("pagibigCont");
-            float efund = summaryResultSet.getFloat("efund");
-            float pagibigLoanS = summaryResultSet.getFloat("pagibigLoanS");
-            float pagibigLoanC = summaryResultSet.getFloat("pagibigLoanC");
-            float otherDedt = summaryResultSet.getFloat("otherDedt");
-            float dedtTot = summaryResultSet.getFloat("dedtTot");
-            float allowance = summaryResultSet.getFloat("allowance");
-            float netPay = summaryResultSet.getFloat("netPay");
-
-            float dayTot = 0;
-            float lateTot = 0;
-            float otTot = 0;
-            float ndTot = 0;
-            float spcTot = 0;
-            float spcOtTot = 0;
-            float legTot = 0;
-
-            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
-            st.setInt(1, empId);
-            resultSet = st.executeQuery();
-            while (resultSet.next()) {
-                dayTot += resultSet.getFloat("day");
-                lateTot += resultSet.getFloat("late");
-                otTot += resultSet.getFloat("ot");
-                ndTot += resultSet.getFloat("nd");
-                spcTot += resultSet.getFloat("spc");
-                spcOtTot += resultSet.getFloat("spcOt");
-                legTot += resultSet.getFloat("leg");
-            }
-
-            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
-            st.setInt(1, empId);
-            resultSet = st.executeQuery();
-            resultSet.next();
-            float rate = resultSet.getFloat("rate");
-
-            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `rate` WHERE `id` = ?");
-            //float lateRate = selectRateData(1);
-            float otRate = selectRateData(2);
-            float ndRate = selectRateData(3);
-            float spcRate = selectRateData(4);
-            float spcOtRate = selectRateData(5);
-            float legRate = selectRateData(6);
-
-            float rph = rate / 8;
-            //lateAmt = rph / 60 * lateTot;
-            //regWage = rate * dayTot - lateTot;
-            otAmt = rph * otRate * otTot;
-            ndAmt = rph * ndRate * ndTot;
-            spcAmt = rph * spcRate * spcTot;
-            spcOtAmt = rph * spcOtRate * spcOtTot;
-            legAmt = rph * legRate * legTot;
-            gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
-
-            netPay = gross - dedtTot + allowance;
-
-            //update summary database with corresponding sumId    
-            st = (PreparedStatement) sgconn.prepareStatement(
-                    "UPDATE `summary` SET "
-                    //+ "`rph` = ?, "
-                    + "`dayTot` = ?, "
-                    + "`lateTot` = ?, "
-                    + "`otTot` = ?, "
-                    + "`ndTot` = ?, "
-                    + "`spcTot` = ?, "
-                    + "`spcOtTot` = ?, "
-                    + "`legTot` = ?, "
-                    + "`lateAmt` = ?, "
-                    + "`otAmt` = ?, "
-                    + "`ndAmt` = ?, "
-                    + "`spcAmt` = ?, "
-                    + "`spcOtAmt` = ?, "
-                    + "`legAmt` = ?, "
-                    //+ "`regWage` = ?, "
-                    + "`gross` = ?, "
-                    + "`netPay` = ? "
-                    + " WHERE empId = ?"
-            );
-
-            st.setFloat(1, dayTot);
-            st.setFloat(2, lateTot);
-            st.setFloat(3, otTot);
-            st.setFloat(4, ndTot);
-            st.setFloat(5, spcTot);
-            st.setFloat(6, spcOtTot);
-            st.setFloat(7, legTot);
-            st.setFloat(8, lateAmt);
-            st.setFloat(9, otAmt);
-            st.setFloat(10, ndAmt);
-            st.setFloat(11, spcAmt);
-            st.setFloat(12, spcOtAmt);
-            st.setFloat(13, legAmt);
-            st.setFloat(14, gross);
-            st.setFloat(15, netPay);
-            st.setFloat(16, empId);
-            st.executeUpdate();
-        }
-    }
-
     public static void main(String[] args) {
         Main main = new Main();
         main.setupDatabase();
         FlatLightLaf.setup();
 
-        AdminHome vr = new AdminHome();
-        vr.setVisible(true);
+        Login_Jarbox login = new Login_Jarbox();
+        login.setVisible(true);
     }
 }

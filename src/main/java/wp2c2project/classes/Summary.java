@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -85,56 +87,109 @@ public class Summary {
         this.netPay = netPay;
     }
 
-    public void calcTime() throws SQLException {
-        Connection sgconn = Main.connectSG();
-        ResultSet resultSet;
-        PreparedStatement st;
+    public void calcTime() {
+        try {
+            Connection sgconn = Main.connectSG();
+            ResultSet resultSet;
+            PreparedStatement st;
 
-        //calculate total
-        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
-        st.setInt(1, empId);
-        resultSet = st.executeQuery();
-        while (resultSet.next()) {
-            dayTot += resultSet.getFloat("day");
-            lateTot += resultSet.getFloat("late");
-            otTot += resultSet.getFloat("ot");
-            ndTot += resultSet.getFloat("nd");
-            spcTot += resultSet.getFloat("spc");
-            spcOtTot += resultSet.getFloat("spcOt");
-            legTot += resultSet.getFloat("leg");
+            //calculate total
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
+            st.setInt(1, empId);
+            resultSet = st.executeQuery();
+            while (resultSet.next()) {
+                try {
+                    dayTot += resultSet.getFloat("day");
+                    lateTot += resultSet.getFloat("late");
+                    otTot += resultSet.getFloat("ot");
+                    ndTot += resultSet.getFloat("nd");
+                    spcTot += resultSet.getFloat("spc");
+                    spcOtTot += resultSet.getFloat("spcOt");
+                    legTot += resultSet.getFloat("leg");
+                } catch (SQLException ex) {
+                    Logger.getLogger(Summary.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            //calculate rates
+            st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
+            st.setInt(1, empId);
+            resultSet = st.executeQuery();
+            resultSet.next();
+            float rate = resultSet.getFloat("rate");
+            rph = rate / 8;
+
+            //amt calculation
+            Main main = new Main();
+            float otRate = main.selectRateData(2);
+            float ndRate = main.selectRateData(3);
+            float spcRate = main.selectRateData(4);
+            float spcOtRate = main.selectRateData(5);
+            float legRate = main.selectRateData(6);
+
+            lateAmt = rph / 60 * lateTot;
+            regWage = rate * dayTot - lateTot;
+
+            otAmt = rph * otRate * otTot;
+            ndAmt = rph * ndRate * ndTot;
+            spcAmt = rph * spcRate * spcTot;
+            spcOtAmt = rph * spcOtRate * spcOtTot;
+            legAmt = rph * legRate * legTot;
+
+            gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
+            netPay = gross;
+        } catch (SQLException ex) {
+            Logger.getLogger(Summary.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //calculate rates
-        st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `employee` WHERE `empId` = ?");
-        st.setInt(1, empId);
-        resultSet = st.executeQuery();
-        resultSet.next();
-        float rate = resultSet.getFloat("rate");
-        rph = rate / 8;
-
-        //amt calculation
-        Main main = new Main();
-        float otRate = main.selectRateData(2);
-        float ndRate = main.selectRateData(3);
-        float spcRate = main.selectRateData(4);
-        float spcOtRate = main.selectRateData(5);
-        float legRate = main.selectRateData(6);
-
-        lateAmt = rph / 60 * lateTot;
-        regWage = rate * dayTot - lateTot;
-
-        otAmt = rph * otRate * otTot;
-        ndAmt = rph * ndRate * ndTot;
-        spcAmt = rph * spcRate * spcTot;
-        spcOtAmt = rph * spcOtRate * spcOtTot;
-        legAmt = rph * legRate * legTot;
-        gross = regWage + otAmt + ndAmt + spcAmt + spcOtAmt + legAmt;
-
-        netPay = gross;
     }
-    
-    public void updateSummary(){
-        
+
+    public void updateTime() {
+        try {
+            Connection sgconn = Main.connectSG();
+            PreparedStatement st;
+
+            st = (PreparedStatement) sgconn.prepareStatement(
+                    "UPDATE `summary` SET "
+                    + "`rph` = ?, "
+                    + "`dayTot` = ?, "
+                    + "`lateTot` = ?, "
+                    + "`otTot` = ?,"
+                    + "`ndTot` = ?, "
+                    + "`spcTot` = ?, "
+                    + "`legTot` = ?, "
+                    + "`lateAmt` = ?, "
+                    + "`otAmt` = ?, "
+                    + "`ndAmt` = ?, "
+                    + "`spcAmt` = ?, "
+                    + "`spcOtAmt` = ?, "
+                    + "`legAmt` = ?, "
+                    + "`regWage` = ?, "
+                    + "`gross` = ?, "
+                    + "`netPay` = ? "
+                    + " WHERE empId = ?"
+            );
+            st.setFloat(1, rph);
+            st.setFloat(2, dayTot);
+            st.setFloat(3, lateTot);
+            st.setFloat(4, otTot);
+            st.setFloat(5, ndTot);
+            st.setFloat(6, spcTot);
+            st.setFloat(7, legTot);
+            st.setFloat(8, lateAmt);
+            st.setFloat(9, otAmt);
+            st.setFloat(10, ndAmt);
+            st.setFloat(11, spcAmt);
+            st.setFloat(12, spcOtAmt);
+            st.setFloat(13, legAmt);
+            st.setFloat(14, regWage);
+            st.setFloat(15, gross);
+            st.setFloat(16, netPay);
+            st.setInt(17, empId);
+
+            st.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Summary.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public int getSumId() {

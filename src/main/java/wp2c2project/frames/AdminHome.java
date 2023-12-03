@@ -1,8 +1,6 @@
 package wp2c2project.frames;
 
 import com.formdev.flatlaf.FlatLightLaf;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

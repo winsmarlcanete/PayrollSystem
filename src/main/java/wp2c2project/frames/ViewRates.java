@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import wp2c2project.classes.Summary;
 
 /**
  *
@@ -239,11 +240,16 @@ public class ViewRates extends javax.swing.JFrame {
             updateRateValue(5, Float.parseFloat(spcOtRateLb.getText()));
             updateRateValue(6, Float.parseFloat(legRateLb.getText()));
 
-            Main main = new Main();
-            main.calcSummaryDedt();
-
+            PreparedStatement summaryStatement = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `summary`");
+            ResultSet summaryResultSet = summaryStatement.executeQuery();
+            while (summaryResultSet.next()) {
+                int empId = summaryResultSet.getInt("empId");
+                Summary summary = new Summary(0, empId, null, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+                summary.calcTime();
+                summary.updateTime();
+            }
             JOptionPane.showMessageDialog(this, "Rates updated successfully!", "Success", JOptionPane.PLAIN_MESSAGE);
-            
+
             // Code block of sending data to database ends here
         } catch (SQLException ex) {
             Logger.getLogger(ViewRates.class.getName()).log(Level.SEVERE, null, ex);
