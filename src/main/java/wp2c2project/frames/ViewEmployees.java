@@ -204,6 +204,7 @@ public class ViewEmployees extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("WP2C2 System");
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 

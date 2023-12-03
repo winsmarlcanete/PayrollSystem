@@ -349,6 +349,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         fileName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("WP2C2 System");
 
         jButton1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
         jButton1.setText("Upload time card");
