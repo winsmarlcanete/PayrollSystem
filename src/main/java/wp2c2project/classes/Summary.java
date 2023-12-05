@@ -5,11 +5,16 @@
 package wp2c2project.classes;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import static wp2c2project.classes.Main.PASS;
+import static wp2c2project.classes.Main.SG_URL;
+import static wp2c2project.classes.Main.USER;
 
 /**
  *
@@ -51,6 +56,10 @@ public class Summary {
     private float allowance;
     private float netPay;
 
+    Connection sgconn = Main.connectSG();
+    PreparedStatement st;
+    ResultSet resultSet;
+
     public Summary(int sumId, int empId, String period, float rph, float dayTot, float lateTot, float otTot, float ndTot, float spcTot, float spcOtTot, float legTot, float lateAmt, float otAmt, float ndAmt, float spcAmt, float spcOtAmt, float legAmt, float regWage, float gross, float sssReg, float sssMpf, float phealth, float wtax, float sssLoanS, float sssLoanC, float pagibigCont, float efund, float pagibigLoanS, float pagibigLoanC, float otherDedt, float dedtTot, float allowance, float netPay) {
         this.sumId = sumId;
         this.empId = empId;
@@ -89,10 +98,6 @@ public class Summary {
 
     public void calcTime() {
         try {
-            Connection sgconn = Main.connectSG();
-            ResultSet resultSet;
-            PreparedStatement st;
-
             //calculate total
             st = (PreparedStatement) sgconn.prepareStatement("SELECT * FROM `time_card` WHERE `empId` = ?");
             st.setInt(1, empId);
@@ -120,12 +125,11 @@ public class Summary {
             rph = rate / 8;
 
             //amt calculation
-            Main main = new Main();
-            float otRate = main.selectRateData(2);
-            float ndRate = main.selectRateData(3);
-            float spcRate = main.selectRateData(4);
-            float spcOtRate = main.selectRateData(5);
-            float legRate = main.selectRateData(6);
+            float otRate = selectRateData(2);
+            float ndRate = selectRateData(3);
+            float spcRate = selectRateData(4);
+            float spcOtRate = selectRateData(5);
+            float legRate = selectRateData(6);
 
             lateAmt = rph / 60 * lateTot;
             regWage = rate * dayTot - lateTot;
@@ -143,11 +147,18 @@ public class Summary {
         }
     }
 
+    public float selectRateData(int rateId) throws SQLException {
+        String insertDataQuery = "SELECT * FROM `rates` WHERE `id` = ?";
+        try (PreparedStatement st = sgconn.prepareStatement(insertDataQuery)) {
+            st.setInt(1, rateId);
+            resultSet = st.executeQuery();
+            resultSet.next();
+            return resultSet.getFloat("rateValue");
+        }
+    }
+
     public void updateTime() {
         try {
-            Connection sgconn = Main.connectSG();
-            PreparedStatement st;
-
             st = (PreparedStatement) sgconn.prepareStatement(
                     "UPDATE `summary` SET "
                     + "`rph` = ?, "

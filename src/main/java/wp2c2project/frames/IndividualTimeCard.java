@@ -32,10 +32,11 @@ public class IndividualTimeCard extends javax.swing.JFrame {
     PreparedStatement st;
 
     //employee details
-    int empId; //placeholder
+    int empId;
     String empName;
     String dept;
     String period;
+    String date;
 
     //time card
     //total
@@ -434,6 +435,14 @@ public class IndividualTimeCard extends javax.swing.JFrame {
                 timeIn = String.valueOf(GetData(i, 5));
                 timeOut = String.valueOf(GetData(i, 6));
 
+                // if dateType is edited to holiday
+                /**
+                 * if (dateType >= 1 && 2 >= dateType) { st =
+                 * (PreparedStatement) sgconn.prepareStatement( "UPDATE
+                 * `time_card` SET " + "`dateType` = ? " + "WHERE `date` = ? AND
+                 * `period` = ?" ); st.setInt(1, dateType); st.setString(2,
+                 * date); st.setString(3, period); st.executeUpdate(); }
+                 */
                 // !!calculation for attendance!!
                 Timecard timecard = new Timecard(dateId, 0, null, dateType, shiftStart, shiftEnd, timeIn, timeOut, 0, 0, 0, 0, 0, 0, 0);
                 timecard.calcAttendance();

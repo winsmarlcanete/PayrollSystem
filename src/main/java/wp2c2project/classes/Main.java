@@ -150,6 +150,9 @@ public class Main {
                     insertRateData(1f);
 
                     System.out.println("Database setup successful");
+
+                    Login_Jarbox login = new Login_Jarbox();
+                    login.setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(Login_Jon.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -158,6 +161,7 @@ public class Main {
             }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "There were errors connecting to the database. Please try again", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -171,16 +175,6 @@ public class Main {
         }
     }
 
-    public float selectRateData(int rateId) throws SQLException {
-        String insertDataQuery = "SELECT * FROM `rates` WHERE `id` = ?";
-        try (PreparedStatement st = sgconn.prepareStatement(insertDataQuery)) {
-            st.setInt(1, rateId);
-            resultSet = st.executeQuery();
-            resultSet.next();
-            return resultSet.getFloat("rateValue");
-        }
-    }
-
     public static Connection connectSG() {
         Connection conn;
         try {
@@ -188,7 +182,7 @@ public class Main {
             conn = DriverManager.getConnection(SG_URL, USER, PASS);
             return conn;
         } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println("There were errors connecting to the database");
+            JOptionPane.showMessageDialog(null, "There are problems with your connection. Please try again.", "Connection error", JOptionPane.WARNING_MESSAGE);
             return null;
         }
     }
@@ -197,8 +191,5 @@ public class Main {
         Main main = new Main();
         main.setupDatabase();
         FlatLightLaf.setup();
-
-        Login_Jarbox login = new Login_Jarbox();
-        login.setVisible(true);
     }
 }

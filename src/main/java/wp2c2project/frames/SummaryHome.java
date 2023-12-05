@@ -395,7 +395,7 @@ public class SummaryHome extends javax.swing.JFrame implements SetupEmployeeCall
         jLabel1.setToolTipText("");
 
         jButton3.setFont(new java.awt.Font("Inter Medium", 0, 12)); // NOI18N
-        jButton3.setText("Settings");
+        jButton3.setText("Details");
         jButton3.setFocusable(false);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

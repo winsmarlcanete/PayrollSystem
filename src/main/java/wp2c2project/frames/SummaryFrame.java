@@ -150,6 +150,7 @@ public class SummaryFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -161,7 +162,10 @@ public class SummaryFrame extends javax.swing.JFrame {
         nameLb = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("WP2C2 Payroll");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -185,9 +189,6 @@ public class SummaryFrame extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTable1MousePressed(evt);
             }
@@ -404,7 +405,7 @@ public class SummaryFrame extends javax.swing.JFrame {
         try {
             // Fetch data from the database
             st = sgconn.prepareStatement("SELECT * FROM `summary` WHERE `period` = ?");
-            st.setString(1, "2023-10-20~2023-11-05"); //placeholder
+            st.setString(1, period);
             resultSet = st.executeQuery();
 
             // Debug prints
@@ -491,8 +492,8 @@ public class SummaryFrame extends javax.swing.JFrame {
                 sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 2, 3));
                 insertCell(rowR, 2, status);
                 sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 4, 6));
-                insertCell(rowR, 4, "2023-10-20~2023-11-05");
-                insertCell(rowR, 7, "Nov. 10, 2022"); // date now
+                insertCell(rowR, 4, period);
+                insertCell(rowR, 7, "Dec. 04, 2023"); // date now
                 insertCell(rowR, 8, taxStatus);
 
                 rowNum++;
@@ -654,10 +655,6 @@ public class SummaryFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
-
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-
-    }//GEN-LAST:event_jTable1MouseClicked
     int empIdSelected;
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
         String name = (String) jTable1.getValueAt(jTable1.getSelectedRow(), 2);
@@ -716,6 +713,7 @@ public class SummaryFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
